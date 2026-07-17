@@ -1,0 +1,1 @@
+<form {{ $attributes->merge(['class' => 'self-center w-[28%] flex gap-3 flex-col']) }}>{{ $slot }}</form>

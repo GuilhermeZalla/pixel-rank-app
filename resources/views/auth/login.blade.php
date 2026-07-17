@@ -1,0 +1,20 @@
+<x-layout>
+    <x-slot:title>Login</x-slot:title>
+    <x-form.form method="POST" action="/login" class="m-[22vh]">
+        @csrf
+        <x-form.field class="text-center mb-6">
+            <x-form.description title="Sign In" description="Start reviewing your favorite games today"></x-form.description>
+        </x-form.field>
+        <x-form.field class="flex flex-col gap-2">
+            <x-form.label for="email">Email</x-form.label>
+            <x-form.input type="email" name="email" id="email" placeholder="you@example.com" required/>
+        </x-form.field>
+        <x-form.field class="flex flex-col gap-2">
+            <x-form.label for="password">Password</x-form.label>
+            <x-form.input type="password" name="password" id="password" placeholder="******" required/>
+        </x-form.field>
+        <x-form.field class="mt-2">
+            <x-form.button>Sign In</x-form.button>
+        </x-form.field>
+    </x-form.form>
+</x-layout>
