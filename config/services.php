@@ -37,4 +37,13 @@ return [
         ],
     ],
 
+    'game_api' => [
+        'twitch' => env('TWITCH_AUTH'),
+        'twitch_id' => env('TWITCH_CLIENT_ID'),
+        'twitch_secret' => env('TWITCH_CLIENT_SECRET'),
+        'url' => env('GAME_API_URL'),
+        'key' => env('GAME_API_KEY')
+
+    ]
+
 ];

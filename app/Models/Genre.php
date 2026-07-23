@@ -13,6 +13,6 @@ class Genre extends Model
     protected $table = 'genres';
 
    public function games(){
-        return $this->belongsToMany(\App\Models\Game::class);
+        return $this->belongsToMany(\App\Models\Game::class, 'game_genre');
    }
 }

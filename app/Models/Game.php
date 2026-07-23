@@ -17,10 +17,10 @@ class Game extends Model
     }
 
     public function genres(){
-        return $this->belongsToMany(\App\Models\Genre::class);
+        return $this->belongsToMany(\App\Models\Genre::class, 'game_genre');
     }
 
     public function platforms(){
-        return $this->belongsToMany(\App\Models\Platform::class);
+        return $this->belongsToMany(\App\Models\Platform::class, 'game_platform');
     }
 }

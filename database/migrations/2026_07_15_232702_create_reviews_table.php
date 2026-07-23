@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('body');
-            $table->unsignedTinyInteger('rating')->max(5);
+            $table->unsignedTinyInteger('rating');
             $table->boolean('contains_spoilers')->default(false);
             $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(\App\Models\Game::class)->constrained()->onDelete('cascade');
