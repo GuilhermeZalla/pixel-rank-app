@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class GameApiService
 {
@@ -10,7 +11,6 @@ class GameApiService
     private string $baseUrlAuth;
     private string $twitchId;
     private string $twitchSecret;
-    private string $token;
 
     public function __construct()
     {
@@ -22,29 +22,41 @@ class GameApiService
 
     public function authentication()
     {
-        $response = Http::asForm()->post($this->baseUrlAuth . 'oauth2/token', [
+        return Http::asForm()->post($this->baseUrlAuth . 'oauth2/token', [
             'client_id' => $this->twitchId,
             'client_secret' => $this->twitchSecret,
             'grant_type' => 'client_credentials',
         ]);
 
-        $this->token = $response->json()['access_token'];
+    }
+
+    public function getAccessToken()
+    {
+        if (Cache::has('igdb_access_token')) {
+            return Cache::get('igdb_access_token');
+        }
+
+        $response = $this->authentication()->json();
+
+        Cache::put('igdb_access_token', $response['access_token'], now()->addSeconds($response['expires_in']));
+
+        return $response['access_token'];
     }
 
     public function getGames()
     {
         return Http::withHeaders([
             'Client-ID' => $this->twitchId,
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->withBody('fields *;', 'text/plain')->post($this->baseUrl)->json();
+            'Authorization' => 'Bearer ' . $this->getAccessToken(),
+        ])->withBody('fields *;', 'text/plain')->post($this->baseUrl . '/games')->json();
     }
 
     public function getGame(string $title)
     {
         return Http::withHeaders([
             'Client-ID' => $this->twitchId,
-            'Authorization' => 'Bearer ' . $this->token,
-        ])->withBody('search "' . $title . '"; fields name,cover.url,first_release_date; limit 10;',
-        'text/plain')->post($this->baseUrl)->json();
+            'Authorization' => 'Bearer ' . $this->getAccessToken(),
+        ])->withBody('search "' . $title . '"; fields name,summary,storyline,platforms.name,genres.name,cover.url,first_release_date; limit 10;',
+        'text/plain')->post($this->baseUrl . '/games')->json();
     }
 }

@@ -11,13 +11,15 @@
     </section>
     <section>
         <nav class="flex flex-row justify-start gap-3">
-            <x-badge-link href="/" count="2" :active="request()->is('/')">Highest Rated</x-badge-link>
-            <x-badge-link href="/popular" count="2" :active="request()->is('popular')">Popular</x-badge-link>
-            <x-badge-link href="/latest" count="2" :active="request()->is('latest')">Latest</x-badge-link>
-            <x-badge-link href="/oldest" count="2" :active="request()->is('oldest')">Oldest</x-badge-link>
+            <x-badge-link href="/" :active="request()->is('/')">All</x-badge-link>
+            <x-badge-link href="/highest-rated" :active="request()->is('highest-rated')">Highest Rated</x-badge-link>
+            <x-badge-link href="/lowest-rated" :active="request()->is('lowest-rated')">Lowest Rated</x-badge-link>
+            <x-badge-link href="/popular" :active="request()->is('popular')">Popular</x-badge-link>
+            <x-badge-link href="/oldest" :active="request()->is('oldest')">Oldest</x-badge-link>
+            <x-badge-link href="/hot-reviews" :active="request()->is('hot-reviews')">Hot</x-badge-link>
         </nav>
     </section>
-    <section class="flex flex-wrap gap-5">
+    <section class="flex flex-wrap flex-col gap-5">
         @foreach($reviews as $review)
                 <x-article-link :review="$review"></x-article-link>
         @endforeach

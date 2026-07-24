@@ -14,18 +14,26 @@ class ReviewController extends Controller
 
     public function index(Request $request)
     {
+        $reviews = Review::with(['game', 'user', 'comments']);
 
-        $reviews = Review::with(['game', 'user']);
-
-        switch($request->filter){
+        switch ($request->filter) {
+            case 'highest-rated':
+                $reviews = $reviews->orderBy('rating', 'desc');
+                break;
+            case 'lowest-rated':
+                $reviews = $reviews->orderBy('rating', 'asc');
+                break;
             case 'popular':
-            break;
-            case 'latest':
-                $reviews = $reviews->latest();
-            break;
+                break;
             case 'oldest':
                 $reviews = $reviews->oldest();
-            break;
+                break;
+              case 'hot-reviews':
+                $reviews = $reviews->withCount('comments')->orderByDesc('comments_count');
+                break;
+            default:
+                $reviews = $reviews->latest();
+                break;
         }
 
         return view('reviews.index', [
@@ -52,9 +60,12 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Review $review)
+    public function show(Request $request, GameApiService $gameapi)
     {
-        return view('reviews.show', ['review' => $review]);
+        $review = Review::with(['game', 'user', 'comments', 'comments.user'])->find($request->review);
+        $info = $review->getGameInfo($gameapi->getGame($review->game->title)[0]);
+
+        return view('reviews.show', ['review' => $review, 'game' => $info]);
     }
 
     /**

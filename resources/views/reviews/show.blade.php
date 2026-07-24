@@ -3,7 +3,7 @@
     <div class="px-50">
         <section class="py-10">
             <nav class="flex flex-row justify-between">
-                <x-nav-link href="/reviews"
+                <x-nav-link href="/"
                     class="flex flex-row gap-3 font-bold text-[.90rem] items-center"><x-heroicon-s-arrow-small-left
                         class="size-5" />Back to Reviews</x-nav-link>
                 <div class="flex flex-row gap-3">
@@ -20,8 +20,7 @@
         </section>
         <section class="flex flex-col">
             <div class="max-h-100 overflow-hidden rounded-md">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
-                    alt="Placeholder Image" class="w-full h-full object-contain">
+                <img src="{{ url($game['cover']) }}" alt="{{ $review->game->title . ' cover' }}" class="w-full h-full object-contain">
             </div>
             <div class="py-8 px-3 flex flex-col gap-3">
                 <h1 class="text-4xl font-bold">{{ $review->title }}</h1>
@@ -34,15 +33,13 @@
                         <li><a href="#comments" class="flex flex-row items-center gap-1"><x-heroicon-o-chat-bubble-oval-left class="size-4.5" />{{ count($review->comments) }} comentários</a></li>
                     </ul>
                     <ul class="flex flex-row flex-wrap gap-4 bg-[#181818] rounded-2xl p-4">
-                        <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $review->getPlatformsFormatted() }}</strong></li>
+                        <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $game['platforms'] }}</strong></li>
                         <li class="w-[calc(50%-0.5rem)] ">Status<br><strong>Campanha Concluíd</strong>a</li>
-                        <li class="w-[calc(50%-0.5rem)] ">Tempo jogado<br><strong>45h</strong></li>
+                        <li class="w-[calc(50%-0.5rem)] ">Lançamento<br><strong>{{ $game['release_date'] }}</strong></li>
                         <li class="w-[calc(50%-0.5rem)] ">Nota<br><strong>{{ $review->rating === '10.0' ? 10 : $review->rating }}/10</strong></li>
                     </ul>
                     <h2 class="font-bold">Resumo</h2>
-                    <p>
-                        Shadow of the Erdtree expande Elden Ring com áreas mais densas, chefes memoráveis e um senso de descoberta raro em expansões modernas. A dificuldade elevada e alguns problemas de ritmo impedem a perfeição, mas o pacote continua sendo uma das experiências mais fortes da geração.
-                    </p>
+                    <p>{{ $game['summary'] }}</p>
                 </div>
               <hr class="my-8 border-t border-white/8" />
                 <article class="prose prose-invert max-w-none">
@@ -72,16 +69,24 @@
             </div>
         </section>
         <section id="comments" class="flex flex-col px-3">
-            <h2 class="font-bold text-[1.3rem]">Comentários <span>(18)</span></h2>
-            <ul class="flex flex-col gap-3">
-                <li class="flex flex-row gap-4 border-b border-white/8 py-8">
-                    <img src="https://ui-avatars.com/api/?name={{ !empty($user->name) ? urlencode($user->name) : 'Guilherme' }}" alt="{{ !empty($user->name) ? $user->name : 'Guilherme' }}" class="rounded-[50%] h-12">
-                    <div class="w-full">
-                        <span class="flex flex-row justify-between mb-6"><h3 class="font-bold">GamerBR</h3><h4 class="label text-[.90rem]">há 2 horas</h4></span>
-                        <p>Concordo com a parte da exploração. A DLC me lembrou a sensação da primeira vez saindo de Limgrave. Concordo com a parte da exploração. A DLC me lembrou a sensação da primeira vez saindo de Limgrave. Concordo com a parte da exploração. A DLC me lembrou a sensação da primeira vez saindo de Limgrave. Concordo com a parte da exploração. A DLC me lembrou a sensação da primeira vez saindo de Limgrave. Concordo com a parte da exploração. A DLC me lembrou a sensação da primeira vez saindo de Limgrave.</p>
-                    </div>
-                </li>
-            </ul>
+            <h2 class="font-bold text-[1.3rem]">Comentários <span>({{ count($review->comments)}})</span></h2>
+            @if(!empty($review->comments))
+                <ul class="flex flex-col gap-3">
+                    @foreach($review->comments as $comment)
+                        <li class="flex flex-row gap-4 border-b border-white/8 py-8">
+                            <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->name) }}" alt="User"
+                                class="rounded-[50%] h-12">
+                            <div class="w-full">
+                                <span class="flex flex-row justify-between mb-3">
+                                    <h3 class="font-bold">{{ $comment->user->name }}</h3>
+                                    <h4 class="label text-[.90rem]">há 2 horas</h4>
+                                </span>
+                                <p>{{ $comment->body }}</p>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </section>
     </div>
     <!-- Delete Review Confirmation Modal -->

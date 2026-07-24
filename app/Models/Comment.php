@@ -9,9 +9,12 @@ class Comment extends Model
 {
     protected $table = 'comments';
 
+    public function user(){
+        return $this->belongsTo(\App\Models\User::class);
+    }
+
     public function review()
     {
         return $this->belongsTo(\App\Models\Review::class);
     }
-
 }

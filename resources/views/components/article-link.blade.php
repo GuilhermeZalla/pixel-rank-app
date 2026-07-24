@@ -1,21 +1,24 @@
- <a href="/reviews/{{ $review->id }}"  class="sm:w-full md:flex-1/4 lg:flex-1/4 border-2 border-[#88888822] rounded-[7px] hover:border-primary transition-all duration-300 ease-in-out">
+ <a href="/reviews/{{ $review->id }}"  class="sm:w-full md:flex-1/4 lg:flex-1/4 border-2 border-[#88888822] rounded-[7px] group hover:border-primary transition-all duration-300 ease-in-out">
     <article class="rounded-[7px]">
-        <div class="flex flex-col">
-            <div class="h-50 overflow-hidden rounded-tr-md rounded-tl-md">
+        <div class="flex flex-row gap-3">
                 <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
-                    alt="Placeholder Image" class="w-full h-full object-cover">
-            </div>
-            <div class="py-4 px-3 flex flex-col gap-5">
-                <div class="flex flex-col gap-2 w-3/4">
-                    <h2 class="font-bold text-lg">{{ $review->title }}</h2>
-                    <div class="flex flex-row gap-2">
-                        <span class="badge badge-outline font-bold text-[.72rem]">Tag 1</span>
-                        <span class="badge badge-outline font-bold text-[.72rem]">Tag 2</span>
-                    </div>
+                    alt="Placeholder Image" class="rounded-bl-md rounded-tl-md h-42 w-65 object-cover">
+            <div class="py-4 px-3 flex flex-row justify-between w-full">
+                <div class="flex flex-col justify-between">
+                    <h2 class="font-bold text-[1.4rem] pb-2">{{ $review->title }}</h2>
+                    <p class="text-sm text-gray-400 text-[.90rem]">
+                         {{ Str::limit($review->body, 350) }}  <span class="group-hover:text-primary group-hover:underline transition-all duration-300 ease-in-out">read more</span>
+                    </p>
+                       <ul class="flex flex-row gap-5 items-center text-[.85rem] mt-2">
+                        <li><x-badge-link type="label" class="bg-[#033317] text-accent rounded-[10px] px-1 py-0 font-normal text-[0.70rem]">{{ $review->recommendation->label() }}</x-badge-link> </li>
+                        <li class="font-bold">{{ $review->rating === '10.0' ? 10 : $review->rating }}/10</li>
+                        <li class="flex flex-row items-center gap-1"><x-heroicon-o-chat-bubble-oval-left class="size-4" />{{ count($review->comments) }} comment(s)</li>
+                    </ul>
                 </div>
-                    <p class="text-sm text-gray-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua.</p>
-                    <span class="text-xs text-gray-500 mt-7">2 hours ago</span>
+                <ul class="flex flex-col justify-between">
+                    <li class="text-[.82rem] flex flex-row items-center gap-1"><x-heroicon-o-user class="size-3.5" /> Guilherme</li>
+                    <li class="text-gray-500 text-[.82rem]">2 hours ago</li>
+                </ul>
             </div>
         </div>
     </article>

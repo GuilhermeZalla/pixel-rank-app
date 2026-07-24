@@ -15,12 +15,4 @@ class Game extends Model
     public function reviews(){
         return $this->hasMany(\App\Models\Review::class);
     }
-
-    public function genres(){
-        return $this->belongsToMany(\App\Models\Genre::class, 'game_genre');
-    }
-
-    public function platforms(){
-        return $this->belongsToMany(\App\Models\Platform::class, 'game_platform');
-    }
 }

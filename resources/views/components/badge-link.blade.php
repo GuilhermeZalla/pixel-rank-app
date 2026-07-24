@@ -1,4 +1,4 @@
-@props(['count' => 0, 'active' => false, 'type' => 'badge'])
+@props(['active' => false, 'type' => 'badge'])
 
 @php
     $badgeActive = 'bg-primary text-base-300 py-3';
@@ -16,5 +16,5 @@
         <label {{ $attributes->merge(['class' => 'p-3 gap-2 ' . $default]) }}>{{ $slot }}</label>
     @break
     @default
-        <a {{ $attributes->merge(['class' => 'gap-4 ' . $default . ($active ? ' ' . $badgeActive : '')]) }}>{{ $slot }}<span>{{ $count }}</span></a>
+        <a {{ $attributes->merge(['class' => 'gap-4 ' . $default . ($active ? ' ' . $badgeActive : '')]) }}>{{ $slot }}</a>
 @endswitch

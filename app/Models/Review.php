@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\ReviewRecommendation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -39,11 +40,22 @@ class Review extends Model
         return $this->updated_at->locale('pt_BR')->isoFormat('DD MM YYYY');
     }
 
-    public function getPlatformsFormatted(){
-        $platforms = '';
-        foreach($this->game->platforms as $platform){
-            $platforms .= '/'.$platform->name;
+    public function getPlatformsFormatted(array $platforms){
+
+        $result = '';
+        foreach($platforms as $platform){
+            $result .= '/'.$platform['name'];
         }
-        return substr(implode(', ', explode('/', $platforms)), 1);
+
+        return substr(implode(', ', explode('/', $result)), 1);
+    }
+
+    public function getGameInfo(array $game){
+       return [
+           'platforms' => $this->getPlatformsFormatted($game['platforms']),
+           'release_date' => Carbon::createFromTimestamp($game['first_release_date'])->locale('pt_BR')->isoFormat('DD/MM/YYYY'),
+           'summary' => $game['summary'],
+           'cover' => $game['cover']['url']
+       ];
     }
 }
