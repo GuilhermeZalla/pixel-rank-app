@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Auth\LoginController;
 use \App\Http\Controllers\Auth\LogoutController;
 use \App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CommentController;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\ReviewController;
 
@@ -46,4 +47,13 @@ Route::controller(ReviewController::class)->group(function () {
     });
     Route::get('/reviews/{review}', 'show');
     Route::get('/{filter?}', 'index');
+});
+
+// Comments Route
+
+Route::controller(CommentController::class)->middleware('auth')->group(function(){
+    Route::get('/comments', 'index');
+    Route::post('/comments', 'store');
+    Route::patch('/comments/{comment}', 'update')->can('update', 'comment');
+    Route::delete('/comments/{comment}', 'destroy')->can('delete', 'comment');
 });

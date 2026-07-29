@@ -5,15 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <!-- Site Content -->
 <body class="pb-20">
-    <div class="navbar bg-base-100 shadow-sm border-b border-b-[#88888833] px-40">
+    <div class="navbar bg-base-100 shadow-sm border-b border-b-[#88888833] px-4 sm:px-0 md:px-40 lg:px-20">
         <div class="flex-1">
-            <a class="btn btn-ghost text-xl" href="/">daisyUI</a>
+            <a class="btn btn-ghost text-xl" href="/"> <img src="{{ asset('pixelrank.png') }}" alt="PixelRank" class="w-full h-full object-contain"></a>
         </div>
         @auth
             <div class="flex-none">
@@ -44,7 +45,7 @@
             </div>
         @endguest
     </div>
-    <main class="flex flex-col gap-10 px-40">
+    <main class="flex flex-col gap-10">
         {{ $slot }}
     </main>
     @if (session('success'))

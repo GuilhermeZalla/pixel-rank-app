@@ -32,6 +32,10 @@ class Review extends Model
         return $this->hasMany(\App\Models\Comment::class);
     }
 
+    public function pros_cons(){
+        return $this->hasMany(\App\Models\ProsCons::class);
+    }
+
     public function getPublishedDate(){
         return $this->created_at->locale('pt_BR')->isoFormat('DD MMM YYYY');
     }
@@ -55,7 +59,7 @@ class Review extends Model
            'platforms' => $this->getPlatformsFormatted($game['platforms']),
            'release_date' => Carbon::createFromTimestamp($game['first_release_date'])->locale('pt_BR')->isoFormat('DD/MM/YYYY'),
            'summary' => $game['summary'],
-           'cover' => $game['cover']['url']
+           'cover' => $game['artworks'][rand(0, count($game['artworks']) - 1)]['image_id']
        ];
     }
 }

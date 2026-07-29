@@ -56,7 +56,7 @@ class GameApiService
         return Http::withHeaders([
             'Client-ID' => $this->twitchId,
             'Authorization' => 'Bearer ' . $this->getAccessToken(),
-        ])->withBody('search "' . $title . '"; fields name,summary,storyline,platforms.name,genres.name,cover.url,first_release_date; limit 10;',
+        ])->withBody('search "' . $title . '"; fields name,summary,storyline,platforms.name,genres.name,artworks.image_id,first_release_date; limit 10;',
         'text/plain')->post($this->baseUrl . '/games')->json();
     }
 }

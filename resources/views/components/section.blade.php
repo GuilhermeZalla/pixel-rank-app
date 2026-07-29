@@ -1,0 +1,1 @@
+<section {{ $attributes }}>{{ $slot }}</section>

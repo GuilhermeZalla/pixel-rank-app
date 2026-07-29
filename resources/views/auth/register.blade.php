@@ -27,7 +27,7 @@
             <x-form.input type="file" name="avatar" id="avatar" />
         </x-form.field>
         <x-form.field class="flex flex-col gap-2">
-            <x-form.label for="bio">Avatar (optional)</x-form.label>
+            <x-form.label for="bio">Bio (optional)</x-form.label>
             <x-form.input type="textarea" name="bio" id="bio" placeholder="Tell us about yourself" />
         </x-form.field>
         <x-form.field class="mt-2">

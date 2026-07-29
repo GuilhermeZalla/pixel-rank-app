@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Comment extends Model
 {
     protected $table = 'comments';
+    protected $appends = ['posted_date'];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(\App\Models\User::class);
     }
 
@@ -17,4 +19,15 @@ class Comment extends Model
     {
         return $this->belongsTo(\App\Models\Review::class);
     }
+
+    public function getPostedDate()
+    {
+        return $this->created_at->locale('pt_BR')->diffForHumans();
+    }
+
+    public function getPostedDateAttribute()
+    {
+        return $this->getPostedDate();
+    }
+
 }

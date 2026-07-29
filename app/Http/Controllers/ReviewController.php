@@ -12,28 +12,39 @@ class ReviewController extends Controller
      * Display a listing of the resource.
      */
 
+    protected $recommendations = ['not_recommended', 'recommended', 'mixed', 'essential'];
+
     public function index(Request $request)
     {
+        $filter = $request->filter;
         $reviews = Review::with(['game', 'user', 'comments']);
 
-        switch ($request->filter) {
-            case 'highest-rated':
-                $reviews = $reviews->orderBy('rating', 'desc');
-                break;
-            case 'lowest-rated':
-                $reviews = $reviews->orderBy('rating', 'asc');
-                break;
-            case 'popular':
-                break;
-            case 'oldest':
-                $reviews = $reviews->oldest();
-                break;
-              case 'hot-reviews':
-                $reviews = $reviews->withCount('comments')->orderByDesc('comments_count');
-                break;
-            default:
-                $reviews = $reviews->latest();
-                break;
+        if (in_array($filter, $this->recommendations)) {
+            $reviews->where('recommendation', $filter);
+        } else {
+            switch ($filter) {
+                case 'highest-rated':
+                    $reviews = $reviews->orderBy('rating', 'desc');
+                    break;
+                case 'lowest-rated':
+                    $reviews = $reviews->orderBy('rating', 'asc');
+                    break;
+                case 'popular':
+                    break;
+                case 'oldest':
+                    $reviews = $reviews->oldest();
+                    break;
+                case 'hot-reviews':
+                    $reviews = $reviews->withCount([
+                        'comments as recent_comments_count' => function ($query) {
+                            $query->where('created_at', '>=', now()->subDays(7));
+                        }
+                    ])->orderBy('recent_comments_count', 'desc');
+                    break;
+                default:
+                    $reviews = $reviews->latest();
+                    break;
+            }
         }
 
         return view('reviews.index', [
@@ -64,8 +75,9 @@ class ReviewController extends Controller
     {
         $review = Review::with(['game', 'user', 'comments', 'comments.user'])->find($request->review);
         $info = $review->getGameInfo($gameapi->getGame($review->game->title)[0]);
+        $pros_cons = $review->pros_cons->groupBy('type');
 
-        return view('reviews.show', ['review' => $review, 'game' => $info]);
+        return view('reviews.show', ['review' => $review, 'pros_cons' => $pros_cons, 'game' => $info]);
     }
 
     /**
