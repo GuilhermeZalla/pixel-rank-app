@@ -1,16 +1,30 @@
 @props(['type' => 'input'])
 
 @php
-    $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E]';
+$default = ' font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E] ';
 @endphp
 
-@if($type === 'textarea')
-    <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-3' . $default]) }}></textarea>
-    <x-form.error name="{{ $attributes->get('bio') }}" />
-@elseif($type === 'checkbox')
-    <input type="text" {{ $attributes->merge(['class' => 'text-[.80rem] hover:border-accent readonly cursor-pointer flex-1/3 text-center p-2.5' . $default]) }} placeholder="{{ $attributes->get('placeholder') }}"/>
-@else
-    <input {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem]' . $default]) }} @if($attributes->get('name') !== 'password')
-    value="{{ old($attributes->get('name')) }}" @endif>
-    <x-form.error name="{{ $attributes->get('name') }}" />
-@endif
+@switch($type)
+    @case('textarea')
+        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-3 ' . $default]) }}>{{ $attributes->get('value') }}</textarea>
+        <x-form.error name="{{ $attributes->get('bio') }}" />
+        @break
+
+    @case('search')
+        <input type="text" id="game-search" placeholder="Search a game..." autocomplete="on" {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem] ' . $default]) }} required>
+        <input type="hidden" name="game_id" id="game-id">
+        <div id="game-dropdown" class="{{ 'absolute top-20 z-99 flex flex-col gap-3 hidden overflow-y-scroll max-h-80 ' . $default }}"> </div>
+        @break
+
+    @case('checkbox')
+        <input type="checkbox" checked="checked" {{ $attributes->merge(['class' => 'checkbox checkbox-success']) }} value="1" />
+        @break
+
+    @case('number')
+        <input type="number" name="rating" id="rating" min="0" max="10" step="0.5" placeholder="0 - 10" {{ $attributes->merge(['class' => 'p-2 text-[.80rem]'.$default]) }}/>
+        @break
+
+    @default
+        <input {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem]' . $default]) }} @if($attributes->get('name') !== 'password') value="{{ old($attributes->get('name')) }}" @endif />
+        <x-form.error name="{{ $attributes->get('name') }}" />
+@endswitch

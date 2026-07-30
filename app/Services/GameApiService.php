@@ -48,15 +48,18 @@ class GameApiService
         return Http::withHeaders([
             'Client-ID' => $this->twitchId,
             'Authorization' => 'Bearer ' . $this->getAccessToken(),
-        ])->withBody('fields *;', 'text/plain')->post($this->baseUrl . '/games')->json();
+        ])->withBody('fields name; limit *;', 'text/plain')->post($this->baseUrl . '/games')->json();
     }
 
-    public function getGame(string $title)
+    public function getGame(string $id)
     {
+        $query = filter_var($id, FILTER_VALIDATE_INT) !== false ? 'where id = ' . (int) $id . ';' : 'search "' . addslashes($id) . '"; limit 15;';
         return Http::withHeaders([
             'Client-ID' => $this->twitchId,
             'Authorization' => 'Bearer ' . $this->getAccessToken(),
-        ])->withBody('search "' . $title . '"; fields name,summary,storyline,platforms.name,genres.name,artworks.image_id,first_release_date; limit 10;',
-        'text/plain')->post($this->baseUrl . '/games')->json();
+        ])->withBody(
+                $query . ' fields name,summary,storyline,platforms.name,genres.name,artworks.image_id,first_release_date;',
+                'text/plain'
+            )->post($this->baseUrl . '/games')->json();
     }
 }

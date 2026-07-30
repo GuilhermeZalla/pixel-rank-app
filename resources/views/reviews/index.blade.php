@@ -17,16 +17,34 @@
             <x-badge-link href="/popular" :active="request()->is('popular')">Popular</x-badge-link>
             <x-badge-link href="/oldest" :active="request()->is('oldest')">Oldest</x-badge-link>
             <x-badge-link href="/hot-reviews" :active="request()->is('hot-reviews')">Hot</x-badge-link>
-            <x-badge-link href="/recommended" :active="request()->is('recommended')">Recommended</x-badge-link>
-            <x-badge-link href="/not_recommended" :active="request()->is('not_recommended')">Not Recommended</x-badge-link>
-            <x-badge-link href="/essential" :active="request()->is('essential')">Essential</x-badge-link>
-            <x-badge-link href="/mixed" :active="request()->is('mixed')">Mixed</x-badge-link>
+            <x-badge-link href="/recommended" :active="request()->is('recommended')">Recommended <span>{{ $recommendationsTotal['recommended'] }}</span></x-badge-link>
+            <x-badge-link href="/not_recommended" :active="request()->is('not_recommended')">Not Recommended <span>{{ $recommendationsTotal['not_recommended'] }}</span></x-badge-link>
+            <x-badge-link href="/essential" :active="request()->is('essential')">Essential <span>{{ $recommendationsTotal['essential'] }}</span></x-badge-link>
+            <x-badge-link href="/mixed" :active="request()->is('mixed')">Mixed <span>{{ $recommendationsTotal['mixed'] }}</span></x-badge-link>
         </nav>
     </x-section>
-    <x-section class="px-40 flex flex-col gap-5">
-          @foreach($reviews as $review)
+    <x-section class="px-40 flex flex-col gap-5 -mt-10">
+        <div class="flex flex-row justify-end gap-2 text-[.80rem] mb-2">
+            <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-5 w-5" />
+            <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
+        </div>
+        @foreach($reviews as $review)
                 <x-article-link :review="$review"></x-article-link>
         @endforeach
             <div class="mt-5">@if(!empty($reviews->links())){{ $reviews->links() }}@endif</div>
     </x-section>
+    <script>
+        const toggleCheckbox = document.getElementById('toggle-link');
+        const spoilerLinks = document.querySelectorAll('.review-link-spoiler');
+
+        function updateSpoilerVisibility() {
+            spoilerLinks.forEach(link => {
+                link.classList.toggle('hidden', toggleCheckbox.checked);
+            });
+        }
+
+        toggleCheckbox.addEventListener('change', updateSpoilerVisibility);
+
+        updateSpoilerVisibility();
+    </script>
 </x-layout>

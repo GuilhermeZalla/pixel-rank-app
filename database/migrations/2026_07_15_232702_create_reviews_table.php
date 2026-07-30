@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('rating');
             $table->boolean('contains_spoilers')->default(false);
             $table->foreignIdFor(\App\Models\User::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(\App\Models\Game::class)->constrained()->onDelete('cascade');
+            $table->bigInteger('game_id');
             $table->timestamps();
         });
     }

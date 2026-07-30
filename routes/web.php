@@ -7,9 +7,10 @@ use \App\Http\Controllers\Auth\LoginController;
 use \App\Http\Controllers\Auth\LogoutController;
 use \App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\GameController;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\ReviewController;
-
+use App\Services\GameApiService;
 
 // Auth Route List
 
@@ -40,6 +41,7 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
 Route::controller(ReviewController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/reviews/create', 'create');
+        Route::get('/reviews/create', 'create');
         Route::post('/reviews', 'store')->can('create', \App\Models\Review::class);
         Route::put('/reviews/{review}', 'update')->can('update', 'review');
         Route::delete('/reviews/{review}', 'destroy')->can('delete', 'review');
@@ -57,3 +59,7 @@ Route::controller(CommentController::class)->middleware('auth')->group(function(
     Route::patch('/comments/{comment}', 'update')->can('update', 'comment');
     Route::delete('/comments/{comment}', 'destroy')->can('delete', 'comment');
 });
+
+// Search Game Routes
+
+Route::get('/games/search', GameController::class);

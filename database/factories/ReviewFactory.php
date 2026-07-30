@@ -22,7 +22,7 @@ class ReviewFactory extends Factory
             'title' => fake()->name(),
             'body' => fake()->sentence(100),
             'rating' => fake()->randomFloat(1, 1, 10),
-            'recommendation' => ReviewRecommendation::class,
+            'recommendation' => 'recommended',
             'contains_spoilers' => fake()->boolean(),
             'user_id' => 1,
             'game_id' => 1

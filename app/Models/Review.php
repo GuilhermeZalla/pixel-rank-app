@@ -24,16 +24,17 @@ class Review extends Model
         return $this->belongsTo(\App\Models\User::class);
     }
 
-    public function game(){
-        return $this->belongsTo(\App\Models\Game::class);
-    }
-
     public function comments(){
         return $this->hasMany(\App\Models\Comment::class);
     }
 
     public function pros_cons(){
         return $this->hasMany(\App\Models\ProsCons::class);
+    }
+
+    public function getPostedDate()
+    {
+        return $this->created_at->locale('pt_BR')->diffForHumans();
     }
 
     public function getPublishedDate(){

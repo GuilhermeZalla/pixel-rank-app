@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReviewRequest;
+use App\Models\ProsCons;
 use App\Models\Review;
 use App\Services\GameApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class ReviewController extends Controller
 {
@@ -14,13 +18,13 @@ class ReviewController extends Controller
 
     protected $recommendations = ['not_recommended', 'recommended', 'mixed', 'essential'];
 
-    public function index(Request $request)
+    public function index(Request $request, GameApiService $gameapi)
     {
         $filter = $request->filter;
-        $reviews = Review::with(['game', 'user', 'comments']);
+        $reviews = Review::with(['user', 'comments']);
 
         if (in_array($filter, $this->recommendations)) {
-            $reviews->where('recommendation', $filter);
+            $reviews = $reviews->where('recommendation', $filter);
         } else {
             switch ($filter) {
                 case 'highest-rated':
@@ -40,15 +44,21 @@ class ReviewController extends Controller
                             $query->where('created_at', '>=', now()->subDays(7));
                         }
                     ])->orderBy('recent_comments_count', 'desc');
-                    break;
+                break;
+                case 'spoiler':
+                     $reviews = $reviews->where('contains_spoilers', false);
+                break;
                 default:
                     $reviews = $reviews->latest();
                     break;
             }
         }
 
+        $recommendations = Review::selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
+
         return view('reviews.index', [
-            'reviews' => $reviews->paginate(12)
+            'reviews' => $reviews->paginate(12),
+            'recommendationsTotal' => $recommendations
         ]);
     }
 
@@ -63,18 +73,35 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ReviewRequest $request)
     {
-        //
+        $validated = $request->validated();
+        $review = Auth::user()->reviews()->create(Arr::except($validated, ['pros', 'cons']));
+
+        $review->pros_cons()->createMany(
+            collect($validated['pros'] ?? [])->map(fn($pro) => [
+                'type' => 'pros',
+                'content' => $pro,
+            ])->all()
+        );
+
+        $review->pros_cons()->createMany(
+            collect($validated['cons'] ?? [])->map(fn($con) => [
+                'type' => 'cons',
+                'content' => $con,
+            ])->all()
+        );
+
+        return redirect('/reviews/'.$review->id);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, GameApiService $gameapi)
+   public function show(Request $request, GameApiService $gameapi)
     {
-        $review = Review::with(['game', 'user', 'comments', 'comments.user'])->find($request->review);
-        $info = $review->getGameInfo($gameapi->getGame($review->game->title)[0]);
+        $review = Review::with(['user', 'comments', 'comments.user'])->find($request->review);
+        $info = $review->getGameInfo($gameapi->getGame($review->game_id)[0]);
         $pros_cons = $review->pros_cons->groupBy('type');
 
         return view('reviews.show', ['review' => $review, 'pros_cons' => $pros_cons, 'game' => $info]);
