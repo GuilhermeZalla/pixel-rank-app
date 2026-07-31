@@ -128,7 +128,8 @@ class ReviewController extends Controller
      */
     public function destroy(Review $review)
     {
+        $deleted = $review->title;
         $review->delete();
-        return redirect('/');
+        return redirect('/')->with('info', 'Review deleted: "'.$deleted.'"');
     }
 }

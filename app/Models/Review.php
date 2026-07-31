@@ -42,7 +42,7 @@ class Review extends Model
     }
 
     public function getUpdatedDate(){
-        return $this->updated_at->locale('pt_BR')->isoFormat('DD MM YYYY');
+        return $this->updated_at->locale('pt_BR')->isoFormat('DD MMM YYYY');
     }
 
     public function getPlatformsFormatted(array $platforms){

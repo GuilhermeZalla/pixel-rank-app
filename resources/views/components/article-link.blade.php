@@ -1,24 +1,25 @@
-<a href="/reviews/{{ $review->id }}"  @if($review->contains_spoilers) class="review-link-spoiler sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px]" @else class="sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px]" @endif>
+<a href="/reviews/{{ $review->id }}"  @if($review->contains_spoilers) class="bg-[#0E0E0E] review-link-spoiler sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px]" @else class="sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px] bg-[#0E0E0E]" @endif>
     <article class="rounded-[7px] border-2 border-[#88888822] group hover:border-primary transition-all duration-300 ease-in-out">
         <div class="flex flex-row gap-3">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
-                alt="Placeholder Image" class="rounded-bl-md rounded-tl-md h-42 w-65 object-cover">
+                alt="Placeholder Image" class="rounded-bl-md rounded-tl-md h-[190px] w-[220px] aspect-video object-cover">
             <div class="py-4 px-3 flex flex-row justify-between w-full">
-                <div class="flex flex-col justify-between">
-                    <h2 class="font-bold text-[1.4rem] pb-2">{{ $review->title }}</h2>
-                    <p class="text-sm text-gray-400 text-[.90rem]">{{ Str::limit($review->body, 350) }}</p>
+                <div class="flex flex-col justify-between flex-5/6">
+                    <h2 class="font-bold text-[1.2rem] pb-2">{{ $review->title }}</h2>
+                    <p class="text-sm text-gray-400 text-[.90rem] py-2 break-all">{{ Str::limit($review->body, 350) }}</p>
                     <ul class="flex flex-row gap-5 items-center text-[.85rem] mt-2">
                         <li>
                             <x-badge-link type="label" class="rounded-[10px] px-1 py-0 font-bold text-[0.70rem]">{{ $review->recommendation->label() }}</x-badge-link>
                         </li>
                         <li class="font-bold">{{ $review->rating === '10.0' ? 10 : $review->rating }}/10</li>
                         <li class="flex flex-row items-center gap-1"><x-heroicon-o-chat-bubble-oval-left class="size-4" />{{ count($review->comments) }} comment(s)</li>
-                        <li>@if($review->contains_spoilers)<span class="text-[.80rem] flex flex-row gap-2"><x-heroicon-s-exclamation-triangle class="text-orange-600 size-4"/>Contains Spoilers</span>@endif</li>
+                        @if($review->contains_spoilers)<li><span class="text-[.80rem] flex flex-row gap-2"><x-heroicon-s-exclamation-triangle class="text-orange-600 size-4"/>Contains Spoilers</span></li>@endif
+                        <li class="text-[.80rem]">Review for <strong class="group-hover:text-accent transition-all duration-300 ease-in-out">{{ $review->game_name }}</strong></li>
                     </ul>
                 </div>
-                <ul class="flex flex-col justify-between">
+                <ul class="flex flex-col justify-between items-end flex-1/6">
                     <li class="text-[.82rem] flex flex-row items-center gap-1 font-bold group-hover:text-accent transition-all duration-300 ease-in-out">
-                        <x-heroicon-o-user class="size-3.5" />{{ $review->user->name }}</li>
+                        <x-heroicon-o-user class="size-3.5" />{{ $review->user->nickname }}</li>
                     <li class="text-gray-500 text-[.82rem]">{{ $review->getPostedDate() }}</li>
                 </ul>
             </div>

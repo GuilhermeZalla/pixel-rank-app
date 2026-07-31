@@ -13,15 +13,13 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
     @case('search')
         <input type="text" id="game-search" placeholder="Search a game..." autocomplete="on" {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem] ' . $default]) }} required>
         <input type="hidden" name="game_id" id="game-id">
+        <input type="hidden" name="game_name" id="game-name">
+
         <div id="game-dropdown" class="{{ 'absolute top-20 z-99 flex flex-col gap-3 hidden overflow-y-scroll max-h-80 ' . $default }}"> </div>
         @break
 
     @case('checkbox')
         <input type="checkbox" checked="checked" {{ $attributes->merge(['class' => 'checkbox checkbox-success']) }} value="1" />
-        @break
-
-    @case('number')
-        <input type="number" name="rating" id="rating" min="0" max="10" step="0.5" placeholder="0 - 10" {{ $attributes->merge(['class' => 'p-2 text-[.80rem]'.$default]) }}/>
         @break
 
     @default

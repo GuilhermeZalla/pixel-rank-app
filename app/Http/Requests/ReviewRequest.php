@@ -24,6 +24,7 @@ class ReviewRequest extends FormRequest
     {
         return [
             'game_id' => ['required', 'integer'],
+            'game_name' => ['required', 'string'],
             'title' => ['required', 'min:8', 'max:120'],
             'recommendation' => ['required'],
             'contains_spoiler' => ['boolean'],

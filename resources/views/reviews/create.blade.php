@@ -13,20 +13,23 @@
             </x-form.field>
             <x-form.field class="flex flex-col gap-1">
                 <x-form.label for="title">Review Title</x-form.label>
-                <x-form.input type="title" name="title" id="title" placeholder="Your review title" required maxlength="120"/>
+                <x-form.input type="text" name="title" id="title" placeholder="Your review title" required maxlength="120"/>
             </x-form.field>
             <x-form.field class="flex flex-col gap-2">
-                <x-form.label for="recommendation">Your Recommendation</x-form.label>
-                <div class="flex flex-row flex-wrap gap-3">
-                    <x-form.button type="radio" option="recommended" required>Recommended</x-form.button>
-                    <x-form.button type="radio" option="not_recommended">Not Recommended</x-form.button>
-                    <x-form.button type="radio" option="mixed">Mixed</x-form.button>
-                    <x-form.button type="radio" option="essential">Essential</x-form.button>
+                <x-form.label for="recommendation">Your Recommendation and rating</x-form.label>
+                <div class="flex flex-row justify-between gap-3">
+                    <div class="flex flex-row flex-wrap gap-3 flex-5/6">
+                        <x-form.button type="radio" option="recommended" required>Recommended</x-form.button>
+                        <x-form.button type="radio" option="not_recommended">Not Recommended</x-form.button>
+                        <x-form.button type="radio" option="mixed">Mixed</x-form.button>
+                        <x-form.button type="radio" option="essential">Essential</x-form.button>
+                    </div>
+                    <div class="border border-[#8888884A] rounded-[5px] bg-[#0E0E0E] flex flex-col items-center justify-center flex-1/6">
+                        <x-form.label for="rating">Score</x-form.label>
+                        <input type="number" name="rating" id="rating" min="0" max="10" step="0.5" placeholder="0 - 10"
+                            class="py-2 px-0 text-[.80rem] font-bold text-white w-full text-center focus:border-none focus:outline-none placeholder:text-white" />
+                    </div>
                 </div>
-            </x-form.field>
-            <x-form.field>
-                <x-form.label for="rating">Your rating</x-form.label>
-                <x-form.input type="number" />
             </x-form.field>
             <x-form.field class="flex flex-col gap-2">
                 <x-form.label for="review">Write Your Review</x-form.label>
@@ -37,35 +40,35 @@
                 <x-form.label for="spoiler" class="cursor-pointer">This review contains spoilers</x-form.label>
             </x-form.field>
             <div class="flex flex-col gap-4 my-4">
-                <x-form.label for="title">The Good & The Bad (max 10 for both)</x-form.label>
+                <x-form.label for="proscons">The Good & The Bad (max 10 for both)</x-form.label>
                 <div class="flex flex-row justify-between gap-4">
                     <div class="flex flex-col flex-wrap gap-4 bg-[#181818] rounded-2xl p-4 w-full">
+                         <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]"><x-heroicon-o-hand-thumb-up
+                                class="size-4 text-primary" />Pontos positivos</h3>
                         <div class="flex gap-2">
-                            <input type="text" id="pro-input" class="input input-bordered flex-1"
-                                placeholder="Add a positive point..." maxlength="100">
+                            <input type="text" id="pro-input" class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E"
+                                placeholder="Add a positive point..." maxlength="50" name="proscons">
                             <button type="button" id="add-pro" class="btn btn-primary">Add</button>
                         </div>
-                        <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]"><x-heroicon-o-hand-thumb-up
-                                class="size-4 text-primary" />Pontos positivos</h3>
                         <ul id="pros-list" class="space-y-2"></ul>
-                        <p id="pros-empty" class="text-sm text-gray-400">Nenhum ponto positivo.</p>
+                        <p id="pros-empty" class="text-sm text-gray-400">Nenhum ponto adicionado ainda.</p>
                     </div>
                     <div class="flex flex-col flex-wrap gap-4 bg-[#181818] rounded-2xl p-4 w-full">
-                        <div class="flex gap-2">
-                            <input type="text" id="cons-input" class="input input-bordered flex-1"
-                                placeholder="Add a negative point..." maxlength="100">
-                            <button type="button" id="add-cons" class="btn btn-primary">Add</button>
-                        </div>
-                        <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
+                               <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
                             <x-heroicon-o-hand-thumb-down class="size-4 text-warning" /> Pontos negativos</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="cons-input" class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E"
+                                placeholder="Add a negative point..." maxlength="5" name="proscons">
+                            <button type="button" id="add-cons" class="btn btn-warning text-white">Add</button>
+                        </div>
                         <ul id="cons-list" class="space-y-2"></ul>
-                        <p id="cons-empty" class="text-sm text-gray-400">Nenhum ponto negativo.</p>
+                        <p id="cons-empty" class="text-sm text-gray-400">Nenhum ponto adicionado ainda.</p>
                     </div>
                 </div>
             </div>
-            <x-form.field class="mt-2">
-                <x-form.button>Return</x-form.button>
-                <x-form.button>Create</x-form.button>
+            <x-form.field class="mt-2 flex-row justify-end">
+                <x-form.link href="/" class="w-35 btn">Return</x-form.link>
+                <x-form.button class="w-35">Create</x-form.button>
             </x-form.field>
         </div>
     </x-form.form>
@@ -73,6 +76,7 @@
         const searchInput = document.getElementById('game-search');
         const dropdown = document.getElementById('game-dropdown');
         const gameId = document.getElementById('game-id');
+        const gameName = document.getElementById('game-name');
 
         let timeout = null;
 
@@ -80,6 +84,7 @@
             clearTimeout(timeout);
 
             gameId.value = '';
+            gameName.value = '';
 
             const query = this.value.trim();
 
@@ -104,6 +109,7 @@
                     item.addEventListener('click', () => {
                         searchInput.value = game.name;
                         gameId.value = game.id;
+                        gameName.value = game.name;
 
                         dropdown.classList.add('hidden');
                     });

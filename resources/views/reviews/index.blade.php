@@ -23,9 +23,9 @@
             <x-badge-link href="/mixed" :active="request()->is('mixed')">Mixed <span>{{ $recommendationsTotal['mixed'] }}</span></x-badge-link>
         </nav>
     </x-section>
-    <x-section class="px-40 flex flex-col gap-5 -mt-10">
-        <div class="flex flex-row justify-end gap-2 text-[.80rem] mb-2">
-            <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-5 w-5" />
+    <x-section class="px-40 flex flex-col gap-7 -mt-10">
+        <div class="flex flex-row justify-end gap-2 text-[.80rem] items-center">
+            <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-4 w-4" />
             <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
         </div>
         @foreach($reviews as $review)
