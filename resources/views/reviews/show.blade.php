@@ -52,7 +52,7 @@
                     <ul class="flex flex-row flex-wrap gap-4 bg-[#181818] rounded-2xl p-4">
                         <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $game['platforms'] }}</strong>
                         </li>
-                        <li class="w-[calc(50%-0.5rem)] ">Status<br><strong>Campanha Concluíd</strong>a</li>
+                        <li class="w-[calc(50%-0.5rem)] ">Plataforma jogada<br><strong>Campanha Concluíd</strong>a</li>
                         <li class="w-[calc(50%-0.5rem)] ">Lançamento<br><strong>{{ $game['release_date'] }}</strong>
                         </li>
                         <li class="w-[calc(50%-0.5rem)] ">
@@ -106,50 +106,13 @@
             <form id="comment-form" method="POST" action="/comments" class="w-full">
                 @csrf
                 <x-form.input type="textarea" name="comment" id="comment" placeholder="Participe da discussão"
-                    class="placeholder:text-base-content resize-none border-[#88888822] rounded-xl" rows="3" />
+                    class="placeholder:text-base-content resize-none border-[#88888822] rounded-xl" rows="5" minlength="5" maxlength="2000" />
                 <input type="text" name="review" value="{{ $review->id }}" class="hidden" />
             </form>
             @if (!empty($review->comments))
                 <ul id="comments" class="flex flex-col gap-3 mt-7">
                     @foreach ($review->comments as $comment)
-                        <li id="comment-{{ $comment->id }}" class="flex flex-row gap-4 border-b border-white/8 py-8">
-                            <img src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->nickname) }}"
-                                alt="User" class="rounded-[50%] h-12">
-                            <div class="w-full">
-                                <span class="flex flex-row justify-between">
-                                    <h3 class="font-bold h-0">{{ $comment->user->nickname }}</h3>
-                                    <div class="flex flex-row h-10">
-                                        <h4 class="label text-[.90rem]">{{ $comment->getPostedDate() }}</h4>
-                                        <div class="navbar bg-base-100 shadow-sm p-0 self-center">
-                                            <div class="navbar-center hidden lg:flex">
-                                                <ul class="menu menu-horizontal px-1">
-                                                    <li>
-                                                        <details>
-                                                            <summary ><svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke-width="1.5"
-                                                                    stroke="currentColor" class="size-6">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                                                </svg>
-                                                            </summary>
-                                                            <ul class="p-2 bg-base-100 w-40 z-1">
-                                                                @can('delete', $comment)
-                                                                    <li id="comment-{{ $comment->id }}"> <button
-                                                                            class="delete-comment text-red-500"
-                                                                            data-id="{{ $comment->id }}"> Delete
-                                                                        </button></li>
-                                                                @endcan
-                                                            </ul>
-                                                        </details>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </span>
-                                <p>{{ $comment->body }}</p>
-                            </div>
-                        </li>
+                     <x-comment :comment="$comment"></x-comment>
                     @endforeach
                 </ul>
             @endif
@@ -158,16 +121,16 @@
     <!-- Delete Review Confirmation Modal -->
     <input type="checkbox" id="my_modal_7" class="modal-toggle" />
     <div class="modal" role="dialog">
-        <div class="modal-box px-4 py-2 bg-[#181818]">
+        <div class="modal-box w-95 border border-[#88888833] bg-[#0E0E0E] rounded-[20px] px-6">
             <div class="flex flex-row justify-between items-center">
                 <h3 class="text-lg font-bold">Delete Review</h3>
                 <label class="btn font-bold bg-transparent shadow-none border-0 outline-0 m-0 p-0" for="my_modal_7">
                     <x-heroicon-o-x-mark class="size-4.5" /></label>
             </div>
-            <p class="py-4 text-center text-[1.2rem] my-10">Are you sure you want to delete this review?</p>
-            <div class="flex flex-row justify-between gap-3 mb-2">
-                <label class="btn font-bold flex-1/2 bg-[#030303]" for="my_modal_7">CANCEL</label>
-                <button type="submit" form="delete-review" class="btn font-bold flex-1/2 bg-red-500">DELETE</button>
+            <p class="py-4 text-center text-[1.2rem] my-5 flex flex-col gap-5">Are you sure you want to delete this review? <br><span class="text-[1rem]">(This action can't be undone)</span></p>
+            <div class="flex flex-row justify-between gap-5 mb-2">
+                <label class="btn font-bold flex-1/2 bg-transparent border border-[#8888884A] hover:bg-black rounded-lg" for="my_modal_7">CANCEL</label>
+                <button type="submit" form="delete-review" class="btn font-bold flex-1/2 bg-red-500 rounded-lg">DELETE</button>
             </div>
         </div>
     </div>

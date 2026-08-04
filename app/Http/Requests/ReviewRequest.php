@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\ReviewRecommendation;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ReviewRequest extends FormRequest
 {
@@ -26,7 +28,7 @@ class ReviewRequest extends FormRequest
             'game_id' => ['required', 'integer'],
             'game_name' => ['required', 'string'],
             'title' => ['required', 'min:8', 'max:120'],
-            'recommendation' => ['required'],
+            'recommendation' => ['required', Rule::enum(ReviewRecommendation::class)],
             'contains_spoiler' => ['boolean'],
             'body' => ['required', 'min: 150'],
             'rating' => ['required', 'numeric', 'between:0,10'],

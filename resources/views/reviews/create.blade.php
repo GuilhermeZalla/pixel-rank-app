@@ -39,7 +39,7 @@
                 <x-form.input type="checkbox" name="spoiler" id="spoiler"/>
                 <x-form.label for="spoiler" class="cursor-pointer">This review contains spoilers</x-form.label>
             </x-form.field>
-            <div class="flex flex-col gap-4 my-4">
+            <x-form.field class="flex flex-col gap-4 my-4">
                 <x-form.label for="proscons">The Good & The Bad (max 10 for both)</x-form.label>
                 <div class="flex flex-row justify-between gap-4">
                     <div class="flex flex-col flex-wrap gap-4 bg-[#181818] rounded-2xl p-4 w-full">
@@ -65,7 +65,15 @@
                         <p id="cons-empty" class="text-sm text-gray-400">Nenhum ponto adicionado ainda.</p>
                     </div>
                 </div>
-            </div>
+            </x-form.field>
+            <x-form.field>
+                <x-form.label for="platform">Platform Played</x-form.label>
+                <x-form.select name="platform">
+                    @foreach($platforms as $platform)
+                        <option value="{{ $platform['name'] }}" class="hover:bg-accent hover:text-black">{{ $platform['name'] }}</option>
+                    @endforeach
+                </x-form.select>
+            </x-form.field>
             <x-form.field class="mt-2 flex-row justify-end">
                 <x-form.link href="/" class="w-35 btn">Return</x-form.link>
                 <x-form.button class="w-35">Create</x-form.button>

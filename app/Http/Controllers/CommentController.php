@@ -30,7 +30,11 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $comment = Auth::user()->comments()->create(['body' => $request->comment, 'review_id' => $request->review]);
+        $validated = $request->validate([
+            'body' => ['required', 'string', 'min:5', 'max:2000']
+        ]);
+
+        $comment = Auth::user()->comments()->create(['body' => $validated, 'review_id' => $request->review]);
         return response()->json([
             'comment' => $comment->load('user')
         ]);

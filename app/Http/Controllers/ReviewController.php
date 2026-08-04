@@ -18,10 +18,10 @@ class ReviewController extends Controller
 
     protected $recommendations = ['not_recommended', 'recommended', 'mixed', 'essential'];
 
-    public function index(Request $request, GameApiService $gameapi)
+    public function index(Request $request)
     {
         $filter = $request->filter;
-        $reviews = Review::with(['user', 'comments']);
+        $reviews = !empty($request['game_id']) ? Review::with(['user', 'comments'])->where('game_id', $request['game_id']) : Review::with(['user', 'comments']);
 
         if (in_array($filter, $this->recommendations)) {
             $reviews = $reviews->where('recommendation', $filter);
@@ -53,7 +53,6 @@ class ReviewController extends Controller
                     break;
             }
         }
-
         $recommendations = Review::selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
 
         return view('reviews.index', [
@@ -65,9 +64,9 @@ class ReviewController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create(Request $request, GameApiService $gameapi)
     {
-        return view('reviews.create', ['review' => $request->review]);
+        return view('reviews.create', ['review' => $request->review, 'platforms' => $gameapi->getPlatforms()]);
     }
 
     /**

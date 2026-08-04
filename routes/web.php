@@ -30,10 +30,10 @@ Route::controller(RegisterController::class)->group(function () {
 // Users Route
 
 Route::controller(UserController::class)->middleware('auth')->group(function () {
-    Route::get('/user', 'index');
-    Route::get('/user/{user}', 'show');
-    Route::get('/user/{user}/edit', 'edit')->can('update', 'user');
-    Route::put('/user/{user}', 'update')->can('update', 'user');
+    Route::get('/users', 'index');
+    Route::get('/users/{user}', 'show');
+    Route::get('/users/{user}/edit', 'edit')->name('users.edit')->can('update', 'user');
+    Route::put('/users/{user}', 'update')->can('update', 'user');
 });
 
 // Reviews Route

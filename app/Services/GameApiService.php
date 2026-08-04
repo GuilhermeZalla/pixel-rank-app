@@ -43,6 +43,14 @@ class GameApiService
         return $response['access_token'];
     }
 
+    public function getPlatforms()
+    {
+        return Http::withHeaders([
+            'Client-ID' => $this->twitchId,
+            'Authorization' => 'Bearer ' . $this->getAccessToken(),
+        ])->withBody('fields id,name; limit 500; sort name asc;', 'text/plain')->post($this->baseUrl . '/platforms')->json();
+    }
+
     public function getGames()
     {
         return Http::withHeaders([
