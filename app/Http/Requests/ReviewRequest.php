@@ -31,11 +31,12 @@ class ReviewRequest extends FormRequest
             'recommendation' => ['required', Rule::enum(ReviewRecommendation::class)],
             'contains_spoiler' => ['boolean'],
             'body' => ['required', 'min: 150'],
-            'rating' => ['required', 'numeric', 'between:0,10'],
+            'rating' => ['required', 'numeric', 'between:0,10', 'regex:/^(10(\.0)?|[0-9](\.(0|5))?)$/'],
             'pros' => ['nullable', 'array', 'max:10'],
             'pros.*' => ['string', 'max:100'],
             'cons' => ['nullable', 'array', 'max:10'],
             'cons.*' => ['string', 'max:100'],
+            'platform_playable' => ['string']
         ];
     }
 }

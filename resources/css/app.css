@@ -42,3 +42,14 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px #0E0E0E inset;
     -webkit-text-fill-color: #fff;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}

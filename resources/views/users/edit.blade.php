@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>Dashboard - {{ auth()->user()->nickname }}</x-slot:title>
-    <div class="flex flex-row justify-between gap-8 mt-[10vh] mx-[2vw]" x-data="{ activeMenu: 'menu3' }">
-        <section class="flex flex-col w-100 border border-[#88888833] bg-[#0E0E0E] rounded-[10px] py-6 h-128 gap-6">
+    <div class="flex flex-row justify-between gap-8 mt-[10vh] mx-[2vw]" x-data="{ activeMenu: '{{ $menu }}' }">
+        <section class="flex flex-col w-100 border border-[#88888833] bg-[#0E0E0E] rounded-[10px] py-6 h-130 gap-6">
             <div class="flex flex-col justify-center text-center gap-5">
                 <x-cover src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}" alt="User Profile Image" class="mask mask-circle h-[15vh]"></x-cover>
                 <h1 class="font-bold text-[1.3rem] text-secondary">{{ auth()->user()->nickname }}</h1>
@@ -18,6 +18,7 @@
             </ul>
         </section>
         <section class="flex flex-col gap-5 w-full border border-[#88888833] bg-[#0E0E0E] rounded-[10px] p-6">
+
             <!-- User Edit Form -->
             <x-form.form method="POST" action="{{ route('users.edit', auth()->user()->id) }}" class="w-full" x-show="activeMenu === 'menu1'">
                 @csrf
@@ -63,7 +64,7 @@
                 </x-form.field>
             </x-form.form>
 
-            <!-- User Reviews -->
+            <!-- My Reviews -->
             <div id="review" x-show="activeMenu === 'menu2'">
                 <h2 class="font-bold text-[1.7rem] mb-2">My Reviews ({{ $reviews->total() }})</h2>
                 <p>Manage your reviews.</p>
@@ -91,8 +92,6 @@
                     <ul id="comments" class="flex flex-col gap-6 mt-5">
                         @foreach ($comments as $comment)
                             <x-comment :comment="$comment" :dashboard="true"></x-comment>
-                             <x-comment :comment="$comment" :dashboard="true"></x-comment>
-                              <x-comment :comment="$comment" :dashboard="true"></x-comment>
                         @endforeach
                     </ul>
                     <div class="mt-10">

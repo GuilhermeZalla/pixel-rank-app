@@ -5,7 +5,7 @@
         class="bg-[#0E0E0E] review-link-spoiler sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px]" @else
             class="sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px] bg-[#0E0E0E]" @endif>
             <article
-                class="rounded-[7px] border-2 border-[#88888822] group hover:border-primary transition-all duration-300 ease-in-out">
+                class="rounded-[7px] border-2 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
                 <div class="flex flex-row gap-3">
                     <x-cover type="cover" class="h-[120px] w-[200px]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
                         alt="Review Cover"></x-cover>
@@ -25,8 +25,7 @@
                                 @if($review->contains_spoilers)
                                     <li><span class="text-[.80rem] flex flex-row gap-2"><x-heroicon-s-exclamation-triangle
                                 class="text-orange-600 size-4" />Contains Spoilers</span></li>@endif
-                                <li class="text-[.75rem]">Review for <strong
-                                        class="group-hover:text-accent transition-all duration-300 ease-in-out">{{ $review->game_name }}</strong>
+                                <li class="text-[.75rem]">Review for <strong class="group-hover:text-accent transition-all duration-300 ease-in-out">{{ $review->game_name }}</strong>
                                 </li>
                             </ul>
                         </div>
@@ -46,15 +45,15 @@
     class="bg-[#0E0E0E] review-link-spoiler sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px]" @else
         class="sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px] bg-[#0E0E0E]" @endif>
         <article
-            class="rounded-[7px] border-2 border-[#88888822] group hover:border-primary transition-all duration-300 ease-in-out">
+            class="rounded-[7px] border-2 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
             <div class="flex flex-row gap-3">
-                    <x-cover type="cover" class="h-[190px] w-[220px]"
+                    <x-cover type="cover" class="h-[150px] w-[220px]"
                         src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
                         alt="Review Cover"></x-cover>
-                <div class="py-4 px-3 flex flex-row justify-between w-full">
+                <div class="px-5 py-2 flex flex-row justify-between w-full">
                     <div class="flex flex-col justify-between flex-5/6">
                         <h2 class="font-bold text-[1.2rem] pb-2">{{ $review->title }}</h2>
-                        <p class="text-sm text-gray-400 text-[.90rem] py-2 break-all">{{ Str::limit($review->body, 350) }}
+                        <p class="text-sm text-gray-400 text-[.90rem] py-2 break-all">{{ Str::limit($review->body, 150) }}
                         </p>
                         <ul class="flex flex-row gap-5 items-center text-[.85rem] mt-2">
                             <li>

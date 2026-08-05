@@ -31,10 +31,10 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'body' => ['required', 'string', 'min:5', 'max:2000']
+            'comment' => ['required', 'string', 'min:5', 'max:2000']
         ]);
 
-        $comment = Auth::user()->comments()->create(['body' => $validated, 'review_id' => $request->review]);
+        $comment = Auth::user()->comments()->create(['body' => $validated['comment'], 'review_id' => $request->review]);
         return response()->json([
             'comment' => $comment->load('user')
         ]);
@@ -67,9 +67,14 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy(Request $request, Comment $comment)
     {
         $comment->delete();
+
+        if ($request->has('profile')) {
+            return redirect('/users/' . auth()->user()->id . '/'.'menu3/'.'edit')->with('info', 'Comentário deletado.');
+        }
+
         return response()->json([
             'message' => 'Comentário deletado'
         ]);

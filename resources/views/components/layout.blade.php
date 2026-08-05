@@ -13,10 +13,9 @@
 <!-- Site Content -->
 
 <body class="pb-20">
-    <div
-        class="navbar flex flex-row justify-between bg-base-100 shadow-sm border-b border-b-[#88888833] px-4 sm:px-0 md:px-40 lg:px-20">
-        <div class="flex flex-row"> <a class="btn btn-ghost text-xl" href="/"> <img src="{{ asset('pixelrank.png') }}"
-                    alt="PixelRank" class="w-full h-full object-contain"></a>
+    <div class="navbar flex flex-row justify-between bg-base-100 shadow-sm border-b border-b-[#88888833] px-5">
+        <div class="flex flex-row"> <a class="text-xl" href="/"><img src=""
+                    alt="PixelRank" class="object-contain h-full w-full"></a>
         @if(!request()->is('users/*'))
             <form method="GET" action="/" class="relative">
                 <label class="input w-120" class="rounded-[7px]">
@@ -29,7 +28,7 @@
                         <path d="M18 13h.01" />
                     </svg>
                     <input type="text" id="game-search-layout" placeholder="Search a game..." autocomplete="on"
-                        class="p-2.5 text-[.80rem] font-bold w-full border-none focus:transparent focus:outline-none w-120"
+                        class="p-2.5 text-[.80rem] font-bold border-none focus:transparent focus:outline-none w-120"
                         required>
                     <input type="hidden" name="game_id" id="game-id-layout">
                     <div id="game-dropdown-layout"
@@ -47,9 +46,9 @@
                             <summary> <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"
                                 alt="User" class="rounded-[50%] h-7">{{ auth()->user()->nickname }}</summary>
                             <ul class="rounded-lg border border-[#88888833] bg-[#0E0E0E] p-2 mt-2 left-6 w-40">
-                                <x-submenu-link href="{{ route('users.edit', auth()->user()) }}">Profile</x-submenu-link>
-                                <x-submenu-link>My Reviews</x-submenu-link>
-                                <x-submenu-link>Settings</x-submenu-link>
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/{{ 'menu1' }}/edit">Profile</x-submenu-link>
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/{{ 'menu2' }}/edit">My Reviews</x-submenu-link>
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/{{ 'menu4' }}/edit">Settings</x-submenu-link>
                                 <x-divisor></x-divisor>
                                 <x-submenu-link type="submit"></x-submenu-link>
                             </ul>

@@ -32,7 +32,7 @@ Route::controller(RegisterController::class)->group(function () {
 Route::controller(UserController::class)->middleware('auth')->group(function () {
     Route::get('/users', 'index');
     Route::get('/users/{user}', 'show');
-    Route::get('/users/{user}/edit', 'edit')->name('users.edit')->can('update', 'user');
+    Route::get('/users/{user}/{menu?}/edit', 'edit')->name('users.edit')->can('update', 'user');
     Route::put('/users/{user}', 'update')->can('update', 'user');
 });
 

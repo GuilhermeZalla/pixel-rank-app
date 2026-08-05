@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>PixelRank</x-slot:title>
-    <x-section class="flex flex-col px-40">
+    <x-section class="flex flex-col sm:px-5 md:px-5 lg:px-30">
         <div class="mt-10">
             <h1 class="font-bold text-[1.7rem] mb-1">Reviews</h1>
             <p class="text-[#888888ed] text-[.95rem]">Capture your thoughts and experiences with a game.</p>
@@ -9,7 +9,7 @@
             <x-form.input type="textarea" name="review" rows="5" id="review" placeholder="What's your review?" class="placeholder:text-base-content resize-none border-[#88888822]" />
         </form>
     </x-section>
-    <x-section class="px-40">
+    <x-section class="sm:px-10 md:px-5 lg:px-30">
         <nav class="flex flex-row justify-start gap-3">
             <x-badge-link href="/" :active="request()->is('/')">All</x-badge-link>
             <x-badge-link href="/highest-rated" :active="request()->is('highest-rated')">Highest Rated</x-badge-link>
@@ -23,7 +23,7 @@
             <x-badge-link href="/mixed" :active="request()->is('mixed')">Mixed <span>{{ $recommendationsTotal['mixed'] }}</span></x-badge-link>
         </nav>
     </x-section>
-    <x-section class="px-40 flex flex-col gap-7 -mt-10">
+    <x-section class="sm:px-10 md:px-5 lg:px-30 flex flex-col gap-7 -mt-10">
         <div class="flex flex-row justify-end gap-2 text-[.80rem] items-center">
             <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-4 w-4" />
             <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>

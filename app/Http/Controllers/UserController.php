@@ -17,9 +17,9 @@ class UserController extends Controller
         return view('users.show');
     }
 
-    public function edit(User $user){
+    public function edit(Request $request, User $user){
         $reviews = Auth::user()->reviews()->paginate(8);
         $comments = Auth::user()->comments()->paginate(10);
-        return view('users.edit', ['reviews' => $reviews, 'comments' => $comments]);
+        return view('users.edit', ['reviews' => $reviews, 'comments' => $comments, 'menu' => $request->menu]);
     }
 }

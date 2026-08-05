@@ -52,7 +52,7 @@
                     <ul class="flex flex-row flex-wrap gap-4 bg-[#181818] rounded-2xl p-4">
                         <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $game['platforms'] }}</strong>
                         </li>
-                        <li class="w-[calc(50%-0.5rem)] ">Plataforma jogada<br><strong>Campanha Concluíd</strong>a</li>
+                        <li class="w-[calc(50%-0.5rem)] ">Plataforma Jogada<br><strong>{{ $review->platform_playable }}</strong></li>
                         <li class="w-[calc(50%-0.5rem)] ">Lançamento<br><strong>{{ $game['release_date'] }}</strong>
                         </li>
                         <li class="w-[calc(50%-0.5rem)] ">
@@ -135,9 +135,7 @@
         </div>
     </div>
     <!-- Delete Review Form -->
-    <form method="POST" action="/reviews/{{ $review->id }}" id="delete-review" class="hidden">@csrf
-        @method('DELETE')
-    </form>
+    <x-form.form-delete method="POST" action="/reviews/{{ $review->id }}" id="delete-review"></x-form.form-delete>
     <script>
         const form = document.getElementById('comment-form');
         const textarea = document.getElementById('comment');
@@ -213,7 +211,7 @@
                 </div>
             </span>
 
-            <p>${data.comment.body}</p>
+            <p class="break-all">${data.comment.body}</p>
         </div>
 
     </li>

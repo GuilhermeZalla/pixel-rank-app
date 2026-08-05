@@ -25,9 +25,9 @@
                         <x-form.button type="radio" option="essential">Essential</x-form.button>
                     </div>
                     <div class="border border-[#8888884A] rounded-[5px] bg-[#0E0E0E] flex flex-col items-center justify-center flex-1/6">
-                        <x-form.label for="rating">Score</x-form.label>
+                        <x-form.label for="rating" class="h-full">Score</x-form.label>
                         <input type="number" name="rating" id="rating" min="0" max="10" step="0.5" placeholder="0 - 10"
-                            class="py-2 px-0 text-[.80rem] font-bold text-white w-full text-center focus:border-none focus:outline-none placeholder:text-white" />
+                            class="input bg-transparent border-none outline-none pb-5 text-[1.2rem] font-bold text-white w-full text-center focus:border-none focus:outline-none placeholder:text-white" />
                     </div>
                 </div>
             </x-form.field>
@@ -68,13 +68,13 @@
             </x-form.field>
             <x-form.field>
                 <x-form.label for="platform">Platform Played</x-form.label>
-                <x-form.select name="platform">
+                <x-form.select name="platform_playable">
                     @foreach($platforms as $platform)
                         <option value="{{ $platform['name'] }}" class="hover:bg-accent hover:text-black">{{ $platform['name'] }}</option>
                     @endforeach
                 </x-form.select>
             </x-form.field>
-            <x-form.field class="mt-2 flex-row justify-end">
+            <x-form.field class="mt-2 flex-row justify-end gap-3">
                 <x-form.link href="/" class="w-35 btn">Return</x-form.link>
                 <x-form.button class="w-35">Create</x-form.button>
             </x-form.field>
@@ -136,22 +136,18 @@
                 }
             });
 
-         const rating = document.getElementById('rating');
+        const rating = document.getElementById('rating');
 
-            rating.addEventListener('input', function () {
+            rating.addEventListener('blur', function () {
+                if (this.value === '') return;
 
-                if (this.value === '') {
-                    return;
-                }
+                const value = this.value.replace(',', '.');
+                const regex = /^(10(\.0)?|[0-9](\.[0-9])?)$/;
 
-                let value = Number(this.value);
-
-                if (!Number.isNaN(value)) {
-                    if (value < 0) {
-                        this.value = 0;
-                    } else if (value > 10) {
-                        this.value = 10;
-                    }
+                if (!regex.test(value)) {
+                    alert('The score must be between 0 and 10 with at most one decimal place.');
+                    this.value = '';
+                    this.focus();
                 }
             });
 
