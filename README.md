@@ -1,58 +1,154 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PixelRank
+![PixelRank Screenshot](imagem)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Uma plataforma de reviews de jogos inspirada no Letterboxd, onde os usuários podem
+avaliar jogos, escrever análises, comentar e descobrir novas reviews da comunidade.
 
-## About Laravel
+## 🎯 Objetivo
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+O objetivo do PixelRank é oferecer uma plataforma focada em reviews de jogos,
+inspirada na experiência do Letterboxd para filmes, permitindo que qualquer
+usuário publique, compartilhe e descubra reviews de jogos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Funcionalidades
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Publicação de reviews
+- Sistema de comentários
+- Busca de jogos utilizando a API da IGDB
+- Dashboard do usuário
+- Cadastro e autenticação de usuários
+- Filtros e ordenação
 
-## Learning Laravel
+## 🚧 Status
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Projeto em desenvolvimento.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🛠 Tecnologias
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### Backend
 
-## Agentic Development
+- PHP
+- Laravel
+- Queues & Jobs
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Frontend
+
+- Blade
+- Tailwind CSS
+- DaisyUI
+- JavaScript
+
+### Banco de dados
+
+- MySQL
+
+### APIs
+
+- IGDB API
+
+### Ferramentas
+
+- Git
+- Docker (em desenvolvimento)
+
+## 🚀 Instalação
 
 ```bash
-composer require laravel/boost --dev
+git clone ...
 
-php artisan boost:install
+cd PixelRank
+
+composer install
+
+cp .env.example .env
+
+php artisan key:generate
+
+php artisan migrate
+
+npm install
+
+npm run dev
+
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## 📸 Screenshots
 
-## Contributing
+(em breve)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🏗 Arquitetura
 
-## Code of Conduct
+O projeto segue a arquitetura MVC do Laravel.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+As regras de negócio ficam concentradas em Services, enquanto Policies são utilizadas
+para autorização. Notifications são responsáveis pelo envio de notificações e a
+integração com a API da IGDB é encapsulada em uma camada de serviços para manter
+os controllers enxutos.
 
-## Security Vulnerabilities
+## 📂 Estrutura do projeto
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+A estrutura principal do projeto segue a organização padrão do Laravel,
+com separação de responsabilidades através de Services, Policies e Notifications.
 
-## License
+```text
+PixelRank/
+│
+├── app/
+│ ├── Http/
+│ │ ├── Controllers/
+│ │ ├── Requests/
+│ │ └── Middleware/
+│ │
+│ ├── Models/
+│ ├── Services/
+│ ├── Policies/
+│ └── Notifications/
+│
+├── database/
+│ ├── migrations/
+│ └── seeders/
+│
+├── resources/
+│ ├── views/
+│ ├── css/
+│ └── js/
+│
+├── routes/
+│ └── web.php
+│
+├── tests/
+│
+├── .env.example
+├── composer.json
+└── package.json
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🗺 Roadmap
+
+- [x] Reviews
+- [x] Comentários
+- [x] Criação e autenticação de usuários
+- [x] Dashboard do usuário
+- [ ] Notificações
+- [ ] Sistema de seguidores
+- [ ] Sistema de mensagens privadas
+- [ ] Sistema de recomendação
+- [ ] Internacionalização (PT-BR / EN)
+- [ ] Docker
+- [ ] Testes automatizados
+- [ ] Deploy
+
+## 🔐 Segurança
+
+- Autorização utilizando Laravel Policies
+- Validação através de Form Requests
+- Proteção contra ações não autorizadas
+
+## 📄 Licença
+
+Este projeto foi desenvolvido para fins de estudo e portfólio.
+
+## 🌐 Demonstração
+
+(em breve)
