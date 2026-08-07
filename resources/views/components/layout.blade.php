@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png/svg" href="{{ asset('pixelrank.svg') }}">
     <title>{{ $title }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -14,8 +15,8 @@
 
 <body class="pb-20">
     <div class="navbar flex flex-row justify-between bg-base-100 shadow-sm border-b border-b-[#88888833] px-5">
-        <div class="flex flex-row"> <a class="text-xl" href="/"><img src=""
-                    alt="PixelRank" class="object-contain h-full w-full"></a>
+        <div class="flex flex-row"> <a class="text-xl" href="/"><img src="{{ asset('pixelrank.png') }}"
+                    alt="PixelRank" class="object-contain h-full w-30"></a>
         @if(!request()->is('users/*'))
             <form method="GET" action="/" class="relative">
                 <label class="input w-120" class="rounded-[7px]">

@@ -6,7 +6,7 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
 
 @switch($type)
     @case('textarea')
-        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-3 ' . $default]) }}>{{ $attributes->get('value') }}</textarea>
+        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-3 ' . $default]) }} @if(!empty($attributes->get('value'))) value="{{ old($attributes->get('value')) }}" @endif>{{ $attributes->get('value') }}</textarea>
         <x-form.error name="{{ $attributes->get('bio') }}" />
         @break
 
@@ -23,6 +23,6 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
         @break
 
     @default
-        <input {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem]' . $default]) }} @if($attributes->get('name') !== 'password') value="{{ old($attributes->get('name')) }}" @endif />
+        <input {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem]' . $default]) }} @if($attributes->get('name') !== 'password') value="{{ old($attributes->get('name')) }}" @endif type="{{ $type }}" />
         <x-form.error name="{{ $attributes->get('name') }}" />
 @endswitch

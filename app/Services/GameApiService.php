@@ -51,6 +51,28 @@ class GameApiService
         ])->withBody('fields id,name; limit 500; sort name asc;', 'text/plain')->post($this->baseUrl . '/platforms')->json();
     }
 
+    public function getGamesCovers(array $ids)
+    {
+        $ids = array_unique($ids);
+        return Cache::remember(
+            "igdb_games_" . implode('_', $ids),
+            now()->addDay(),
+            function () use ($ids) {
+
+                $query = 'fields name,cover.image_id; where id = (' . implode(',', $ids) . ');';
+
+                return Http::withHeaders([
+                    'Client-ID' => $this->twitchId,
+                    'Authorization' => 'Bearer ' . $this->getAccessToken(),
+                ])
+                    ->withBody($query, 'text/plain')
+                    ->post('https://api.igdb.com/v4/games')
+                    ->json();
+
+            }
+        );
+    }
+
     public function getGames()
     {
         return Http::withHeaders([
@@ -66,7 +88,7 @@ class GameApiService
             'Client-ID' => $this->twitchId,
             'Authorization' => 'Bearer ' . $this->getAccessToken(),
         ])->withBody(
-                $query . ' fields name,summary,storyline,platforms.name,genres.name,artworks.image_id,first_release_date;',
+                $query . ' fields name,summary,storyline,platforms.name,genres.name,cover.image_id,artworks.image_id,first_release_date;',
                 'text/plain'
             )->post($this->baseUrl . '/games')->json();
     }

@@ -43,7 +43,6 @@ return [
         'twitch_secret' => env('TWITCH_CLIENT_SECRET'),
         'url' => env('GAME_API_URL'),
         'key' => env('GAME_API_KEY')
-
     ]
 
 ];

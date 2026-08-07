@@ -22,8 +22,13 @@
         <x-section class="flex flex-col">
             @if($review->contains_spoilers)<span class="text-center text-[.95rem] font-bold flex flex-row gap-2 p-3 mb-7 justify-center items-center bg-[#181818] rounded-2xl"><x-heroicon-s-exclamation-triangle class="text-orange-600 size-4.5"/>Warning: This review contains spoilers</span>@endif
             <div class="aspect-16/6 w-full overflow-hidden rounded-tr-xl rounded-tl-xl relative">
-                <img src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $game['cover'] }}.jpg" alt="Game cover"
-                    class="w-full h-full object-cover object-top rounded-tr-xl rounded-tl-xl">
+                @if(!empty($game['cover']['id']) && in_array($game['cover']['id'], $game['cover']))
+                    <img src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $game['cover']['image_id'] }}.jpg" alt="Game cover"
+                        class="w-full h-full object-cover object-top rounded-tr-xl rounded-tl-xl">
+                @else
+                    <img src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $game['cover'] }}.jpg" alt="Game cover"
+                        class="w-full h-full object-cover object-top rounded-tr-xl rounded-tl-xl">
+                @endif
                 <div class="absolute inset-0 rounded-tr-xl rounded-tl-xl bg-linear-to-t from-black via-black/20 via-100% to-transparent"></div>
             </div>
             <div class="py-8 px-3 flex flex-col gap-3 -mt-30 relative z-10">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\NewUserNotification;
 use App\Http\Requests\RegisterUserRequest;
 
+
 class RegisterController extends Controller
 {
     public function create()

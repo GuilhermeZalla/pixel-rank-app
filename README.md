@@ -77,6 +77,17 @@ php artisan serve
 
 (em breve)
 
+### Home
+....
+### Review page
+....
+
+### Create review
+....
+
+### User profile
+....
+
 ## 🏗 Arquitetura
 
 O projeto segue a arquitetura MVC do Laravel.

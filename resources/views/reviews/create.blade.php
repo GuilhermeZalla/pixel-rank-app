@@ -54,11 +54,13 @@
                         <p id="pros-empty" class="text-sm text-gray-400">Nenhum ponto adicionado ainda.</p>
                     </div>
                     <div class="flex flex-col flex-wrap gap-4 bg-[#181818] rounded-2xl p-4 w-full">
-                               <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
-                            <x-heroicon-o-hand-thumb-down class="size-4 text-warning" /> Pontos negativos</h3>
+                        <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
+                            <x-heroicon-o-hand-thumb-down class="size-4 text-warning" /> Pontos negativos
+                        </h3>
                         <div class="flex gap-2">
-                            <input type="text" id="cons-input" class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E"
-                                placeholder="Add a negative point..." maxlength="5" name="proscons">
+                            <input type="text" id="cons-input"
+                                class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E"
+                                placeholder="Add a negative point..." maxlength="50" name="proscons">
                             <button type="button" id="add-cons" class="btn btn-warning text-white">Add</button>
                         </div>
                         <ul id="cons-list" class="space-y-2"></ul>

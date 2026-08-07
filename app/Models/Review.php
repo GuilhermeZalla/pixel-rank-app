@@ -60,7 +60,7 @@ class Review extends Model
            'platforms' => $this->getPlatformsFormatted($game['platforms']),
            'release_date' => Carbon::createFromTimestamp($game['first_release_date'])->locale('pt_BR')->isoFormat('DD/MM/YYYY'),
            'summary' => $game['summary'],
-           'cover' => $game['artworks'][rand(0, count($game['artworks']) - 1)]['image_id']
+           'cover' => !empty($game['artworks']) ? $game['artworks'][rand(0, count($game['artworks']) - 1)]['image_id'] : $game['cover']
        ];
     }
 }

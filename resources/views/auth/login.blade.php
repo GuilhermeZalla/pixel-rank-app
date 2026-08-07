@@ -11,7 +11,7 @@
         </x-form.field>
         <x-form.field class="flex flex-col gap-2">
             <x-form.label for="password">Password</x-form.label>
-            <x-form.input type="password" name="password" id="password" placeholder="******" required/>
+            <x-form.input type="password" name="password" id="password" placeholder="******" minlenght="8" required/>
         </x-form.field>
         <x-form.field class="mt-3">
             <x-form.button>Sign In</x-form.button>
