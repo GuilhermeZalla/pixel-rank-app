@@ -9,6 +9,7 @@ use App\Services\GameApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
@@ -63,9 +64,8 @@ class ReviewController extends Controller
         $recommendations = Review::selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
 
         return view('reviews.index', [
-            'reviews' => $reviews->paginate(12),
+            'reviews' => $reviews->paginate(15),
             'recommendationsTotal' => $recommendations,
-            'reviewsHot' => $reviewsHot->take(4)->get(),
             'reviewsHighest' => (clone $reviewsHighest)->latest()->take(6)->get(),
             'reviewsCovers' => $reviews_covers
         ]);
@@ -85,23 +85,25 @@ class ReviewController extends Controller
     public function store(ReviewRequest $request)
     {
         $validated = $request->validated();
-        $review = Auth::user()->reviews()->create(Arr::except($validated, ['pros', 'cons']));
 
-        $review->pros_cons()->createMany(
-            collect($validated['pros'] ?? [])->map(fn($pro) => [
-                'type' => 'pros',
-                'content' => $pro,
-            ])->all()
-        );
+        DB::transaction(function () use ($validated) {
+            $review = Auth::user()->reviews()->create(Arr::except($validated, ['pros', 'cons']));
 
-        $review->pros_cons()->createMany(
-            collect($validated['cons'] ?? [])->map(fn($con) => [
-                'type' => 'cons',
-                'content' => $con,
-            ])->all()
-        );
+            $review->pros_cons()->createMany(
+                collect($validated['pros'] ?? [])->map(fn($pro) => [
+                    'type' => 'pros',
+                    'content' => $pro,
+                ])->all()
+            );
 
-        return redirect('/reviews/'.$review->id);
+            $review->pros_cons()->createMany(
+                collect($validated['cons'] ?? [])->map(fn($con) => [
+                    'type' => 'cons',
+                    'content' => $con,
+                ])->all()
+            );
+            return redirect('/reviews/' . $review->id);
+        });
     }
 
     /**

@@ -59,7 +59,7 @@ class GameApiService
             now()->addDay(),
             function () use ($ids) {
 
-                $query = 'fields name,cover.image_id; where id = (' . implode(',', $ids) . ');';
+                $query = 'fields name,cover.image_id,artworks.image_id; where id = (' . implode(',', $ids) . ');';
 
                 return Http::withHeaders([
                     'Client-ID' => $this->twitchId,

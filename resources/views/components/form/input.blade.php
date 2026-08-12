@@ -14,6 +14,7 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
         <input type="text" id="game-search" placeholder="Search a game..." autocomplete="on" {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem] ' . $default]) }} required>
         <input type="hidden" name="game_id" id="game-id">
         <input type="hidden" name="game_name" id="game-name">
+        <input type="hidden" name="game_cover" id="game-cover">
 
         <div id="game-dropdown" class="{{ 'absolute top-20 z-99 flex flex-col gap-3 hidden overflow-y-scroll max-h-80 ' . $default }}"> </div>
         @break

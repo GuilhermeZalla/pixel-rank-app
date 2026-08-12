@@ -87,6 +87,7 @@
         const dropdown = document.getElementById('game-dropdown');
         const gameId = document.getElementById('game-id');
         const gameName = document.getElementById('game-name');
+        const gameCover = document.getElementById('game-cover');
 
         let timeout = null;
 
@@ -95,6 +96,7 @@
 
             gameId.value = '';
             gameName.value = '';
+            gameCover.value = '';
 
             const query = this.value.trim();
 
@@ -107,6 +109,7 @@
             timeout = setTimeout(async () => {
                 const response = await fetch(`/games/search?query=${query}`);
                 const games = await response.json();
+                console.log(games);
 
                 dropdown.innerHTML = '';
 
@@ -120,6 +123,7 @@
                         searchInput.value = game.name;
                         gameId.value = game.id;
                         gameName.value = game.name;
+                        gameCover.value = game.cover['image_id'];
 
                         dropdown.classList.add('hidden');
                     });

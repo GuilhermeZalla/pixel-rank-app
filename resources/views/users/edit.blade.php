@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>Dashboard - {{ auth()->user()->nickname }}</x-slot:title>
-    <div class="flex flex-row justify-between gap-8 mt-[10vh] mx-[2vw]" x-data="{ activeMenu: '{{ $menu }}' }">
+    <div class="flex flex-row justify-between gap-8 mt-[5vh] mx-[2vw]" x-data="{ activeMenu: '{{ $menu }}' }">
         <section class="flex flex-col w-100 border border-[#88888833] bg-[#0E0E0E] rounded-[10px] py-6 h-155 gap-6">
             <div class="flex flex-col justify-center text-center gap-5">
                 <x-cover src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}" alt="User Profile Image" class="mask mask-circle h-[13vh]"></x-cover>

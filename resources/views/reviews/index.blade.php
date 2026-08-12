@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>PixelRank</x-slot:title>
-    <x-section class="flex flex-row gap-8 mt-15 p-3">
-        <div x-data="carousel" class="relative w-[70%] rounded-[20px] h-96 overflow-hidden" @mouseenter="stopAutoplay()"
+    <x-section class="flex flex-row gap-8 mt-5 p-3">
+        <div x-data="carousel" class="relative w-full rounded-[20px] h-96 overflow-hidden" @mouseenter="stopAutoplay()"
             @mouseleave="startAutoplay()">
             <div class="flex h-full" :class="transitionEnabled ? 'transition-transform duration-700 ease-in-out' : ''"
                 :style="`transform: translateX(-${current * 100}%)`" @transitionend="handleTransitionEnd()">
@@ -10,7 +10,7 @@
                         <a href=""
                             class="relative block w-full h-full rounded-[20px] border-2 border-transparent group hover:border-accent overflow-hidden">
                             <img :src="`https://images.igdb.com/igdb/image/upload/t_1080p/${slide.src}.jpg`"
-                                class="w-full h-full object-cover aspect-auto rounded-[20px]">
+                                class="w-full h-full aspect-[16/5] object-cover rounded-[20px]">
                             <div
                                 class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent rounded-[20px]">
                             </div>
@@ -32,15 +32,8 @@
                 &#10095;
             </button>
         </div>
-        @if(!empty($reviewsHot))
-            <div class="flex flex-col gap-6 w-[30%]">
-                @foreach($reviewsHot as $review)
-                    <x-article-link :review="$review" hot="true"></x-article-link>
-                @endforeach
-            </div>
-        @endif
     </x-section>
-    <x-section class="-mt-15">
+    <x-section class="-mt-5">
         <div>
             <h1 class="font-bold text-[1.7rem]">Write your review!</h1>
             <p class="text-[#888888ed] text-[.95rem]">Capture your thoughts and experiences with a game.</p>
@@ -77,9 +70,11 @@
                 <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
             </div>
         </div>
-        @foreach($reviews as $review)
-            <x-article-link :review="$review"></x-article-link>
-        @endforeach
+        <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
+            @foreach($reviews as $review)
+                <x-article-link :review="$review"></x-article-link>
+            @endforeach
+        </div>
         <div class="mt-5">@if(!empty($reviews->links())){{ $reviews->links() }}@endif</div>
     </x-section>
     <script>
@@ -87,6 +82,7 @@
         const spoilerLinks = document.querySelectorAll('.review-link-spoiler');
         const reviews = @json($reviewsHighest);
         const covers = @json($reviewsCovers);
+        console.log(covers);
         let banners = [];
 
         for ($i = 0; $i < reviews.length; $i++) {

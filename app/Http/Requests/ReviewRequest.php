@@ -27,6 +27,7 @@ class ReviewRequest extends FormRequest
         return [
             'game_id' => ['required', 'integer'],
             'game_name' => ['required', 'string'],
+            'game_cover' => ['required', 'string'],
             'title' => ['required', 'min:8', 'max:120'],
             'recommendation' => ['required', Rule::enum(ReviewRecommendation::class)],
             'contains_spoiler' => ['boolean'],

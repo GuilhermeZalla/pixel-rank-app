@@ -13,32 +13,32 @@
 
 <!-- Site Content -->
 
-<body class="pb-20">
-    <div class="navbar flex flex-row justify-between bg-base-100 shadow-sm border-b border-b-[#88888833] px-5">
-        <div class="flex flex-row"> <a class="text-xl" href="/"><img src="{{ asset('pixelrank.png') }}"
-                    alt="PixelRank" class="object-contain h-full w-30"></a>
-        @if(!request()->is('users/*'))
-            <form method="GET" action="/" class="relative">
-                <label class="input w-120" class="rounded-[7px]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.8em] opacity-50" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M2 12c0-2.21 1.79-4 4-4h12a4 4 0 0 1 4 4v3a3 3 0 0 1-3 3h-1l-2-2h-8l-2 2H5a3 3 0 0 1-3-3v-3z" />
-                        <path d="M6 12h4" />
-                        <path d="M8 10v4" />
-                        <path d="M15 11h.01" />
-                        <path d="M18 13h.01" />
-                    </svg>
-                    <input type="text" id="game-search-layout" placeholder="Search a game..." autocomplete="on"
-                        class="p-2.5 text-[.80rem] font-bold border-none focus:transparent focus:outline-none w-120"
-                        required>
-                    <input type="hidden" name="game_id" id="game-id-layout">
-                    <div id="game-dropdown-layout"
-                        class="absolute top-12 left-0 z-99 flex flex-col gap-3 hidden overflow-y-scroll max-h-80 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E]">
-                    </div>
-                </label>
-            </form>
-        @endif
+<body class="pb-5">
+    <div class="navbar flex flex-row justify-between bg-base-100 shadow-sm border-b border-b-[#88888833] px-10">
+        <div class="flex flex-row"> <a class="text-xl" href="/"><img src="{{ asset('pixelrank.png') }}" alt="PixelRank"
+                    class="object-contain w-30"></a>
         </div>
+         @if(!request()->is('users/*'))
+                <form method="GET" action="/" class="relative">
+                    <label class="input w-120" class="rounded-[7px]">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.8em] opacity-50" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M2 12c0-2.21 1.79-4 4-4h12a4 4 0 0 1 4 4v3a3 3 0 0 1-3 3h-1l-2-2h-8l-2 2H5a3 3 0 0 1-3-3v-3z" />
+                            <path d="M6 12h4" />
+                            <path d="M8 10v4" />
+                            <path d="M15 11h.01" />
+                            <path d="M18 13h.01" />
+                        </svg>
+                        <input type="text" id="game-search-layout" placeholder="Search a game..." autocomplete="on"
+                            class="p-2.5 text-[.80rem] font-bold border-none focus:border-none focus:outline-none w-120" required>
+                        <input type="hidden" name="game_id" id="game-id-layout">
+                        <div id="game-dropdown-layout"
+                            class="absolute top-12 left-0 z-99 flex flex-col gap-3 hidden overflow-y-scroll max-h-80 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E]">
+                        </div>
+                    </label>
+                </form>
+            @endif
         @auth
             <div class="flex-none">
                 <ul class="menu menu-horizontal px-1">
