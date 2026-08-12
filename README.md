@@ -78,9 +78,9 @@ php artisan serve
 (em breve)
 
 ### Home
-(docs/images/home.jpg)
+!(docs/images/home.jpg)
 
-(docs/images/screenshot.png)
+!(docs/images/screenshot.png)
 
 ....
 ### Review page
