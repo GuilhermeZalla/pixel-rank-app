@@ -10,7 +10,12 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\GameController;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\ReviewController;
-use App\Services\GameApiService;
+use App\Http\Controllers\SearchController;
+
+// Search Routes
+
+Route::get('/search', [SearchController::class, 'index']);
+Route::get('/games/search', GameController::class);
 
 // Auth Route List
 
@@ -48,7 +53,7 @@ Route::controller(ReviewController::class)->group(function () {
         Route::get('/reviews/{review}/edit', 'edit')->can('update', 'review');
     });
     Route::get('/reviews/{review}', 'show');
-    Route::get('/{filter?}', 'index');
+    Route::get('/{filter?}', 'index')->where('filter', 'essential|recommended|not_recommended|mixed|highest-rated|lowest-rated|popular|oldest|hot-reviews');
 });
 
 // Comments Route
@@ -59,7 +64,3 @@ Route::controller(CommentController::class)->middleware('auth')->group(function(
     Route::patch('/comments/{comment}', 'update')->can('update', 'comment');
     Route::delete('/comments/{comment}', 'destroy')->can('delete', 'comment');
 });
-
-// Search Game Routes
-
-Route::get('/games/search', GameController::class);

@@ -109,7 +109,6 @@
             timeout = setTimeout(async () => {
                 const response = await fetch(`/games/search?query=${query}`);
                 const games = await response.json();
-                console.log(games);
 
                 dropdown.innerHTML = '';
 
@@ -122,8 +121,7 @@
                     item.addEventListener('click', () => {
                         searchInput.value = game.name;
                         gameId.value = game.id;
-                        gameName.value = game.name;
-                        gameCover.value = game.cover['image_id'];
+                        gameCover.value = game.name;
 
                         dropdown.classList.add('hidden');
                     });
