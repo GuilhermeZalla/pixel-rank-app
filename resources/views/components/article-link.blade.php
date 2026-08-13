@@ -42,37 +42,35 @@
         </a>
 @else
     <a href="/reviews/{{ $review->id }}"
-    class="bg-[#0E0E0E] review-link-spoiler rounded-[7px] h-120">
+    class="bg-[#0E0E0E] {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} rounded-[7px] h-40">
         <article
             class="rounded-[7px] h-full border-3 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
-            <div class="flex flex-col h-full pb-1">
-                    <x-cover type="cover" class="h-full w-full object-contain rounded-[7px]"
-                        src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg"
-                        alt="Review Cover"></x-cover>
-                <div class="px-5 flex flex-col justify-between w-full h-full">
-                    <div class="flex flex-col justify-start flex-5/6 mt-3">
+            <div class="flex flex-row justify-between h-full rounded-[7px]">
+                <x-cover class="h-full w-[200px] object-cover p-2 rounded-2xl"
+                    src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="Review Cover"></x-cover>
+                    <div class="flex flex-col justify-start gap-3 flex-5/6 px-4 py-3">
                         <ul class="flex flex-row justify-between items-center gap-3 text-[.65rem]">
                             <li class="flex flex-row justify-center items-center gap-1 opacity-60">
                                 <x-heroicon-o-user class="size-3" />{{ $review->user->nickname }} <span
                                     class="text-[1rem]">&middot;</span> {{ $review->getPublishedDate() }}
                             </li>
                             @if($review->contains_spoilers)
-                                <li><span class="flex flex-row gap-2 font-bold"><x-heroicon-s-exclamation-triangle
+                                <li><span class="flex flex-row gap-2 font-bold text-[.75rem] items-center"><x-heroicon-s-exclamation-triangle
                             class="text-orange-600 size-4" />Spoilers</span></li>@endif
                         </ul>
-                        <h2 class="font-bold text-[.95rem] flex flex-col mt-2 gap-1 h-full"><span
-                                class="group-hover:text-accent font-normal transition-all duration-300 ease-in-out break-all wrap-break-word text-[.75rem] opacity-70">{{Str::limit($review->game_name, 80)}}</span>{{Str::limit($review->title, 90)}}
+                        <h2 class="font-bold text-[.95rem] flex flex-col gap-1 h-full"><span
+                                class="group-hover:text-accent font-normal transition-all duration-300 ease-in-out break-all wrap-break-word text-[.75rem] opacity-70">{{Str::limit($review->game_name, 190)}}</span>{{Str::limit($review->title, 150)}}
                         </h2>
-                        <ul class="flex flex-row justify-between text-[.75rem] py-2">
+                        <ul class="flex flex-row justify-start gap-4">
+                             <li class="text-[.95rem] font-bold">{{ $review->rating }}/10</li>
                             <li>
                                 <x-badge-link type="label"
-                                    class="rounded-[10px] px-2 py-1 font-bold text-[0.70rem]">{{ $review->recommendation->label() }}</x-badge-link>
+                                    class="rounded-[10px] px-2 py-0 font-bold text-[0.65rem]">{{ $review->recommendation->label() }}</x-badge-link>
                             </li>
-                            <li class="flex flex-row items-center gap-1"><x-heroicon-o-chat-bubble-oval-left
+                            <li class="flex flex-row items-center gap-1 text-[.75rem]"><x-heroicon-o-chat-bubble-oval-left
                                     class="size-4" />{{ count($review->comments) }} comment(s)</li>
                         </ul>
                     </div>
-                </div>
             </div>
         </article>
     </a>

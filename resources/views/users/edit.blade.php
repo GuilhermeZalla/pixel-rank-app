@@ -1,9 +1,12 @@
 <x-layout>
+    @php
+        $avatarURL = !empty(auth()->user()->avatar) ? asset(auth()->user()->avatar) : "https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}";
+    @endphp
     <x-slot:title>Dashboard - {{ auth()->user()->nickname }}</x-slot:title>
     <div class="flex flex-row justify-between gap-8 mt-[5vh] mx-[2vw]" x-data="{ activeMenu: '{{ $menu }}' }">
         <section class="flex flex-col w-100 border border-[#88888833] bg-[#0E0E0E] rounded-[10px] py-6 h-155 gap-6">
             <div class="flex flex-col justify-center text-center gap-5">
-                <x-cover src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}" alt="User Profile Image" class="mask mask-circle h-[13vh]"></x-cover>
+                <x-cover src="{{ $avatarURL }}" alt="User Profile Image" class="mask mask-circle object-contain h-[15vh]"></x-cover>
                 <h1 class="font-bold text-[1.3rem] text-secondary">{{ auth()->user()->nickname }}</h1>
                 <h2 class="font-bold">Bio</h2>
                 <p class="break-all px-7">{{ auth()->user()->bio }}</p>
@@ -22,7 +25,7 @@
         <section class="flex flex-col gap-5 w-full border border-[#88888833] bg-[#0E0E0E] rounded-[10px] p-6">
 
             <!-- User Edit Form -->
-            <x-form.form method="POST" action="{{ route('users.edit', auth()->user()->id) }}" class="w-full" x-show="activeMenu === 'menu1'">
+            <x-form.form method="POST" action="/users/{{ auth()->user()->id }}" class="w-full" x-show="activeMenu === 'menu1'" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <x-form.field>
@@ -46,12 +49,12 @@
                 <div class="flex flex-row justify-between gap-3">
                     <x-form.field class="flex-1/2">
                         <x-form.label for="password">Password</x-form.label>
-                        <x-form.input type="password" name="password" id="password" placeholder="******" />
+                        <x-form.input type="password" name="password" id="password" placeholder="******" value="{{ auth()->user()->password }}" />
                     </x-form.field>
                     <x-form.field class="flex-1/2">
                         <x-form.label for="password_confirmation">Confirm Password</x-form.label>
                         <x-form.input type="password" name="password_confirmation" id="password_confirmation"
-                            placeholder="******" minlenght="8"/>
+                            placeholder="******" minlenght="8" value="{{ auth()->user()->password }}"/>
                     </x-form.field>
                 </div>
                 <x-form.field>
@@ -82,7 +85,7 @@
                         {{ $reviews->links() }}
                     </div>
                 @else
-                    <p class="font-bold">Nenhuma review encontrada.</p>
+                    <p class="font-bold">You don't have any reviews yet</p>
                 @endif
             </div>
 
@@ -101,7 +104,7 @@
                         {{ $comments->links() }}
                     </div>
                 @else
-                    <p class="font-bold">Nenhum comentário encontrado</p>
+                    <p class="font-bold">You don't have any comments yet</p>
                 @endif
             </div>
 

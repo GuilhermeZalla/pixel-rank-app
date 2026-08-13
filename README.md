@@ -143,6 +143,7 @@ PixelRank/
 
 - [x] Reviews
 - [x] Comentários
+- [ ] Interação entre comentários
 - [x] Criação e autenticação de usuários
 - [x] Dashboard do usuário
 - [ ] Notificações

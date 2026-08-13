@@ -11,7 +11,7 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
         @break
 
     @case('search')
-        <input type="text" id="game-search" placeholder="Search a game..." autocomplete="on" {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem] ' . $default]) }} required>
+        <input type="text" name="game_search" id="game-search" placeholder="Search a game..." autocomplete="on" {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem] ' . $default]) }} required>
         <input type="hidden" name="game_id" id="game-id">
         <input type="hidden" name="game_name" id="game-name">
         <input type="hidden" name="game_cover" id="game-cover">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\FetchReviews;
 use App\Http\Requests\ReviewRequest;
 use App\Models\ProsCons;
 use App\Models\Review;
@@ -13,62 +14,16 @@ use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
 
-    protected $recommendations = ['not_recommended', 'recommended', 'mixed', 'essential'];
-
-    public function index(Request $request, GameApiService $gameapi)
+    public function index(Request $request, FetchReviews $fetch)
     {
-        $filter = $request->filter;
-        $reviews = !empty($request['game_id']) ? Review::with(['user', 'comments'])->where('game_id', $request['game_id']) : Review::with(['user', 'comments']);
-        $reviewsHot = (clone $reviews)->withCount([
-                        'comments as recent_comments_count' => function ($query) {
-                            $query->where('created_at', '>=', now()->subDays(15));
-                        }])->orderBy('recent_comments_count', 'desc');
-        $reviewsHighest = (clone $reviews)->orderBy('rating', 'desc');
+        $data = $fetch->execute($request);
 
-        $reviews_covers = [];
-        $gameIds =  (clone $reviewsHighest)->latest()->take(6)->get()->pluck('game_id')->toArray();
-
-        $reviews_covers = $gameapi->getGamesCovers($gameIds);
-
-        if (in_array($filter, $this->recommendations)) {
-            $reviews = (clone $reviews)->where('recommendation', $filter)->latest();
-        } else {
-            switch ($filter) {
-                case 'highest-rated':
-                    $reviews = $reviewsHighest;
-                    break;
-                case 'lowest-rated':
-                    $reviews = $reviews->orderBy('rating', 'asc');
-                    break;
-                case 'popular':
-                    break;
-                case 'oldest':
-                    $reviews = $reviews->oldest();
-                    break;
-                case 'hot-reviews':
-                    $reviews = $reviewsHot;
-                break;
-                case 'spoiler':
-                     $reviews = $reviews->where('contains_spoilers', false);
-                break;
-                default:
-                    $reviews = $reviews->latest();
-                break;
-            }
-        }
-
-        $recommendations = Review::selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
-
-        return view('reviews.index', [
-            'reviews' => $reviews->paginate(15),
-            'recommendationsTotal' => $recommendations,
-            'reviewsHighest' => (clone $reviewsHighest)->latest()->take(6)->get(),
-            'reviewsCovers' => $reviews_covers
-        ]);
+        return view('reviews.index', $data);
     }
 
     /**
@@ -84,6 +39,7 @@ class ReviewController extends Controller
      */
     public function store(ReviewRequest $request)
     {
+        dd($request->all());
         $validated = $request->validated();
 
         DB::transaction(function () use ($validated) {

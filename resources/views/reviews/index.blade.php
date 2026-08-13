@@ -32,12 +32,12 @@
     <x-section class="flex flex-col gap-7">
         <div class="flex flex-row justify-between gap-2 text-[.80rem] items-center">
             <h2 class="font-bold text-[1.4rem]">Reviews</h2>
-            <div class="flex flex-row gap-2">
+            <div class="flex flex-row gap-2 items-center">
                 <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-4 w-4" />
                 <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
             </div>
         </div>
-        <div class="grid gap-5 grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
+        <div class="flex flex-col gap-5">
             @foreach($reviews as $review)
                 <x-article-link :review="$review"></x-article-link>
             @endforeach
@@ -48,15 +48,22 @@
         const toggleCheckbox = document.getElementById('toggle-link');
         const spoilerLinks = document.querySelectorAll('.review-link-spoiler');
 
+        const hideSpoilers = localStorage.getItem('hideSpoilers') === 'true';
+
+        toggleCheckbox.checked = hideSpoilers;
+
         function updateSpoilerVisibility() {
             spoilerLinks.forEach(link => {
                 link.classList.toggle('hidden', toggleCheckbox.checked);
             });
         }
 
-        toggleCheckbox.addEventListener('change', updateSpoilerVisibility);
+        toggleCheckbox.addEventListener('change', () => {
+            localStorage.setItem('hideSpoilers', toggleCheckbox.checked);
+
+            updateSpoilerVisibility();
+        });
 
         updateSpoilerVisibility();
-
     </script>
 </x-layout>

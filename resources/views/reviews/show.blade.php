@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>{{ $review->title }}</x-slot:title>
-    <div class="px-4 sm:px-0 md:px-40 lg:px-50">
+    <div class="px-4 sm:px-5 md:px-5">
         <x-section class="py-10">
             <nav class="flex flex-row justify-between">
                 <x-nav-link href="/" class="flex flex-row gap-3 font-bold text-[.90rem] items-center hover:text-accent">
@@ -178,47 +178,33 @@
 
                 const data = await response.json();
 
-                document.getElementById('comments').insertAdjacentHTML('afterbegin', `
-    <li id="comment-${data.comment.id}" class="flex flex-row gap-4 border-b border-white/8 py-8">
+                let avatar = "https://ui-avatars.com/api/?name=${encodeURIComponent(data.comment.user.name)}"
+                if(data.comment.user.avatar){
+                     avatar = '/storage/' + data.comment.user.avatar;
+                }
 
-        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(data.comment.user.name)}"
+                document.getElementById('comments').insertAdjacentHTML('afterbegin', `
+    <li id="comment-${data.comment.id}" class="flex flex-row gap-4 border-b border-white/8 pt-8 pb-4">
+
+        <img src="${avatar}"
              alt="User" class="rounded-[50%] h-12">
 
         <div class="w-full">
-            <span class="flex flex-row justify-between mb-3">
-                <h3 class="font-bold">${data.comment.user.name}</h3>
-                <h4 class="label text-[.90rem]">${data.comment.posted_date}</h4>
-                <div class="navbar bg-base-100 shadow-sm">
-                    <div class="navbar-center hidden lg:flex">
-                        <ul class="menu menu-horizontal px-1">
-                            <li>
-                                <details>
-                                    <summary><svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                            viewBox="0 0 24 24" stroke-width="1.5"
-                                            stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                    </svg>
-                                    </summary>
-                                    <ul class="p-2 bg-base-100 w-40 z-1">
-                                        <li>
-                                            <button
-                                                class="delete-comment text-red-500"
-                                                data-id="${data.comment.id}">
-                                                Delete
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </details>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <span class="flex flex-row justify-between mb-5"">
+                 <h3 class="font-bold text-[.90rem] flex flex-col">${data.comment.user.nickname} <span
+                        class="text-[.75rem] text-[#ffffff97] font-normal">${data.comment.posted_date}</span></h3>
+
+                    <ul class="">
+                    @if(!empty($comment))
+                    @can('delete', $comment)
+                        <li id="comment-${data.comment.id}"> <button class="delete-comment text-red-500 cursor-pointer" data-id="${data.comment.id}">Delete</button></li>
+                    @endcan
+                    @endif
+                </ul>
             </span>
+            <p class="break-all"> ${data.comment.body}</p>
 
-            <p class="break-all">${data.comment.body}</p>
         </div>
-
     </li>
     `);
                 textarea.value = '';

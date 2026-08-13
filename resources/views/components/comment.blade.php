@@ -1,10 +1,14 @@
 @props(['dashboard' => false, 'comment' => '', 'review' => ''])
 
+@php
+    $avatarURL = !empty($comment->user->avatar) ? asset($comment->user->avatar) : "https://ui-avatars.com/api/?name={{ urlencode($comment->user->nickname) }}";
+@endphp
+
 @if($dashboard)
     <li id="comment-{{ $comment->id }}"
         class="border-2 border-[#88888833] py-5 px-3.5 rounded-[10px] cursor-pointer group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
         <a href="/reviews/{{ $comment->review->id }}" class="flex flex-row gap-4">
-            <x-cover src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->nickname) }}"
+            <x-cover src="{{ $avatarURL }}"
                 alt="User Profile Image" class="rounded-[50%] h-10"></x-cover>
             <div class="w-full">
                 <span class="flex flex-row justify-between">
@@ -25,15 +29,15 @@
     </li>
 @else
     <li id="comment-{{ $comment->id }}" class="flex flex-row gap-4 border-b border-white/8 pt-8 pb-4">
-        <x-cover src="https://ui-avatars.com/api/?name={{ urlencode($comment->user->nickname) }}" alt="User Profile Image"
+        <x-cover src="{{ $avatarURL }}" alt="User Profile Image"
             class="rounded-[50%] h-12"></x-cover>
         <div class="w-full">
             <span class="flex flex-row justify-between mb-5">
                 <h3 class="font-bold text-[.90rem] flex flex-col">{{ $comment->user->nickname }} <span
                         class="text-[.75rem] text-[#ffffff97] font-normal">{{ $comment->getPostedDate() }}</span></h3>
-                <ul class="">
+                <ul>
                     @can('delete', $comment)
-                        <li id="comment-{{ $comment->id }}"> <button class="delete-comment text-red-500" data-id="{{ $comment->id }}">Delete</button></li>
+                        <li id="comment-{{ $comment->id }}"> <button class="delete-comment text-red-500 cursor-pointer" data-id="{{ $comment->id }}">Delete</button></li>
                     @endcan
                 </ul>
             </span>

@@ -20,6 +20,7 @@ class RegisterController extends Controller
         $path = $request->file('avatar')?->store('avatars', 'public');
         $user = User::create([
             'name' => $validated['name'],
+            'nickname' => $validated['nickname'],
             'email' => $validated['email'],
             'password' => $validated['password'],
             'bio' => $validated['bio'],
