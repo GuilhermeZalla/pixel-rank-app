@@ -79,15 +79,15 @@ php artisan serve
 ### Home
 ![](docs/images/home.jpg)
 
-![](docs/images/screenshot.png)
+![](docs/images/home-menu.jpg)
 
 ....
 
 ### Login & Register
 
-![](docs/images/login.png)
+![](docs/images/login.jpg)
 
-![](docs/images/register.png)
+![](docs/images/register.jpg)
 
 ### Review page
 ....
