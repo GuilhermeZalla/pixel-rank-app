@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:title>Results for Laravel</x-slot:title>
     @if(count($reviews) === 0)
-        <x-search-error></x-search-error>
+        <x-empty-result title="No results found for {{ request('search') }}" subtitle="We can't find any items matching your search."></x-empty-result>
     @else
     <x-section class="flex flex-col gap-3">
         <h1 class="font-bold text-[1.8rem] mt-[5vh] mb-5">Result(s) for {{ request('search') }}</h1>

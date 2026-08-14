@@ -1,27 +1,26 @@
 # PixelRank
 ![PixelRank Screenshot](imagem)
 
-Uma plataforma de reviews de jogos inspirada no Letterboxd, onde os usuários podem
-avaliar jogos, escrever análises, comentar e descobrir novas reviews da comunidade.
+A game review platform inspired by Letterboxd, where users can rate games,
+write reviews, comment, and discover new reviews from the community.
 
 ## 🎯 Objetivo
 
-O objetivo do PixelRank é oferecer uma plataforma focada em reviews de jogos,
-inspirada na experiência do Letterboxd para filmes, permitindo que qualquer
-usuário publique, compartilhe e descubra reviews de jogos.
+PixelRank aims to offer a platform focused on game reviews, inspired by the Letterboxd experience for movies,
+allowing any user to publish, share, and discover game reviews.
 
 ## ✨ Funcionalidades
 
-- Publicação de reviews
-- Sistema de comentários
-- Busca de jogos utilizando a API da IGDB
-- Dashboard do usuário
-- Cadastro e autenticação de usuários
-- Filtros e ordenação
+- Review publishing
+- Comment system
+- Game search using the IGDB API
+- User dashboard
+- User registration and authentication
+- Filters and sorting
 
 ## 🚧 Status
 
-Projeto em desenvolvimento.
+Project under development.
 
 ## 🛠 Tecnologias
 
@@ -49,7 +48,7 @@ Projeto em desenvolvimento.
 ### Ferramentas
 
 - Git
-- Docker (em desenvolvimento)
+- Docker (in development)
 
 ## 🚀 Instalação
 
@@ -75,7 +74,7 @@ php artisan serve
 
 ## 📸 Screenshots
 
-(em breve)
+(under construction)
 
 ### Home
 ![](docs/images/home.jpg)
@@ -83,6 +82,13 @@ php artisan serve
 ![](docs/images/screenshot.png)
 
 ....
+
+### Login & Register
+
+![](docs/images/login.png)
+
+![](docs/images/register.png)
+
 ### Review page
 ....
 
@@ -92,19 +98,18 @@ php artisan serve
 ### User profile
 ....
 
-## 🏗 Arquitetura
+## 🏗 Architecture
 
-O projeto segue a arquitetura MVC do Laravel.
+The project follows Laravel's MVC architecture.
 
-As regras de negócio ficam concentradas em Services, enquanto Policies são utilizadas
-para autorização. Notifications são responsáveis pelo envio de notificações e a
-integração com a API da IGDB é encapsulada em uma camada de serviços para manter
-os controllers enxutos.
+Business logic is encapsulated within Services, while Policies handle authorization.
+Notifications are responsible for dispatching notifications, and the integration with
+the IGDB API is encapsulated in a dedicated service layer to keep controllers thin.
 
-## 📂 Estrutura do projeto
+## 📂 Project's Structure
 
-A estrutura principal do projeto segue a organização padrão do Laravel,
-com separação de responsabilidades através de Services, Policies e Notifications.
+The project's core structure follows Laravel's standard organization,
+with clear separation of concerns through Services, Policies, and Notifications.
 
 ```text
 PixelRank/
@@ -142,29 +147,29 @@ PixelRank/
 ## 🗺 Roadmap
 
 - [x] Reviews
-- [x] Comentários
-- [ ] Interação entre comentários
-- [x] Criação e autenticação de usuários
-- [x] Dashboard do usuário
-- [ ] Notificações
-- [ ] Sistema de seguidores
-- [ ] Sistema de mensagens privadas
-- [ ] Sistema de recomendação
-- [ ] Internacionalização (PT-BR / EN)
+- [x] Comments
+- [ ] Comment interaction
+- [x] User creation and authentication
+- [x] User dashboard
+- [ ] Notification
+- [ ] Follower system
+- [ ] Private messaging system
+- [ ] Recommendation system
+- [ ] Internationalization (PT-BR / EN)
 - [ ] Docker
-- [ ] Testes automatizados
+- [x] Test
 - [ ] Deploy
 
 ## 🔐 Segurança
 
-- Autorização utilizando Laravel Policies
-- Validação através de Form Requests
-- Proteção contra ações não autorizadas
+- Authorization using Laravel Policies
+- Validation via Form Requests
+- Protection against unauthorized actions
 
 ## 📄 Licença
 
-Este projeto foi desenvolvido para fins de estudo e portfólio.
+This project was developed for study and portfolio purposes.
 
 ## 🌐 Demonstração
 
-(em breve)
+(soon)

@@ -18,8 +18,8 @@
         </x-form.field>
         <form-field>
             <p class="text-center text-sm text-gray-400 mt-4">
-                Não tem uma conta?
-                <a href="/register" class="text-primary font-bold hover:underline">Registre-se</a>
+                Don't have an account?
+                <a href="/register" class="text-primary font-bold hover:underline">Sign up</a>
             </p>
         </form-field>
     </x-form.form>

@@ -36,7 +36,7 @@
                 <x-form.input type="textarea" name="body" id="review" placeholder="Write your review!" minlength="150" rows="15" value="{{ !empty($review) ? $review : '' }}" />
             </x-form.field>
             <x-form.field class="flex flex-row gap-2">
-                <x-form.input type="checkbox" name="spoiler" id="spoiler"/>
+                <x-form.input type="checkbox" name="contains_spoilers" id="spoiler"/>
                 <x-form.label for="spoiler" class="cursor-pointer">This review contains spoilers</x-form.label>
             </x-form.field>
             <x-form.field class="flex flex-col gap-4 my-4">
@@ -121,7 +121,8 @@
                     item.addEventListener('click', () => {
                         searchInput.value = game.name;
                         gameId.value = game.id;
-                        gameCover.value = game.name;
+                        gameCover.value = game.cover.image_id;
+                        gameName.value = game.name;
 
                         dropdown.classList.add('hidden');
                     });

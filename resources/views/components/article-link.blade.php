@@ -2,12 +2,12 @@
 
 @if($dashboard)
     <a href="/reviews/{{ $review->id }}" @if($review->contains_spoilers)
-        class="bg-[#0E0E0E] review-link-spoiler sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px]" @else
-            class="sm:w-full md:flex-1/4 lg:flex-1/4 rounded-[7px] bg-[#0E0E0E]" @endif>
+        class="bg-[#0E0E0E] review-link-spoiler sm:w-full md:flex-1/4 lg:flex-1/4" @else
+            class="sm:w-full md:flex-1/4 lg:flex-1/4 bg-[#0E0E0E]" @endif>
             <article
-                class="rounded-[7px] border-3 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
+                class="rounded-[20px] border-3 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
                 <div class="flex flex-row gap-3">
-                    <x-cover type="cover" class="h-[120px] w-[200px]" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
+                    <x-cover class="h-[120px] w-[200px] rounded-[20px] object-cover" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmbdujr8xhGqABB81Nt4VjhM8a_GlRee7rI6MjmNr_0n_gH4uEuMIUuy3p&s=10"
                         alt="Review Cover"></x-cover>
                     <div class="py-4 px-3 flex flex-row justify-between w-full">
                         <div class="flex flex-col justify-between flex-5/6">
@@ -42,13 +42,13 @@
         </a>
 @else
     <a href="/reviews/{{ $review->id }}"
-    class="bg-[#0E0E0E] {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} rounded-[7px] h-40">
+    class="bg-[#0E0E0E] {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} h-40 rounded-[20px]">
         <article
-            class="rounded-[7px] h-full border-3 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
-            <div class="flex flex-row justify-between h-full rounded-[7px]">
-                <x-cover class="h-full w-[200px] object-cover p-2 rounded-2xl"
+            class="rounded-[20px] h-full border-3 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
+            <div class="flex flex-row justify-between h-full">
+                <x-cover class="h-full object-contain rounded-[20px]"
                     src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="Review Cover"></x-cover>
-                    <div class="flex flex-col justify-start gap-3 flex-5/6 px-4 py-3">
+                    <div class="flex flex-col justify-start gap-2 flex-5/6 px-4 py-3">
                         <ul class="flex flex-row justify-between items-center gap-3 text-[.65rem]">
                             <li class="flex flex-row justify-center items-center gap-1 opacity-60">
                                 <x-heroicon-o-user class="size-3" />{{ $review->user->nickname }} <span

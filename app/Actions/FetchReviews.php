@@ -57,9 +57,8 @@ class FetchReviews
         }
 
         $recommendations = Review::selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
-
         return [
-            'reviews' => $reviews->paginate(15),
+            'reviews' => $reviews->paginate(10),
             'recommendationsTotal' => $recommendations,
         ];
     }

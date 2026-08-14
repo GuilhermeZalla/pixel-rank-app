@@ -72,20 +72,18 @@
 
             <!-- My Reviews -->
             <div id="review" x-show="activeMenu === 'menu2'">
-                <h2 class="font-bold text-[1.7rem] mb-2">My Reviews ({{ $reviews->total() }})</h2>
+                <h2 class="font-bold text-[1.7rem] mb-2 flex flex-row justify-between">My Reviews ({{ $reviews->total() }}) <x-nav-link href="{{ route('reviews.create') }}" class="flex flex-row gap-2 items-center text-[.75rem] border-2 hover:border-accent hover:text-accent py-4 badge border-[#8888884A] font-bold"><x-heroicon-s-plus class="size-4" />New Review</x-nav-link></h2>
                 <p>Manage your reviews.</p>
                 <x-divisor class="my-5"></x-divisor>
-                @if(!empty($reviews))
+                @if(count($reviews) !== 0)
                     <div class="flex flex-col gap-6">
                         @foreach($reviews as $review)
                             <x-article-link :review="$review" :dashboard="true"></x-article-link>
                         @endforeach
                     </div>
-                    <div class="mt-10">
-                        {{ $reviews->links() }}
-                    </div>
+                    <x-pagination :pagination="$reviews" class="mt-10"></x-pagination>
                 @else
-                    <p class="font-bold">You don't have any reviews yet</p>
+                    <x-empty-result type="reviews" title="You don't have any reviews yet"></x-empty-result>
                 @endif
             </div>
 
@@ -94,17 +92,15 @@
                 <h2 class="font-bold text-[1.7rem] mb-2">My Comments ({{ $comments->total() }})</h2>
                 <p>Manage your comments.</p>
                 <x-divisor class="my-5"></x-divisor>
-                @if(!empty($comments))
+                @if(count($comments) !== 0)
                     <ul id="comments" class="flex flex-col gap-6 mt-5">
                         @foreach ($comments as $comment)
                             <x-comment :comment="$comment" :dashboard="true"></x-comment>
                         @endforeach
                     </ul>
-                    <div class="mt-10">
-                        {{ $comments->links() }}
-                    </div>
+                     <x-pagination :pagination="$comments" class="mt-10"></x-pagination>
                 @else
-                    <p class="font-bold">You don't have any comments yet</p>
+                    <x-empty-result type="comments" title="You don't have any comments yet"></x-empty-result>
                 @endif
             </div>
 

@@ -20,29 +20,37 @@
             <x-badge-link href="/oldest" :active="request()->is('oldest')">Oldest</x-badge-link>
             <x-badge-link href="/hot-reviews" :active="request()->is('hot-reviews')">Hot</x-badge-link>
             <x-badge-link href="/recommended" :active="request()->is('recommended')">Recommended
-                <span>{{ $recommendationsTotal['recommended'] }}</span></x-badge-link>
+                <span>{{ empty($recommendationsTotal['recommended']) ? 0 : $recommendationsTotal['recommended'] }}</span></x-badge-link>
             <x-badge-link href="/not_recommended" :active="request()->is('not_recommended')">Not Recommended
-                <span>{{ $recommendationsTotal['not_recommended'] }}</span></x-badge-link>
+                <span>{{ empty($recommendationsTotal['not_recommended']) ? 0 : $recommendationsTotal['not_recommended'] }}</span></x-badge-link>
             <x-badge-link href="/essential" :active="request()->is('essential')">Essential
-                <span>{{ $recommendationsTotal['essential'] }}</span></x-badge-link>
+                <span>{{ empty($recommendationsTotal['essential']) ? 0 : $recommendationsTotal['essential'] }}</span></x-badge-link>
             <x-badge-link href="/mixed" :active="request()->is('mixed')">Mixed
-                <span>{{ $recommendationsTotal['mixed'] }}</span></x-badge-link>
+                <span>{{ empty($recommendationsTotal['mixed']) ? 0 : $recommendationsTotal['mixed'] }}</span></x-badge-link>
         </nav>
     </x-section>
     <x-section class="flex flex-col gap-7">
-        <div class="flex flex-row justify-between gap-2 text-[.80rem] items-center">
-            <h2 class="font-bold text-[1.4rem]">Reviews</h2>
-            <div class="flex flex-row gap-2 items-center">
-                <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-4 w-4" />
-                <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
+        @if(count($reviews) !== 0)
+            <div class="flex flex-row justify-between gap-2 text-[.80rem] items-center">
+                <h2 class="font-bold text-[1.4rem]">Reviews</h2>
+                <div class="flex flex-row gap-2 items-center">
+                    <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-4 w-4" />
+                    <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
+                </div>
             </div>
-        </div>
-        <div class="flex flex-col gap-5">
-            @foreach($reviews as $review)
-                <x-article-link :review="$review"></x-article-link>
-            @endforeach
-        </div>
-        <div class="mt-5">@if(!empty($reviews->links())){{ $reviews->links() }}@endif</div>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-5">
+                @foreach($reviews as $review)
+                    <x-article-link :review="$review"></x-article-link>
+                @endforeach
+            </div>
+            <x-pagination :pagination="$reviews"></x-pagination>
+        @else
+            <div class="flex flex-col items-center mt-15 gap-3">
+                <x-heroicon-s-document-text class="text-accent size-30" />
+                <h1 class="font-bold text-2xl">Looks like it's a little quiet around here...</h1>
+                <a href="{{ route('reviews.create') }}" class="hover:underline hover:text-accent opacity-70 text-[1.1rem] -mt-3">Be the first to share your take on a game</a>
+            </div>
+        @endif
     </x-section>
     <script>
         const toggleCheckbox = document.getElementById('toggle-link');

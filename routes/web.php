@@ -46,14 +46,14 @@ Route::controller(UserController::class)->middleware('auth')->group(function () 
 Route::controller(ReviewController::class)->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/reviews/create', 'create');
-        Route::get('/reviews/create', 'create');
+        Route::get('/reviews/create', 'create')->name('reviews.create');
         Route::post('/reviews', 'store')->can('create', \App\Models\Review::class);
         Route::put('/reviews/{review}', 'update')->can('update', 'review');
         Route::delete('/reviews/{review}', 'destroy')->can('delete', 'review');
         Route::get('/reviews/{review}/edit', 'edit')->can('update', 'review');
     });
     Route::get('/reviews/{review}', 'show');
-    Route::get('/{filter?}', 'index')->where('filter', 'essential|recommended|not_recommended|mixed|highest-rated|lowest-rated|popular|oldest|hot-reviews');
+    Route::get('/{filter?}', 'index')->where('filter', 'essential|recommended|not_recommended|mixed|highest-rated|lowest-rated|popular|oldest|hot-reviews')->name('reviews');
 });
 
 // Comments Route

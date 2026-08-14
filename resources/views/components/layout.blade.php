@@ -42,11 +42,13 @@
                         <details>
                             <summary> <img @if(!empty(auth()->user()->avatar)) src="{{ asset(auth()->user()->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
                                 alt="User" class="rounded-[50%] h-7">{{ auth()->user()->nickname }}</summary>
-                            <ul class="rounded-lg border border-[#88888833] bg-[#0E0E0E] p-2 mt-2 left-6 w-40">
-                                <x-submenu-link href="/users/{{ auth()->user()->id }}/{{ 'menu1' }}/edit">Profile</x-submenu-link>
-                                <x-submenu-link href="/users/{{ auth()->user()->id }}/{{ 'menu2' }}/edit">My Reviews</x-submenu-link>
-                                <x-submenu-link href="/users/{{ auth()->user()->id }}/{{ 'menu4' }}/edit">Settings</x-submenu-link>
-                                <x-submenu-link href="/">Home</x-submenu-link>
+                            <ul class="rounded-lg border border-[#88888833] bg-[#0E0E0E] p-2 mt-2 left-6 w-40 z-50">
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/menu1/edit">Profile</x-submenu-link>
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/menu2/edit">My Reviews</x-submenu-link>
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/menu3/edit">My Comments</x-submenu-link>
+                                <x-submenu-link href="{{ route('reviews.create') }}">New Review</x-submenu-link>
+                                <x-submenu-link href="/users/{{ auth()->user()->id }}/menu4/edit">Settings</x-submenu-link>
+                                <x-submenu-link href="{{ route('reviews') }}">Home</x-submenu-link>
                                 <x-divisor></x-divisor>
                                 <x-submenu-link type="submit"></x-submenu-link>
                             </ul>

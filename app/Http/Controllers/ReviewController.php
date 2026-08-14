@@ -39,10 +39,9 @@ class ReviewController extends Controller
      */
     public function store(ReviewRequest $request)
     {
-        dd($request->all());
         $validated = $request->validated();
 
-        DB::transaction(function () use ($validated) {
+        $review = DB::transaction(function () use ($validated) {
             $review = Auth::user()->reviews()->create(Arr::except($validated, ['pros', 'cons']));
 
             $review->pros_cons()->createMany(
@@ -58,8 +57,11 @@ class ReviewController extends Controller
                     'content' => $con,
                 ])->all()
             );
-            return redirect('/reviews/' . $review->id);
+
+            return $review;
         });
+
+        return redirect('/reviews/' . $review->id);
     }
 
     /**
