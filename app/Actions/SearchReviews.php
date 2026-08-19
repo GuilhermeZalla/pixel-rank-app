@@ -4,7 +4,7 @@ namespace App\Actions;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
-class FetchReviews
+class SearchReviews
 {
     protected $recommendationsFilters = ['not_recommended', 'recommended', 'mixed', 'essential'];
 
@@ -19,12 +19,13 @@ class FetchReviews
     public function execute(Request $request)
     {
         $filter = $request->filter;
-        $reviews = !empty($request['game_id']) ? Review::with(['user', 'comments'])->where('game_id', $request['game_id']) : Review::with(['user', 'comments']);
+
+        $reviews = Review::where('title', 'LIKE', '%' . $request->search . '%')->with(['user', 'comments']);
+
+        $recommendationsCount = (clone $reviews)->selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
 
         if (in_array($filter, $this->recommendationsFilters)) {
             $reviews = (clone $reviews)->where('recommendation', $filter)->latest();
-        } elseif (!empty($request->search)) {
-            $reviews->where('title', 'LIKE', '%' . $request->search . '%');
         } else {
             switch ($filter) {
                 case 'highest-rated':
@@ -34,7 +35,7 @@ class FetchReviews
                     $reviews = $reviews->orderBy('rating', 'asc');
                     break;
                 case 'popular':
-                     $reviews = $reviews->orderBy('views', 'desc');
+                    $reviews = $reviews->orderBy('views', 'desc');
                     break;
                 case 'oldest':
                     $reviews = $reviews->oldest();
@@ -55,10 +56,10 @@ class FetchReviews
             }
         }
 
-        $recommendations = Review::selectRaw('recommendation, COUNT(*) as total')->groupBy('recommendation')->pluck('total', 'recommendation');
+
         return [
             'reviews' => $reviews->paginate(10),
-            'recommendationsTotal' => $recommendations,
+            'recommendationsTotal' => $recommendationsCount
         ];
     }
 }

@@ -6,8 +6,8 @@
             <p class="text-[#888888ed] text-[.95rem]">Capture your thoughts and experiences with a game.</p>
         </div>
         <form method="POST" action="/reviews/create" class="mt-5">@csrf
-            <x-form.input type="textarea" name="review" rows="5" id="review" placeholder="What's your review?"
-                class="placeholder:text-base-content resize-none border-[#88888822]" />
+            <x-form.input type="textarea" name="review" rows="5" id="review" placeholder="Start writing your review…"
+                class="placeholder:text-base-content resize-none border-[#88888822] rounded-2xl" />
         </form>
     </x-section>
     <x-section class="flex flex-col gap-3">
@@ -19,14 +19,23 @@
             <x-badge-link href="/popular" :active="request()->is('popular')">Popular</x-badge-link>
             <x-badge-link href="/oldest" :active="request()->is('oldest')">Oldest</x-badge-link>
             <x-badge-link href="/hot-reviews" :active="request()->is('hot-reviews')">Hot</x-badge-link>
-            <x-badge-link href="/recommended" :active="request()->is('recommended')">Recommended
-                <span>{{ empty($recommendationsTotal['recommended']) ? 0 : $recommendationsTotal['recommended'] }}</span></x-badge-link>
-            <x-badge-link href="/not_recommended" :active="request()->is('not_recommended')">Not Recommended
-                <span>{{ empty($recommendationsTotal['not_recommended']) ? 0 : $recommendationsTotal['not_recommended'] }}</span></x-badge-link>
-            <x-badge-link href="/essential" :active="request()->is('essential')">Essential
-                <span>{{ empty($recommendationsTotal['essential']) ? 0 : $recommendationsTotal['essential'] }}</span></x-badge-link>
-            <x-badge-link href="/mixed" :active="request()->is('mixed')">Mixed
-                <span>{{ empty($recommendationsTotal['mixed']) ? 0 : $recommendationsTotal['mixed'] }}</span></x-badge-link>
+
+
+            @if(!empty($recommendationsTotal['recommended']))<x-badge-link href="/recommended"
+                :active="request()->is('recommended')">Recommended
+            <span>{{ $recommendationsTotal['recommended'] }}</span></x-badge-link>@endif
+            @if(!empty($recommendationsTotal['not_recommended']))<x-badge-link
+                href="/not_recommended" :active="request()->is('not_recommended')">Not
+                Recommended
+            <span>{{ $recommendationsTotal['not_recommended'] ?? 0 }}</span></x-badge-link>@endif
+            @if(!empty($recommendationsTotal['essential'])) <x-badge-link href="/essential"
+                :active="request()->is('essential')">Essential
+            <span>{{ $recommendationsTotal['essential'] ?? 0 }}</span></x-badge-link> @endif
+            @if(!empty($recommendationsTotal['mixed'])) <x-badge-link href="/mixed"
+                :active="request()->is('mixed')">Mixed
+            <span>{{ $recommendationsTotal['mixed'] ?? 0 }}</span></x-badge-link>@endif
+
+
         </nav>
     </x-section>
     <x-section class="flex flex-col gap-7">

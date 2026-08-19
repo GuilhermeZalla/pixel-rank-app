@@ -14,7 +14,7 @@ use App\Http\Controllers\SearchController;
 
 // Search Routes
 
-Route::get('/search/{filter?}', [SearchController::class, 'index']);
+Route::get('/search/{filter?}/{search?}', [SearchController::class, 'index']);
 Route::get('/games/search', GameController::class);
 
 // Auth Route List

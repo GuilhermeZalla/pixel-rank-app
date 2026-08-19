@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="pixelrank" class="text-base-content">
+<html lang="en" data-theme="pixelrank" class="text-base-content bg-base-100">
 
 <head>
     <meta charset="UTF-8">
@@ -14,14 +14,14 @@
 <!-- Site Content -->
 
 <body class="pb-5">
-    <div class="navbar flex flex-row justify-between bg-base-100 shadow-sm border-b border-b-[#88888833] px-10">
+    <div class="navbar flex flex-row justify-between bg-base-200 xl:px-[3vw] items-center" style="box-shadow: 0px 2px 10px #0000009e;">
         <div class="flex flex-row"> <a class="text-xl" href="/"><img src="{{ asset('pixelrank.png') }}"
-                    alt="PixelRank" class="object-contain h-full w-30"></a>
+                    alt="PixelRank" class="object-contain h-full w-40"></a>
         </div>
          @if(!request()->is('users/*'))
-            <form method="GET" action="/search" class="relative">
+            <form method="GET" action="/search/popular" class="relative">
                 <label class="input w-120 rounded-[7px]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[1.8em] opacity-50" viewBox="0 0 24 24" fill="none"
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-[2.5em] opacity-50" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M2 12c0-2.21 1.79-4 4-4h12a4 4 0 0 1 4 4v3a3 3 0 0 1-3 3h-1l-2-2h-8l-2 2H5a3 3 0 0 1-3-3v-3z" />
                         <path d="M6 12h4" />
@@ -30,7 +30,7 @@
                         <path d="M18 13h.01" />
                     </svg>
                     <input type="search" name="search" placeholder="Search for a review..." autocomplete="on"
-                        class="p-2.5 pl-1 text-[.80rem] font-bold border-none focus:transparent focus:outline-none w-120"
+                        class="p-2.5 pl-1 text-[.90rem] font-bold border-none focus:transparent focus:outline-none w-120"
                         required>
                 </label>
             </form>
@@ -40,9 +40,9 @@
                 <ul class="menu menu-horizontal px-1">
                     <li>
                         <details>
-                            <summary> <img @if(!empty(auth()->user()->avatar)) src="{{ asset(auth()->user()->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
-                                alt="User" class="rounded-[50%] h-7">{{ auth()->user()->nickname }}</summary>
-                            <ul class="rounded-lg border border-[#88888833] bg-[#0E0E0E] p-2 mt-2 left-6 w-40 z-50">
+                            <summary class="font-bold"> <img @if(!empty(auth()->user()->avatar)) src="{{ asset(auth()->user()->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
+                                alt="User" class="rounded-[50%] h-9">{{ auth()->user()->nickname }}</summary>
+                            <ul class="rounded-lg border border-[#88888833] bg-base-200 p-2 -mt-2 left-12 w-40 z-50">
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu1/edit">Profile</x-submenu-link>
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu2/edit">My Reviews</x-submenu-link>
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu3/edit">My Comments</x-submenu-link>

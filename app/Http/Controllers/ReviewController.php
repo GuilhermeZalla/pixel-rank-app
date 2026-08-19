@@ -73,6 +73,8 @@ class ReviewController extends Controller
         $info = $review->getGameInfo($gameapi->getGame($review->game_id)[0]);
         $pros_cons = $review->pros_cons->groupBy('type');
 
+        $review->increment('views');
+
         return view('reviews.show', ['review' => $review, 'pros_cons' => $pros_cons, 'game' => $info]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\FetchReviews;
+use \App\Actions\SearchReviews;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,12 @@ class SearchController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, FetchReviews $fetch)
-    {
-            $data = $fetch->execute($request);
 
-            return view('result', $data);
+    public function index(Request $request, SearchReviews $search)
+    {
+            $result = $search->execute($request);
+
+            return view('result', $result);
     }
 
     /**

@@ -1,42 +1,51 @@
 <x-layout>
     <x-slot:title>{{ $review->title }}</x-slot:title>
-    <div class="px-4 sm:px-5 md:px-5">
-        <x-section class="py-10">
+    <div class="px-4">
+        <x-section class="pt-10 pb-5">
             <nav class="flex flex-row justify-between">
                 <x-nav-link href="/" class="flex flex-row gap-3 font-bold text-[.90rem] items-center hover:text-accent">
                     <x-heroicon-s-arrow-small-left class="size-5" />Back to Reviews</x-nav-link>
+                       @if($review->contains_spoilers)<span class="text-center text-[.95rem] font-bold flex flex-row gap-2 px-4 py-3 mb-7 justify-center items-center bg-[#181818] rounded-2xl"><x-heroicon-s-exclamation-triangle class="text-orange-600 size-5"/>Warning: This review contains spoilers</span>@endif
                 <div class="flex flex-row gap-3">
                     @if (!empty($review))
                         @can('update', $review)
-                            <x-badge-link>
-                                <x-heroicon-s-arrow-top-right-on-square class="size-3.5" />Edit
+                            <x-badge-link class="text-[.80rem] py-4">
+                                <x-heroicon-s-arrow-top-right-on-square class="size-4" />Edit
                                 Icon</x-badge-link>
                         @endcan
                         @can('delete', $review)
-                            <x-badge-link for="my_modal_7" type="label"><x-heroicon-s-trash class="size-3.5" />Delete</x-badge-link>
+                            <x-badge-link for="my_modal_7" type="label" class="text-[.80rem] py-4"><x-heroicon-s-trash class="size-4" />Delete</x-badge-link>
                         @endcan
                     @endif
                 </div>
             </nav>
         </x-section>
         <x-section class="flex flex-col">
-            @if($review->contains_spoilers)<span class="text-center text-[.95rem] font-bold flex flex-row gap-2 p-3 mb-7 justify-center items-center bg-[#181818] rounded-2xl"><x-heroicon-s-exclamation-triangle class="text-orange-600 size-4.5"/>Warning: This review contains spoilers</span>@endif
-            <div class="aspect-16/6 w-full overflow-hidden rounded-tr-xl rounded-tl-xl relative">
-                @if(!empty($game['cover']['id']) && in_array($game['cover']['id'], $game['cover']))
-                    <img src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $game['cover']['image_id'] }}.jpg" alt="Game cover"
-                        class="w-full h-full object-cover object-top rounded-tr-xl rounded-tl-xl">
-                @else
-                    <img src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $game['cover'] }}.jpg" alt="Game cover"
-                        class="w-full h-full object-cover object-top rounded-tr-xl rounded-tl-xl">
-                @endif
-                <div class="absolute inset-0 rounded-tr-xl rounded-tl-xl bg-linear-to-t from-black via-black/20 via-100% to-transparent"></div>
-            </div>
-            <div class="py-8 px-3 flex flex-col gap-3 -mt-30 relative z-10">
-                <h1 class="text-4xl font-bold mb-2">{{ $review->title }}</h1>
-                <div class="flex flex-col gap-6">
-                    <ul class="flex flex-row gap-5">
+            <div class="flex flex-row bg-[#181818] p-3 rounded-2xl">
+                 <x-cover class="h-full w-70 object-contain rounded-[20px]"
+                src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="Review Cover"></x-cover>
+                <div class="flex flex-col justify-between p-4">
+                    <h2 class="flex flex-row items-center text-[.85rem] gap-2"><img @if(!empty($review->user->avatar)) src="{{ asset($review->user->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode($review->user->nickname) }}"@endif alt="User" class="rounded-[50%] h-8 border-2 border-secondary"> <div><span class="opacity-70">Review by </span><strong class="font-bold">{{ $review->user->nickname }}</strong></div><span class="text-[1rem] opacity-70">&middot;</span> <span class="flex flex-row items-center gap-1.5 opacity-70 text-[.80rem]">
+                                    <x-heroicon-o-eye
+                                        class="size-3.5" />{{ $review->views }} @if($review->views === 0 || $review->views === 1 ) view @else views @endif
+                                </span></h2>
+                    <ul class="flex flex-row flex-wrap gap-4 rounded-2xl">
+                        <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $game['platforms'] }}</strong>
+                        </li>
+                        <li class="w-[calc(50%-0.5rem)] ">Plataforma Jogada<br><strong>{{ $review->platform_playable }}</strong></li>
+                        <li class="w-[calc(50%-0.5rem)] ">Lançamento<br><strong>{{ $game['release_date'] }}</strong>
+                        </li>
+                        <li class="w-[calc(50%-0.5rem)] ">
+                            Nota<br><strong>{{ $review->rating === '10.0' ? 10 : $review->rating }}/10</strong></li>
+                    </ul>
+                    <div class="py-3">
+                        <h2 class="font-bold">Summário</h2>
+                        <p>{{ $game['summary'] }}</p>
+                    </div>
+                    <ul class="flex flex-row gap-5 text-[.90rem]">
                         <li>
-                            <x-badge-link href="/{{ $review->recommendation }}" type="link" class="text-[.90rem] rounded-[10px] px-2 py-0">{{ $review->recommendation->label() }}</x-badge-link>
+                            <x-badge-link href="/{{ $review->recommendation }}" type="link"
+                                class="rounded-[10px] px-2 py-0">{{ $review->recommendation->label() }}</x-badge-link>
                         </li>
                         <li class="flex flex-row items-center gap-1">
                             <x-heroicon-o-calendar class="size-4.5" />Published
@@ -46,29 +55,15 @@
                             <x-heroicon-s-arrow-path class="size-4.5" />Updated
                             in {{ $review->getUpdatedDate() }}
                         </li>
-                        <li class="flex flex-row items-center gap-1">
-                            <x-heroicon-o-user class="size-4.5" />By
-                            {{ $review->user->nickname }}
-                        </li>
                         <li><a href="#comments" class="flex flex-row items-center gap-1">
                                 <x-heroicon-o-chat-bubble-oval-left class="size-4.5" />{{ count($review->comments) }}
                                 comments</a></li>
                     </ul>
-                    <ul class="flex flex-row flex-wrap gap-4 bg-[#181818] rounded-2xl p-4">
-                        <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $game['platforms'] }}</strong>
-                        </li>
-                        <li class="w-[calc(50%-0.5rem)] ">Plataforma Jogada<br><strong>{{ $review->platform_playable }}</strong></li>
-                        <li class="w-[calc(50%-0.5rem)] ">Lançamento<br><strong>{{ $game['release_date'] }}</strong>
-                        </li>
-                        <li class="w-[calc(50%-0.5rem)] ">
-                            Nota<br><strong>{{ $review->rating === '10.0' ? 10 : $review->rating }}/10</strong></li>
-                    </ul>
-                    <h2 class="font-bold">Resumo</h2>
-                    <p>{{ $game['summary'] }}</p>
                 </div>
-                <hr class="my-8 border-t border-white/8" />
+            </div>
+            <div class="py-8 flex flex-col gap-3 mt-5">
                 <article class="prose prose-invert max-w-none break-all">
-                    <h2 class="font-bold mb-5">Review</h2>
+                    <h1 class="text-4xl font-bold mb-8">{{ $review->title }}</h1>
                     {!! nl2br(e($review->body)) !!}
                 </article>
                 <div class="flex flex-row justify-start gap-5 mt-8">

@@ -1,12 +1,12 @@
 @props(['type' => 'input'])
 
 @php
-$default = ' font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E] ';
+$default = ' font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-2xl bg-[#0E0E0E] ';
 @endphp
 
 @switch($type)
     @case('textarea')
-        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-3 ' . $default]) }} @if(!empty($attributes->get('value'))) value="{{ old($attributes->get('value')) }}" @endif>{{ $attributes->get('value') }}</textarea>
+        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-4 ' . $default]) }} @if(!empty($attributes->get('value'))) value="{{ old($attributes->get('value')) }}" @endif>{{ $attributes->get('value') }}</textarea>
         <x-form.error name="{{ $attributes->get('bio') }}" />
         @break
 

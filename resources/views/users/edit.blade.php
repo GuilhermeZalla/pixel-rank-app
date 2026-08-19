@@ -74,7 +74,7 @@
             <div id="review" x-show="activeMenu === 'menu2'">
                 <h2 class="font-bold text-[1.7rem] mb-2 flex flex-row justify-between">My Reviews ({{ $reviews->total() }}) <x-nav-link href="{{ route('reviews.create') }}" class="flex flex-row gap-2 items-center text-[.75rem] border-2 hover:border-accent hover:text-accent py-4 badge border-[#8888884A] font-bold"><x-heroicon-s-plus class="size-4" />New Review</x-nav-link></h2>
                 <p>Manage your reviews.</p>
-                <x-divisor class="my-5"></x-divisor>
+                <x-divisor class="my-7"></x-divisor>
                 @if(count($reviews) !== 0)
                     <div class="flex flex-col gap-6">
                         @foreach($reviews as $review)
