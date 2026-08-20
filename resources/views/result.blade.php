@@ -40,7 +40,7 @@
                     <label for="spoiler" class="cursor-pointer">Hide Spoiler Reviews</label>
                 </div>
             </div>
-            <div class="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5">
                 @foreach($reviews as $review)
                     <x-article-link :review="$review"></x-article-link>
                 @endforeach

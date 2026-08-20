@@ -42,7 +42,7 @@
             <x-form.field class="flex flex-col gap-4 my-4">
                 <x-form.label for="proscons">The Good & The Bad (max 10 for both)</x-form.label>
                 <div class="flex flex-row justify-between gap-4">
-                    <div class="flex flex-col flex-wrap gap-4 bg-[#181818] rounded-2xl p-4 w-full">
+                    <div class="flex flex-col flex-wrap gap-4 bg-[#0E0E0E] rounded-2xl p-4 w-full">
                          <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]"><x-heroicon-o-hand-thumb-up
                                 class="size-4 text-primary" />Pontos positivos</h3>
                         <div class="flex gap-2">
@@ -53,7 +53,7 @@
                         <ul id="pros-list" class="space-y-2"></ul>
                         <p id="pros-empty" class="text-sm text-gray-400">Nenhum ponto adicionado ainda.</p>
                     </div>
-                    <div class="flex flex-col flex-wrap gap-4 bg-[#181818] rounded-2xl p-4 w-full">
+                    <div class="flex flex-col flex-wrap gap-4 bg-[#0E0E0E] rounded-2xl p-4 w-full">
                         <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
                             <x-heroicon-o-hand-thumb-down class="size-4 text-warning" /> Pontos negativos
                         </h3>

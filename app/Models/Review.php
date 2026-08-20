@@ -58,6 +58,7 @@ class Review extends Model
     public function getGameInfo(array $game){
        return [
            'platforms' => $this->getPlatformsFormatted($game['platforms']),
+           'platforms_count' => count($game['platforms']),
            'release_date' => Carbon::createFromTimestamp($game['first_release_date'])->locale('pt_BR')->isoFormat('DD/MM/YYYY'),
            'summary' => $game['summary'],
            'cover' => $game['cover']

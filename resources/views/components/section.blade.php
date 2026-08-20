@@ -1,1 +1,1 @@
-<section {{ $attributes->merge(['class' => 'flex flex-col sm:px-5 md:px-5 xl:px-[3vw]']) }}>{{ $slot }}</section>
+<section {{ $attributes->merge(['class' => 'flex flex-col sm:px-5 md:px-5 xl:px-[5vw]']) }}>{{ $slot }}</section>

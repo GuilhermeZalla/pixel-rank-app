@@ -14,7 +14,7 @@
 <!-- Site Content -->
 
 <body class="pb-5">
-    <div class="navbar flex flex-row justify-between bg-base-200 xl:px-[3vw] items-center" style="box-shadow: 0px 2px 10px #0000009e;">
+    <div class="navbar flex flex-row justify-between bg-base-200 xl:px-10 items-center" style="box-shadow: 0px 2px 10px #0000009e;">
         <div class="flex flex-row"> <a class="text-xl" href="/"><img src="{{ asset('pixelrank.png') }}"
                     alt="PixelRank" class="object-contain h-full w-40"></a>
         </div>
@@ -30,7 +30,7 @@
                         <path d="M18 13h.01" />
                     </svg>
                     <input type="search" name="search" placeholder="Search for a review..." autocomplete="on"
-                        class="p-2.5 pl-1 text-[.90rem] font-bold border-none focus:transparent focus:outline-none w-120"
+                        class="p-2.5 pl-1 text-[.90rem] font-bold border-none focus:bg-transparent focus:outline-none w-120"
                         required>
                 </label>
             </form>

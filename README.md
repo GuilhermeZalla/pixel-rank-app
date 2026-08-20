@@ -4,12 +4,12 @@
 A game review platform inspired by Letterboxd, where users can rate games,
 write reviews, comment, and discover new reviews from the community.
 
-## 🎯 Objetivo
+## 🎯 Objective
 
 PixelRank aims to offer a platform focused on game reviews, inspired by the Letterboxd experience for movies,
 allowing any user to publish, share, and discover game reviews.
 
-## ✨ Funcionalidades
+## ✨ Features
 
 - Review publishing
 - Comment system
@@ -22,7 +22,7 @@ allowing any user to publish, share, and discover game reviews.
 
 Project under development.
 
-## 🛠 Tecnologias
+## 🛠 Tecnologies
 
 ### Backend
 
@@ -37,7 +37,7 @@ Project under development.
 - DaisyUI
 - JavaScript
 
-### Banco de dados
+### Database
 
 - MySQL
 
@@ -45,12 +45,12 @@ Project under development.
 
 - IGDB API
 
-### Ferramentas
+### Tools
 
 - Git
 - Docker (in development)
 
-## 🚀 Instalação
+## 🚀 Install
 
 ```bash
 git clone ...
@@ -160,16 +160,16 @@ PixelRank/
 - [x] Test
 - [ ] Deploy
 
-## 🔐 Segurança
+## 🔐 Security
 
 - Authorization using Laravel Policies
 - Validation via Form Requests
 - Protection against unauthorized actions
 
-## 📄 Licença
+## 📄 License
 
 This project was developed for study and portfolio purposes.
 
-## 🌐 Demonstração
+## 🌐 Demonstration
 
 (soon)

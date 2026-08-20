@@ -21,16 +21,16 @@
             </nav>
         </x-section>
         <x-section class="flex flex-col">
-            <div class="flex flex-row bg-[#181818] p-3 rounded-2xl">
-                 <x-cover class="h-full w-70 object-contain rounded-[20px]"
+            <div class="flex flex-row bg-[#181818] p-5 rounded-2xl">
+                 <x-cover class="h-full w-60 object-contain rounded-[20px]"
                 src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="Review Cover"></x-cover>
-                <div class="flex flex-col justify-between p-4">
+                <div class="flex flex-col justify-between px-7">
                     <h2 class="flex flex-row items-center text-[.85rem] gap-2"><img @if(!empty($review->user->avatar)) src="{{ asset($review->user->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode($review->user->nickname) }}"@endif alt="User" class="rounded-[50%] h-8 border-2 border-secondary"> <div><span class="opacity-70">Review by </span><strong class="font-bold">{{ $review->user->nickname }}</strong></div><span class="text-[1rem] opacity-70">&middot;</span> <span class="flex flex-row items-center gap-1.5 opacity-70 text-[.80rem]">
                                     <x-heroicon-o-eye
                                         class="size-3.5" />{{ $review->views }} @if($review->views === 0 || $review->views === 1 ) view @else views @endif
                                 </span></h2>
                     <ul class="flex flex-row flex-wrap gap-4 rounded-2xl">
-                        <li class="w-[calc(50%-0.5rem)] ">Plataforma(s)<br><strong>{{ $game['platforms'] }}</strong>
+                        <li class="w-[calc(50%-0.5rem)] ">@if($game['platforms_count'] > 1) Plataformas @else Plataforma @endif<br><strong>{{ $game['platforms'] }}</strong>
                         </li>
                         <li class="w-[calc(50%-0.5rem)] ">Plataforma Jogada<br><strong>{{ $review->platform_playable }}</strong></li>
                         <li class="w-[calc(50%-0.5rem)] ">Lançamento<br><strong>{{ $game['release_date'] }}</strong>
@@ -182,11 +182,11 @@
     <li id="comment-${data.comment.id}" class="flex flex-row gap-4 border-b border-white/8 pt-8 pb-4">
 
         <img src="${avatar}"
-             alt="User" class="rounded-[50%] h-12">
+             alt="User" class="rounded-[50%] h-13">
 
         <div class="w-full">
-            <span class="flex flex-row justify-between mb-5"">
-                 <h3 class="font-bold text-[.90rem] flex flex-col">${data.comment.user.nickname} <span
+            <span class="flex flex-row justify-between mb-3">
+                 <h3 class="font-bold text-[.90rem] flex flex-row gap-2 items-center">${data.comment.user.nickname} <span class="text-[1rem] text-[#ffffff97]">&middot;</span><span
                         class="text-[.75rem] text-[#ffffff97] font-normal">${data.comment.posted_date}</span></h3>
 
                     <ul class="">
