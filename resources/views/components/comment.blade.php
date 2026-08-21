@@ -1,7 +1,9 @@
 @props(['dashboard' => false, 'comment' => '', 'review' => ''])
 
 @php
-    $avatarURL = !empty($comment->user->avatar) ? asset($comment->user->avatar) : "https://ui-avatars.com/api/?name={{ urlencode($comment->user->nickname) }}";
+$avatarURL = !empty($comment->user->avatar)
+    ? asset($comment->user->avatar)
+    : 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->nickname);
 @endphp
 
 @if($dashboard)
@@ -9,7 +11,7 @@
         class="border-2 border-[#88888833] py-5 px-3.5 rounded-[10px] cursor-pointer group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
         <a href="/reviews/{{ $comment->review->id }}" class="flex flex-row gap-4">
             <x-cover src="{{ $avatarURL }}"
-                alt="User Profile Image" class="rounded-[50%] h-15"></x-cover>
+                alt="User Profile Image" class="rounded-[50%] h-12"></x-cover>
             <div class="w-full">
                 <span class="flex flex-row justify-between">
                     <h3 class="font-bold text-[.90rem] flex flex-row gap-2 items-center">{{ $comment->user->nickname }}<span class="text-[1rem] text-[#ffffff97]">&middot;</span>

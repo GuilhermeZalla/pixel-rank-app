@@ -81,7 +81,6 @@ php artisan serve
 
 ![](docs/images/home-menu.jpg)
 
-....
 
 ### Login & Register
 
@@ -90,12 +89,26 @@ php artisan serve
 ![](docs/images/register.jpg)
 
 ### Review page
-....
+
+![](docs/images/review-show.jpg)
+
 
 ### Create review
-....
 
-### User profile
+![](docs/images/review-create-1.jpg)
+
+![](docs/images/review-create-2.jpg)
+
+
+### User dashboard
+
+![](docs/images/dashboard-profile.jpg)
+
+![](docs/images/dashboard-reviews.jpg)
+
+![](docs/images/dashboard-comments.jpg)
+
+
 ....
 
 ## 🏗 Architecture

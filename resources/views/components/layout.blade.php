@@ -42,7 +42,7 @@
                         <details>
                             <summary class="font-bold"> <img @if(!empty(auth()->user()->avatar)) src="{{ asset(auth()->user()->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
                                 alt="User" class="rounded-[50%] h-9">{{ auth()->user()->nickname }}</summary>
-                            <ul class="rounded-lg border border-[#88888833] bg-base-200 p-2 -mt-2 left-12 w-40 z-50">
+                            <ul class="rounded-lg border border-[#88888833] bg-base-200 p-2 mt-1 left-12 w-40 z-50">
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu1/edit">Profile</x-submenu-link>
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu2/edit">My Reviews</x-submenu-link>
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu3/edit">My Comments</x-submenu-link>

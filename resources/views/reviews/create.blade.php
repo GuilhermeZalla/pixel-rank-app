@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>Create Review</x-slot:title>
-    <x-form.form method="POST" action="/reviews" class="m-[6vh] w-[50%]">
+    <x-form.form method="POST" action="/reviews" class="m-[6vh] w-[50%] border border-[#88888833] bg-[#0E0E0E] rounded-[20px] py-8 px-10">
         @csrf
         <div class="flex flex-col gap-5">
             <x-form.field class="text-center mb-1">
@@ -42,7 +42,7 @@
             <x-form.field class="flex flex-col gap-4 my-4">
                 <x-form.label for="proscons">The Good & The Bad (max 10 for both)</x-form.label>
                 <div class="flex flex-row justify-between gap-4">
-                    <div class="flex flex-col flex-wrap gap-4 bg-[#0E0E0E] rounded-2xl p-4 w-full">
+                    <div class="flex flex-col flex-wrap gap-4 bg-[#14181C] rounded-2xl p-4 w-full">
                          <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]"><x-heroicon-o-hand-thumb-up
                                 class="size-4 text-primary" />Pontos positivos</h3>
                         <div class="flex gap-2">
@@ -53,7 +53,7 @@
                         <ul id="pros-list" class="space-y-2"></ul>
                         <p id="pros-empty" class="text-sm text-gray-400">Nenhum ponto adicionado ainda.</p>
                     </div>
-                    <div class="flex flex-col flex-wrap gap-4 bg-[#0E0E0E] rounded-2xl p-4 w-full">
+                    <div class="flex flex-col flex-wrap gap-4 bg-[#14181C] rounded-2xl p-4 w-full">
                         <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
                             <x-heroicon-o-hand-thumb-down class="size-4 text-warning" /> Pontos negativos
                         </h3>
