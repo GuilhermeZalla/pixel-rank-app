@@ -159,18 +159,23 @@ PixelRank/
 
 ## 🗺 Roadmap
 
+### Version 1.0 (current)
+
 - [x] Reviews
 - [x] Comments
 - [ ] Comment interaction
 - [x] User creation and authentication
 - [x] User dashboard
-- [ ] Notification
+- [ ] Recommendation system
+- [ ] Notifications
+- [x] Tests
+
+### Version 2.0 (future)
+
 - [ ] Follower system
 - [ ] Private messaging system
-- [ ] Recommendation system
 - [ ] Internationalization (PT-BR / EN)
 - [ ] Docker
-- [x] Test
 - [ ] Deploy
 
 ## 🔐 Security
