@@ -52,24 +52,47 @@ Project under development.
 
 ## 🚀 Install
 
-```bash
-git clone ...
+### Pré-requisitos
+- PHP 8.3+
+- Composer
+- Node.js 18+
+- MySQL (ou SQLite para testes)
+- Git
 
-cd PixelRank
+### Instalação (Windows)
 
+```powershell
+git clone https://github.com/GuilhermeZalla/pixel-rank-app.git
+cd pixel-rank-app
 composer install
-
 cp .env.example .env
-
 php artisan key:generate
-
 php artisan migrate
-
+php artisan db:seed
 npm install
-
-npm run dev
-
+npm run build
 php artisan serve
+```
+
+### Instalação (Linux/Mac)
+
+```bash
+git clone https://github.com/GuilhermeZalla/pixel-rank-app.git
+cd pixel-rank-app
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+npm install
+npm run build
+php artisan serve
+```
+
+### Rodar os testes
+
+```bash
+php artisan test
 ```
 
 ## 📸 Screenshots
@@ -183,6 +206,48 @@ PixelRank/
 - Authorization using Laravel Policies
 - Validation via Form Requests
 - Protection against unauthorized actions
+
+## 🚀 Produção
+
+Para rodar em produção, defina as seguintes variáveis de ambiente:
+
+- `APP_ENV=production`
+- `APP_DEBUG=false`
+- `APP_URL=https://seudominio.com`
+- `SESSION_SECURE_COOKIE=true`
+- `SESSION_ENCRYPT=true`
+
+Execução em produção:
+
+```bash
+# Cache de configuração, rotas e views
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Link do storage público
+php artisan storage:link
+
+# Fila e agendador (execute em processos separados)
+php artisan queue:work
+php artisan schedule:work
+
+# E-mail SMTP real (configure MAIL_* no .env)
+```
+
+## 🌐 Idiomas
+
+O site suporta dois idiomas: **Português (Brasil)** e **Inglês (Estados Unidos)**.
+
+### Como trocar o idioma
+Acesse qualquer página, use o seletor de idioma no cabeçalho (navbar) e escolha `Português (BR)` ou `English (US)`. A escolha é salva na sessão e em um cookie.
+
+### Como adicionar um novo idioma
+1. Copie a pasta `lang/en` para `lang/<codigo>` (ex.: `lang/es`).
+2. Traduza todos os valores das chaves nos arquivos copiados.
+3. Adicione o novo código à lista de locales permitidos em `app/Http/Middleware/SetLocale.php`.
+4. Adicione a opção no seletor de idioma em `resources/views/components/layout.blade.php`.
+5. Rode o teste de paridade de chaves: `php artisan test --filter=LocaleKeysParityTest`.
 
 ## 📄 License
 

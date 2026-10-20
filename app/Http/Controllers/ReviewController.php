@@ -67,9 +67,14 @@ class ReviewController extends Controller
     /**
      * Display the specified resource.
      */
-   public function show(Request $request, GameApiService $gameapi)
+    public function show(Request $request, GameApiService $gameapi)
     {
         $review = Review::with(['user', 'comments', 'comments.user'])->find($request->review);
+
+        if (! $review) {
+            abort(404);
+        }
+
         $info = $review->getGameInfo($gameapi->getGame($review->game_id)[0]);
         $pros_cons = $review->pros_cons->groupBy('type');
 
