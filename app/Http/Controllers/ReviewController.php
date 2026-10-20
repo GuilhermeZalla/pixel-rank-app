@@ -31,7 +31,13 @@ class ReviewController extends Controller
      */
     public function create(Request $request, GameApiService $gameapi)
     {
-        return view('reviews.create', ['review' => $request->review, 'platforms' => $gameapi->getPlatforms()]);
+        $platforms = $gameapi->getPlatforms();
+
+        return view('reviews.create', [
+            'review' => $request->review,
+            'platforms' => $platforms,
+            'gameApiAvailable' => $gameapi->isConfigured() && ! empty($platforms),
+        ]);
     }
 
     /**
@@ -75,12 +81,27 @@ class ReviewController extends Controller
             abort(404);
         }
 
-        $info = $review->getGameInfo($gameapi->getGame($review->game_id)[0]);
+        $games = $gameapi->getGame((string) $review->game_id);
+        $info = $review->getGameInfo($games[0] ?? []);
+
+        // game_cover deve ser um image_id do IGDB (apenas alfanumérico, sem hífens/UUID).
+        // Valores inválidos resultam em URL quebrada no images.igdb.com.
+        $gameCover = $review->game_cover;
+        if (! is_string($gameCover) || ! preg_match('/^[a-zA-Z0-9_-]{3,40}$/', $gameCover)) {
+            $gameCover = null;
+        }
+
         $pros_cons = $review->pros_cons->groupBy('type');
 
         $review->increment('views');
 
-        return view('reviews.show', ['review' => $review, 'pros_cons' => $pros_cons, 'game' => $info]);
+        return view('reviews.show', [
+            'review' => $review,
+            'pros_cons' => $pros_cons,
+            'game' => $info,
+            'gameApiAvailable' => $gameapi->isConfigured() && ! empty($games),
+            'gameCover' => $gameCover,
+        ]);
     }
 
     /**

@@ -62,19 +62,33 @@ class Review extends Model
 
         $result = '';
         foreach($platforms as $platform){
-            $result .= '/'.$platform['name'];
+            if (is_array($platform) && isset($platform['name'])) {
+                $result .= '/'.$platform['name'];
+            }
         }
 
         return substr(implode(', ', explode('/', $result)), 1);
     }
 
-    public function getGameInfo(array $game){
-       return [
-           'platforms' => $this->getPlatformsFormatted($game['platforms']),
-           'platforms_count' => count($game['platforms']),
-           'release_date' => ! empty($game['first_release_date']) ? LocaleFormatter::date(Carbon::createFromTimestamp($game['first_release_date'])) : null,
-           'summary' => $game['summary'],
-           'cover' => $game['cover']
-       ];
+    /**
+     * Build the game metadata shown on the review page.
+     *
+     * The external game API may be unavailable or return an incomplete
+     * payload, so every key is treated as optional.
+     *
+     * @param  array<string, mixed>  $game
+     * @return array<string, mixed>
+     */
+    public function getGameInfo(array $game = []): array{
+        $platforms = is_array($game['platforms'] ?? null) ? $game['platforms'] : [];
+        $releaseDate = $game['first_release_date'] ?? null;
+
+        return [
+            'platforms' => $this->getPlatformsFormatted($platforms),
+            'platforms_count' => count($platforms),
+            'release_date' => ! empty($releaseDate) ? LocaleFormatter::date(Carbon::createFromTimestamp($releaseDate)) : null,
+            'summary' => $game['summary'] ?? null,
+            'cover' => $game['cover'] ?? null
+        ];
     }
 }

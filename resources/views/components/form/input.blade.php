@@ -6,8 +6,8 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
 
 @switch($type)
     @case('textarea')
-        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-4 ' . $default]) }} @if(!empty($attributes->get('value'))) value="{{ old($attributes->get('value')) }}" @endif>{{ $attributes->get('value') }}</textarea>
-        <x-form.error name="{{ $attributes->get('bio') }}" />
+        <textarea {{ $attributes->merge(['class' => 'text-[.85rem] resize-none p-4 ' . $default]) }}>{{ old($attributes->get('name'), $attributes->get('value')) }}</textarea>
+        <x-form.error name="{{ $attributes->get('name') }}" />
         @break
 
     @case('search')
@@ -20,10 +20,10 @@ $default = ' font-bold w-full border border-[#8888884A] focus:border-accent focu
         @break
 
     @case('checkbox')
-        <input type="checkbox" checked="checked" {{ $attributes->merge(['class' => 'checkbox checkbox-success']) }} value="1" />
+        <input type="checkbox" {{ $attributes->merge(['class' => 'checkbox checkbox-success']) }} value="1" />
         @break
 
     @default
-        <input {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem]' . $default]) }} @if($attributes->get('name') !== 'password') value="{{ old($attributes->get('name')) }}" @endif type="{{ $type }}" />
+        <input {{ $attributes->merge(['class' => 'p-2.5 text-[.80rem]' . $default]) }} @if($attributes->get('name') !== 'password') value="{{ old($attributes->get('name'), $attributes->get('value')) }}" @endif type="{{ $type }}" />
         <x-form.error name="{{ $attributes->get('name') }}" />
 @endswitch

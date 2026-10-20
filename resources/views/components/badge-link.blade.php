@@ -5,22 +5,21 @@
     $default = 'badge border-[#8888884A] font-bold text-[.75rem] flex flex-row cursor-pointer';
     $style = 'text-[#FF6764] btn';
 
-    switch ($slot) {
-        case 'Recommended':
-            $style = 'bg-[#033317] text-accent';
-        break;
-        case 'Not Recommended':
-            $style = 'bg-[#280B0A] text-[#FF6764]';
-            break;
-        case 'Mixed':
-            $style = 'bg-[#281105] text-[#EE7C37]';
-            break;
-        case 'Essential':
-            $style = 'bg-[#001121] text-[#539AF8]';
-            break;
-        default:
-    }
+    $recommendationStyles = [
+        'recommended' => 'bg-[#033317] text-accent',
+        'not_recommended' => 'bg-[#280B0A] text-[#FF6764]',
+        'mixed' => 'bg-[#281105] text-[#EE7C37]',
+        'essential' => 'bg-[#001121] text-[#539AF8]',
+    ];
 
+    $slotText = trim((string) $slot);
+
+    foreach ($recommendationStyles as $recommendation => $recommendationStyle) {
+        if ($slotText === __('reviews.recommendations.' . $recommendation)) {
+            $style = $recommendationStyle;
+            break;
+        }
+    }
 @endphp
 
 @switch($type)

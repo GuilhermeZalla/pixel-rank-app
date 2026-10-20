@@ -1,6 +1,6 @@
 @php
     $avatar = !empty(auth()->user()->avatar)
-        ? asset(auth()->user()->avatar)
+        ? auth()->user()->avatar_url
         : 'https://ui-avatars.com/api/?name=' . urlencode(auth()->user()->nickname);
 @endphp
 

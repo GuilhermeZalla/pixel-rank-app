@@ -10,6 +10,7 @@
             <x-form.field class="flex flex-col gap-2 relative">
                 <x-form.label for="game-search">{{ __('reviews.game_name') }}</x-form.label>
                 <x-form.input type="search" />
+                <p id="game-search-status" class="text-sm text-warning hidden" role="status" aria-live="polite"></p>
             </x-form.field>
             <x-form.field class="flex flex-col gap-1">
                 <x-form.label for="title">{{ __('reviews.review_title') }}</x-form.label>
@@ -71,10 +72,17 @@
             <x-form.field>
                 <x-form.label for="platform">{{ __('reviews.platform_played') }}</x-form.label>
                 <x-form.select name="platform_playable">
-                    @foreach($platforms as $platform)
-                        <option value="{{ $platform['name'] }}" class="hover:bg-accent hover:text-black">{{ $platform['name'] }}</option>
-                    @endforeach
+                    @if (empty($platforms))
+                        <option value="{{ __('reviews.not_available') }}" class="hover:bg-accent hover:text-black">{{ __('reviews.not_available') }}</option>
+                    @else
+                        @foreach($platforms as $platform)
+                            <option value="{{ $platform['name'] }}" class="hover:bg-accent hover:text-black">{{ $platform['name'] }}</option>
+                        @endforeach
+                    @endif
                 </x-form.select>
+                @unless ($gameApiAvailable)
+                    <p class="text-sm text-warning mt-1">{{ __('reviews.game_api_unavailable') }}</p>
+                @endunless
             </x-form.field>
             <x-form.field class="mt-2 flex-col justify-end gap-3 sm:flex-row">
                 <x-form.link href="/" class="btn w-full sm:w-35">{{ __('reviews.return') }}</x-form.link>
@@ -88,6 +96,13 @@
         const gameId = document.getElementById('game-id');
         const gameName = document.getElementById('game-name');
         const gameCover = document.getElementById('game-cover');
+        const searchStatus = document.getElementById('game-search-status');
+
+        const showSearchStatus = (message) => {
+            if (!searchStatus) return;
+            searchStatus.textContent = message;
+            searchStatus.classList.toggle('hidden', !message);
+        };
 
         let timeout = null;
         let activeOptionIndex = -1;
@@ -105,6 +120,8 @@
             gameCover.value = '';
 
             const query = this.value.trim();
+
+            showSearchStatus('');
 
             if (!query) {
                 dropdown.innerHTML = '';
@@ -124,6 +141,14 @@
                 } catch (error) {
                     dropdown.classList.add('hidden');
                     searchInput.setAttribute('aria-expanded', 'false');
+                    showSearchStatus(@js(__('reviews.game_search_failed')));
+                    return;
+                }
+
+                if (!Array.isArray(games)) {
+                    dropdown.classList.add('hidden');
+                    searchInput.setAttribute('aria-expanded', 'false');
+                    showSearchStatus(@js(__('reviews.game_search_failed')));
                     return;
                 }
 

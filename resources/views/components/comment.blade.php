@@ -2,7 +2,7 @@
 
 @php
 $avatarURL = !empty($comment->user->avatar)
-    ? asset($comment->user->avatar)
+    ? $comment->user->avatar_url
     : 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->nickname);
 @endphp
 

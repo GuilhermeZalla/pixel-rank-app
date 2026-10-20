@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>measure</title></head>
+<body style="margin:0;background:#111;color:#eee;font:12px monospace">
+<pre id="out">running...</pre>
+<script>
+const params = new URLSearchParams(location.search);
+const target = params.get('target') || '/';
+const width = parseInt(params.get('w') || '1440', 10);
+
+const out = document.getElementById('out');
+const frame = document.createElement('iframe');
+frame.style.cssText = 'width:' + width + 'px;height:900px;border:0;display:block';
+document.body.appendChild(frame);
+
+frame.addEventListener('load', () => {
+  setTimeout(() => {
+    try {
+      const d = frame.contentDocument;
+      const win = frame.contentWindow;
+      const doc = d.documentElement;
+      const vw = win.innerWidth;
+      const lines = [];
+      lines.push('target=' + target + ' viewportWidth=' + vw);
+      lines.push('doc.scrollWidth=' + doc.scrollWidth + ' clientWidth=' + doc.clientWidth);
+      lines.push('body.scrollWidth=' + d.body.scrollWidth);
+      lines.push('HORIZONTAL OVERFLOW = ' + (doc.scrollWidth > doc.clientWidth + 1));
+      lines.push('');
+      lines.push('--- offenders (right edge > clientWidth) ---');
+      const all = d.querySelectorAll('*');
+      const bad = [];
+      for (const el of all) {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) continue;
+        if (r.right > doc.clientWidth + 1) {
+          bad.push({
+            tag: el.tagName.toLowerCase(),
+            cls: (el.getAttribute('class') || '').slice(0, 160),
+            id: el.id || '',
+            right: Math.round(r.right),
+            width: Math.round(r.width),
+            text: (el.textContent || '').trim().slice(0, 45)
+          });
+        }
+      }
+      bad.sort((a, b) => b.right - a.right);
+      bad.slice(0, 25).forEach(b => {
+        lines.push('<' + b.tag + (b.id ? '#' + b.id : '') + '> right=' + b.right + ' w=' + b.width + ' cls="' + b.cls + '" | "' + b.text + '"');
+      });
+      lines.push('');
+      lines.push('total offenders=' + bad.length);
+      out.textContent = lines.join('\n');
+    } catch (e) {
+      out.textContent = 'ERROR ' + e.message;
+    }
+  }, 2500);
+});
+frame.src = target;
+</script>
+</body>
+</html>

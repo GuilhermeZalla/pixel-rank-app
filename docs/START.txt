@@ -1,0 +1,124 @@
+## O que você ainda precisa para iniciar
+
+O `.env` está configurado para usar **MySQL** (`DB_CONNECTION=mysql`). Você precisa ter o MySQL rodando e criar o banco de dados.
+
+### Passo a passo
+
+**1. Verifique se o MySQL está rodando**
+Se você usa XAMPP, Wamp, Laragon ou MySQL instalado diretamente, certifique-se de que o serviço MySQL esteja ativo.
+
+**2. Crie o banco de dados**
+No MySQL, crie o banco chamado `pixel_rank_app`:
+```sql
+CREATE DATABASE pixel_rank_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+**3. Rode as migrações**
+Na raiz do projeto (`c:\Users\zalla\Documents\code\pixel-rank-app`):
+```powershell
+php artisan migrate
+```
+
+**4. Inicie o servidor**
+```powershell
+php artisan serve
+```
+Acesse então: `http://localhost:8000`
+
+---
+
+## Se você não quiser/configurar MySQL agora
+
+Você pode usar **SQLite** (mais simples, sem servidor externo) alterando o `.env`:
+
+```
+DB_CONNECTION=sqlite
+```
+e comentando/removendo as linhas `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
+
+Depois crie o arquivo vazio do banco e rode as migrações:
+```powershell
+type nul > database/database.sqlite
+php artisan migrate
+```
+
+---
+
+## Sobre a API de jogos (Twitch/IGDB)
+
+O projeto foi projetado para **degradar graciosamente** quando a API externa não está configurada:
+
+- Sem credenciais Twitch/IGDB → as páginas de avaliação carregam normalmente, mostrando "Não disponível" onde o metadado do jogo iria.
+- Busca de jogos retorna lista vazia (HTTP 200), sem erro 500.
+
+Se quiser dados reais de jogos, preencha no `.env`:
+```
+TWITCH_AUTH=https://id.twitch.tv/
+TWITCH_CLIENT_ID=seu_client_id
+TWITCH_CLIENT_SECRET=seu_client_secret
+GAME_API_URL=https://api.igdb.com/v4
+GAME_API_KEY=sua_api_key
+```
+
+---
+
+## Comandos úteis
+
+| Comando | Para quê |
+|---------|----------|
+| `php artisan serve` | Inicia o servidor local |
+| `php artisan migrate` | Cria as tabelas do banco |
+| `php artisan test` | Roda todos os testes |
+| `php artisan test --filter=GameApiResilienceTest` | Rode apenas os testes de resiliência novos |
+
+
+---
+
+### Alguns problemas comuns e como resolve-los
+
+## Resend verification email — Por que não chega?
+
+O problema é a configuração do `.env`:
+
+```
+MAIL_MAILER=log
+```
+
+Com `MAIL_MAILER=log`, o Laravel **não envia email de verdade**. Ele apenas grava o conteúdo do email no arquivo de log (`storage/logs/laravel.log`). Por isso você não recebe nada na caixa de entrada.
+
+**Para receber emails de verdade**, você precisa configurar um SMTP real no `.env`, por exemplo:
+
+```
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=seu_usuario
+MAIL_PASSWORD=sua_senha
+MAIL_FROM_ADDRESS="noreply@seudominio.com"
+MAIL_FROM_NAME="PixelRank"
+```
+
+Ou usar um serviço como Mailtrap (para desenvolvimento), SendGrid, AWS SES, etc.
+
+A rota de resend já existe (`POST /email/verification/send`) e funciona — o que falta é apenas configurar um transportador de email real.
+
+## Jobs/Queue — Como funciona hoje e como corrigir?
+
+**Existe sim um sistema de jobs/queue**, mas é limitado:
+
+| Job | Quando é disparado | O que faz |
+|-----|-------------------|-----------|
+| `NewUserNotification` | Após cadastro de usuário (`RegisterController`) | Envia email de boas-vindas (`NewUserCreated` mailable) e grava log |
+| `VerifyEmailNotification` | Cadastro / troca de email | Envia email de verificação de conta (disparo síncrono, não é job enfileirado) |
+
+**Detalhes importantes:**
+- `NewUserNotification` implementa `ShouldQueue`, ou seja, é enfileirado
+- A conexão de queue configurada no `.env` é `database` (tabela `jobs`)
+- **Para os jobs serem executados, você precisa rodar o worker:**
+  ```bash
+  php artisan queue:work
+  ```
+- Se não rodar o worker, os jobs ficam pendentes na tabela `jobs` e nunca são processados
+- **Não há jobs** para quando uma review é postada ou deletada — essas ações apenas mostram uma mensagem flash (`redirect()->with('info', ...)`), não enviam email
+
+--

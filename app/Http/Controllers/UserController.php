@@ -24,7 +24,9 @@ class UserController extends Controller
     public function edit(Request $request, User $user){
         $reviews = Auth::user()->reviews()->paginate(8);
         $comments = Auth::user()->comments()->with(['review', 'user'])->latest()->paginate(10);
-        return view('users.edit', ['reviews' => $reviews, 'comments' => $comments, 'menu' => $request->menu]);
+        $menu = in_array($request->menu, ['menu1', 'menu2', 'menu3', 'menu4'], true) ? $request->menu : 'menu1';
+
+        return view('users.edit', ['reviews' => $reviews, 'comments' => $comments, 'menu' => $menu]);
     }
 
     public function store(Request $request){

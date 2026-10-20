@@ -13,7 +13,7 @@
 
 <!-- Site Content -->
 
-<body class="pb-5">
+<body class="min-h-screen flex flex-col">
     <div class="navbar flex flex-wrap items-center justify-between gap-2 bg-base-200 px-3 sm:px-5 xl:px-10 xl:flex-nowrap" style="box-shadow: 0px 2px 10px #0000009e;">
         <div class="flex flex-row shrink-0"> <a class="text-xl" href="/"><img src="{{ asset('pixelrank.png') }}"
                     alt="PixelRank" class="object-contain h-full w-32 sm:w-40"></a>
@@ -36,11 +36,11 @@
             </form>
         @endif
         @auth
-            <div class="flex-none">
+            <div class="flex-none mr-4">
                 <ul class="menu menu-horizontal px-1">
                     <li>
                         <details>
-                            <summary class="font-bold"> <img @if(!empty(auth()->user()->avatar)) src="{{ asset(auth()->user()->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
+                            <summary class="font-bold"> <img @if(!empty(auth()->user()->avatar_url)) src="{{ auth()->user()->avatar_url }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
                                 alt="{{ __('navigation.user_avatar_alt') }}" class="rounded-[50%] h-9">{{ auth()->user()->nickname }}</summary>
                             <ul class="rounded-lg border border-[#88888833] bg-base-200 p-2 mt-1 left-12 w-40 z-50">
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu1/edit">{{ __('navigation.profile') }}</x-submenu-link>
@@ -70,19 +70,36 @@
                 </ul>
             </div>
         @endguest
-        <form method="POST" action="{{ route('locale.update') }}" class="flex items-center gap-1">
-            @csrf
-            <label class="sr-only" for="locale-picker">{{ __('locale.label') }}</label>
-            <select class="select select-ghost select-xs min-h-11 w-auto" name="locale" id="locale-picker">
-                <option value="pt_BR" @selected(app()->getLocale() === 'pt_BR')>Português (BR)</option>
-                <option value="en" @selected(app()->getLocale() === 'en')>English (US)</option>
-            </select>
-            <button class="btn btn-ghost btn-xs min-h-11 min-w-11" type="submit">{{ __('locale.change') }}</button>
-        </form>
     </div>
-    <main class="flex flex-col gap-10">
+    <main class="flex-1 flex flex-col gap-10">
         {{ $slot }}
     </main>
+
+    <footer class="bg-base-200 border-t border-base-300 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <span class="font-bold text-lg">PixelRank</span>
+                <span class="text-sm text-base-content/70">Feito por Guilherme Zalla</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="https://github.com/GuilhermeZalla/pixel-rank-app" target="_blank" rel="noopener noreferrer"
+                   class="text-sm text-base-content/70 hover:text-primary transition-colors">
+                    Repositorio no GitHub
+                </a>
+
+                <form method="POST" action="{{ route('locale.update') }}" class="flex items-center gap-2 locale-form">
+                    @csrf
+                    <label class="sr-only" for="locale-picker">{{ __('locale.label') }}</label>
+                    <select class="select select-ghost select-xs min-h-[36px] w-auto" name="locale" id="locale-picker" onchange="this.form.submit()">
+                        <option value="pt_BR" @selected(app()->getLocale() === 'pt_BR')>Português (BR)</option>
+                        <option value="en" @selected(app()->getLocale() === 'en')>English (US)</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </footer>
+
     @php
 $flashTypes = [
     'success' => 'bg-primary',

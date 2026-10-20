@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400" role="img" aria-label="Game cover placeholder">
+    <rect width="300" height="400" fill="#181818" />
+    <rect x="0.5" y="0.5" width="299" height="399" fill="none" stroke="#88888833" />
+    <g fill="none" stroke="#88888866" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="95" y="160" width="110" height="80" rx="12" />
+        <path d="M125 185v30M110 200h30" />
+        <circle cx="180" cy="190" r="6" fill="#88888866" stroke="none" />
+        <circle cx="193" cy="210" r="6" fill="#88888866" stroke="none" />
+    </g>
+</svg>

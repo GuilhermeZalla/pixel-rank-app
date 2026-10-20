@@ -36,7 +36,7 @@
                 <h2 class="font-bold text-[1.4rem]">{{ __('reviews.reviews') }}</h2>
                 <div class="flex flex-row gap-2 items-center">
                     <input id="toggle-link" type="checkbox" class="checkbox checkbox-success h-4 w-4" />
-                    <label for="spoiler" class="cursor-pointer">{{ __('reviews.hide_spoiler_reviews') }}</label>
+                    <label for="toggle-link" class="cursor-pointer">{{ __('reviews.hide_spoiler_reviews') }}</label>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-5">

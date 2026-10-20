@@ -5,7 +5,7 @@
         <div class="avatar">
             <div class="w-24 rounded-full">
                 @if ($user->avatar)
-                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($user->avatar) }}" alt="{{ __('dashboard.avatar_alt') }}">
+                    <img src="{{ $user->avatar_url ?? \Illuminate\Support\Facades\Storage::disk('public')->url($user->avatar) }}" alt="{{ __('dashboard.avatar_alt') }}">
                 @else
                     <div class="flex aspect-square items-center justify-center bg-base-300 text-3xl font-bold" aria-hidden="true">{{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($user->nickname, 0, 1)) }}</div>
                 @endif

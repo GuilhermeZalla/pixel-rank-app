@@ -22,24 +22,24 @@
         <x-section class="flex flex-col">
             <div class="flex flex-col gap-5 rounded-2xl bg-[#181818] p-4 sm:flex-row sm:p-5">
                  <x-cover class="h-full w-full max-w-60 object-contain rounded-[20px] sm:w-60"
-                src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
+                src="@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/{{ $gameCover }}.jpg@else{{ asset('images/game-placeholder.svg') }}@endif" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
                 <div class="flex flex-col justify-between px-7">
-                    <h2 class="flex flex-row items-center text-[.85rem] gap-2"><img @if(!empty($review->user->avatar)) src="{{ asset($review->user->avatar) }}" @else src="https://ui-avatars.com/api/?name={{ urlencode($review->user->nickname) }}"@endif alt="{{ __('reviews.user_avatar_alt') }}" class="rounded-[50%] h-8 border-2 border-secondary"> <div><span class="opacity-70">{{ __('reviews.review_by') }} </span><strong class="font-bold">{{ $review->user->nickname }}</strong></div><span class="text-[1rem] opacity-70">&middot;</span> <span class="flex flex-row items-center gap-1.5 opacity-70 text-[.80rem]">
+                    <h2 class="flex flex-row items-center text-[.85rem] gap-2"><img @if(!empty($review->user->avatar_url)) src="{{ $review->user->avatar_url }}" @else src="https://ui-avatars.com/api/?name={{ urlencode($review->user->nickname) }}"@endif alt="{{ __('reviews.user_avatar_alt') }}" class="rounded-[50%] h-8 border-2 border-secondary"> <div><span class="opacity-70">{{ __('reviews.review_by') }} </span><strong class="font-bold">{{ $review->user->nickname }}</strong></div><span class="text-[1rem] opacity-70">&middot;</span> <span class="flex flex-row items-center gap-1.5 opacity-70 text-[.80rem]">
                                     <x-heroicon-o-eye
                                         class="size-3.5" />{{ trans_choice('reviews.views_count', $review->views, ['count' => $review->views]) }}
                                 </span></h2>
                     <ul class="flex flex-row flex-wrap gap-4 rounded-2xl">
-                        <li class="w-[calc(50%-0.5rem)] ">@if($game['platforms_count'] > 1) {{ __('reviews.platforms') }} @else {{ __('reviews.platforms_single') }} @endif<br><strong>{{ $game['platforms'] }}</strong>
+                        <li class="w-[calc(50%-0.5rem)] ">@if($game['platforms_count'] > 1) {{ __('reviews.platforms') }} @else {{ __('reviews.platforms_single') }} @endif<br><strong>{{ $game['platforms'] ?: __('reviews.not_available') }}</strong>
                         </li>
-                        <li class="w-[calc(50%-0.5rem)] ">{{ __('reviews.platform_played') }}<br><strong>{{ $review->platform_playable }}</strong></li>
-                        <li class="w-[calc(50%-0.5rem)] ">{{ __('reviews.release') }}<br><strong>{{ $game['release_date'] }}</strong>
+                        <li class="w-[calc(50%-0.5rem)] ">{{ __('reviews.platform_played') }}<br><strong>{{ $review->platform_playable ?: __('reviews.not_available') }}</strong></li>
+                        <li class="w-[calc(50%-0.5rem)] ">{{ __('reviews.release') }}<br><strong>{{ $game['release_date'] ?: __('reviews.not_available') }}</strong>
                         </li>
                         <li class="w-[calc(50%-0.5rem)] ">
                             {{ __('reviews.rating') }}<br><strong>{{ \App\Support\LocaleFormatter::number((float) $review->rating, 1) }}/10</strong></li>
                     </ul>
                     <div class="py-3">
                         <h2 class="font-bold">{{ __('reviews.summary') }}</h2>
-                        <p>{{ $game['summary'] }}</p>
+                        <p>{{ $game['summary'] ?: __('reviews.not_available') }}</p>
                     </div>
                     <ul class="flex flex-row flex-wrap gap-5 text-[.90rem]">
                         <li>
@@ -105,13 +105,11 @@
                     class="placeholder:text-base-content resize-none border-[#88888822] rounded-xl" rows="5" minlength="5" maxlength="2000" />
                 <input type="text" name="review" value="{{ $review->id }}" class="hidden" />
             </form>
-            @if (!empty($review->comments))
-                <ul id="comments" class="flex flex-col gap-3 mt-7">
-                    @foreach ($review->comments as $comment)
-                     <x-comment :comment="$comment"></x-comment>
-                    @endforeach
-                </ul>
-            @endif
+            <ul id="comments" class="flex flex-col gap-3 mt-7">
+                @foreach ($review->comments as $comment)
+                 <x-comment :comment="$comment"></x-comment>
+                @endforeach
+            </ul>
         </x-section>
     </div>
     <!-- Delete Review Confirmation Modal -->
@@ -174,8 +172,8 @@
                 commentItem.className = 'flex flex-row gap-4 border-b border-white/8 pt-8 pb-4';
 
                 const avatar = document.createElement('img');
-                avatar.src = data.comment.user.avatar
-                    ? `/storage/${data.comment.user.avatar}`
+                avatar.src = data.comment.user.avatar_url
+                    ? data.comment.user.avatar_url
                     : `https://ui-avatars.com/api/?name=${encodeURIComponent(data.comment.user.nickname)}`;
                 avatar.alt = @js(__('reviews.user_avatar_alt'));
                 avatar.className = 'rounded-[50%] h-13';

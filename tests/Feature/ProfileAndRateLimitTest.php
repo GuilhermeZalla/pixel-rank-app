@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\User;
+use App\Services\GameApiService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,6 +14,24 @@ it('redirects a visitor who tries to update a profile', function () {
 
     $this->put('/users/'.$user->id, ['name' => 'Changed name'])
         ->assertRedirect(route('login'));
+});
+
+it('keeps the requested dashboard tab', function () {
+    $user = User::factory()->create(['email_verified_at' => now(), 'bio' => null, 'avatar' => null]);
+
+    $this->actingAs($user)
+        ->get('/users/'.$user->id.'/menu2/edit')
+        ->assertOk()
+        ->assertSee("activeMenu: 'menu2'", false);
+});
+
+it('falls back to the profile tab for an unknown dashboard menu', function () {
+    $user = User::factory()->create(['email_verified_at' => now(), 'bio' => null, 'avatar' => null]);
+
+    $this->actingAs($user)
+        ->get('/users/'.$user->id.'/menuX/edit')
+        ->assertOk()
+        ->assertSee("activeMenu: 'menu1'", false);
 });
 
 it('prevents one user from updating another user profile', function () {
@@ -66,7 +85,7 @@ it('rate limits repeated invalid registration attempts', function () {
 });
 
 it('limits repeated game catalog searches', function () {
-    $this->mock(\App\Services\GameApiService::class, function ($mock) {
+    $this->mock(GameApiService::class, function ($mock) {
         $mock->shouldReceive('getGame')->times(30)->andReturn([]);
     });
 
