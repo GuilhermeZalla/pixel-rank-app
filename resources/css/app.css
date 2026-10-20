@@ -1,0 +1,55 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@plugin "daisyui/theme" {
+    name: "pixelrank";
+    default: true;
+
+    --color-base-100: #1A2026;
+    --color-base-200: #14181C;
+    --color-base-300: #1a1a1a;
+    --color-base-content: #ffffff;
+
+    --color-primary: #00c853;
+    --color-primary-content: #000000;
+
+    --color-secondary: #00a844;
+    --color-secondary-content: #ffffff;
+
+    --color-accent: #00ff66;
+    --color-accent-content: #000000;
+
+    --color-success: #00c853;
+    --color-success-content: #000000;
+
+    --color-warning: #ff0000;
+    --color-warning-content: #000000;
+
+    --color-info: #00c853;
+    --color-info-content: #000000;
+
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #0E0E0E inset;
+    -webkit-text-fill-color: #fff;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}

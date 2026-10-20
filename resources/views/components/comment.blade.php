@@ -1,0 +1,42 @@
+@props(['dashboard' => false, 'comment' => '', 'review' => ''])
+
+@php
+$avatarURL = !empty($comment->user->avatar)
+    ? asset($comment->user->avatar)
+    : 'https://ui-avatars.com/api/?name=' . urlencode($comment->user->nickname);
+@endphp
+
+@if($dashboard)
+    <li id="comment-{{ $comment->id }}"
+        class="border-2 border-[#88888833] py-5 px-3.5 rounded-[10px] cursor-pointer group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
+        <a href="/reviews/{{ $comment->review->id }}" class="flex flex-row gap-4">
+            <x-cover src="{{ $avatarURL }}"
+                alt="{{ __('reviews.user_avatar_alt') }}" class="rounded-[50%] h-12"></x-cover>
+            <div class="w-full">
+                <span class="flex flex-row justify-between">
+                    <h3 class="font-bold text-[.90rem] flex flex-row gap-2 items-center">{{ $comment->user->nickname }}<span class="text-[1rem] text-[#ffffff97]">&middot;</span>
+                        <span class="text-[.75rem] text-[#ffffff97] font-normal">{{ $comment->getPostedDate() }}</span></h3>
+                </span>
+                <p class="break-all mt-3 mb-5">{{ Str::limit($comment->body, 150) }}</p>
+                <p class="text-[.75rem] text-[#ffffff97] font-normal">{{ __('dashboard.comment_made_in') }} <strong class="font-bold group-hover:text-accent">{{ $comment->review->title }}</strong></p>
+            </div>
+        </a>
+    </li>
+@else
+    <li id="comment-{{ $comment->id }}" class="flex flex-row gap-4 border-b border-white/8 pt-8 pb-4">
+            <x-cover src="{{ $avatarURL }}" alt="{{ __('reviews.user_avatar_alt') }}"
+            class="rounded-[50%] h-13"></x-cover>
+        <div class="w-full">
+            <span class="flex flex-row justify-between mb-3">
+                <h3 class="font-bold text-[.90rem] flex flex-row gap-2 items-center">{{ $comment->user->nickname }}<span class="text-[1rem] text-[#ffffff97]">&middot;</span> <span
+                        class="text-[.75rem] text-[#ffffff97] font-normal">{{ $comment->getPostedDate() }}</span></h3>
+                <ul>
+                    @can('delete', $comment)
+                        <li id="comment-{{ $comment->id }}"> <button class="delete-comment text-red-500 cursor-pointer" data-id="{{ $comment->id }}">{{ __('reviews.comment_delete') }}</button></li>
+                    @endcan
+                </ul>
+            </span>
+            <p class="break-all"> {!! nl2br(e($comment->body)) !!}</p>
+        </div>
+    </li>
+@endif

@@ -1,0 +1,1 @@
+<hr {{ $attributes->merge(['class' => 'my-1 border opacity-5']) }}>

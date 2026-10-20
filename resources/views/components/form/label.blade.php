@@ -1,0 +1,1 @@
+<label {{ $attributes->merge(['class' => 'label text-[.90rem]']) }}>{{ $slot }}</label>
