@@ -37,4 +37,12 @@ return [
     'comment_made_in' => 'Comment made on',
     'profile_updated' => 'Profile updated.',
     'email_changed' => 'Email changed. Verify your new address to continue.',
+    'password_helper' => 'Leave blank to keep your current password.',
+    'avatar_helper' => 'PNG, JPG or GIF up to 1MB.',
+    'first_review_prompt' => 'Share your thoughts and rate your favorite games with the community.',
+    'no_comments_description' => 'Explore reviews from other users and join the conversation.',
+    'settings_description' => 'Manage your application preferences.',
+    'language_preference' => 'Language Preference',
+    'language_preference_description' => 'Choose the language used for the interface.',
+    'review_removed' => 'Review removed',
 ];

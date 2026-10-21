@@ -1,258 +1,114 @@
 # PixelRank
-![PixelRank Screenshot](imagem)
 
-A game review platform inspired by Letterboxd, where users can rate games,
-write reviews, comment, and discover new reviews from the community.
+![Tela inicial do PixelRank](docs/images/home.jpg)
 
-## 🎯 Objective
+O PixelRank é uma plataforma de avaliações de jogos inspirada na experiência do Letterboxd. Os usuários podem avaliar títulos com notas de 0 a 10, escrever resenhas detalhadas com indicação de prós e contras, comentar em publicações da comunidade, filtrar o feed e gerenciar seu perfil e histórico em um dashboard dedicado. É um projeto de portfólio desenvolvido com Laravel, Blade, Tailwind CSS, DaisyUI e Alpine.js.
 
-PixelRank aims to offer a platform focused on game reviews, inspired by the Letterboxd experience for movies,
-allowing any user to publish, share, and discover game reviews.
+## Features da aplicação
 
-## ✨ Features
+- Criar conta, autenticar-se, verificar e-mail e redefinir senha com segurança e proteção contra força bruta (rate limiting).
+- Publicar, editar e excluir avaliações de jogos com nota, recomendação (Recomendado, Não recomendado, Misto ou Essencial), lista de prós e contras e aviso opcional de spoiler.
+- Buscar jogos em tempo real com integração à API do IGDB/Twitch (capas, plataformas, sinopse e data de lançamento), contando com degradação graciosa quando a API externa não estiver configurada.
+- Explorar o feed da comunidade com filtros rápidos (populares, mais bem avaliados, menores notas, mais antigos, quentes e por recomendação) e alternância para ocultar spoilers.
+- Comentar nas avaliações e acompanhar as discussões em tempo real.
+- Painel pessoal do usuário (Dashboard) organizado em abas: edição de perfil (dados, foto de avatar e bio), listagem das próprias avaliações e histórico de comentários.
+- Internacionalização completa em Português (Brasil) e Inglês (EUA), com alternância de idioma salva na sessão e em cookie.
 
-- Review publishing
-- Comment system
-- Game search using the IGDB API
-- User dashboard
-- User registration and authentication
-- Filters and sorting
+## Tecnologias
 
-## 🚧 Status
+- PHP 8.4.27 e Laravel 13
+- Blade, Tailwind CSS 4 e DaisyUI 5
+- Alpine.js 3 e Vite 8
+- Pest 4 para os testes automatizados
+- MySQL por padrão; SQLite em memória para os testes automatizados ou para desenvolvimento local simplificado
+- Integração resiliente com a API Twitch / IGDB com cache de credenciais OAuth
 
-Project under development.
+## Rodar na sua máquina
 
-## 🛠 Tecnologies
-
-### Backend
-
-- PHP
-- Laravel
-- Queues & Jobs
-
-### Frontend
-
-- Blade
-- Tailwind CSS
-- DaisyUI
-- JavaScript
-
-### Database
-
-- MySQL
-
-### APIs
-
-- IGDB API
-
-### Tools
-
-- Git
-- Docker (in development)
-
-## 🚀 Install
-
-### Pré-requisitos
-- PHP 8.3+
-- Composer
-- Node.js 18+
-- MySQL (ou SQLite para testes)
-- Git
-
-### Instalação (Windows)
-
-```powershell
-git clone https://github.com/GuilhermeZalla/pixel-rank-app.git
-cd pixel-rank-app
-composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan db:seed
-npm install
-npm run build
-php artisan serve
-```
-
-### Instalação (Linux/Mac)
+Você precisa de PHP 8.4 com as extensões do Laravel, Composer, Node.js/npm e Git. Com SQLite, não é necessário instalar um servidor de banco de dados externo.
 
 ```bash
 git clone https://github.com/GuilhermeZalla/pixel-rank-app.git
 cd pixel-rank-app
 composer install
-cp .env.example .env
-php artisan key:generate
-php artisan migrate
-php artisan db:seed
 npm install
-npm run build
-php artisan serve
 ```
 
-### Rodar os testes
+Copie `.env.example` para `.env` (no PowerShell, use `Copy-Item .env.example .env`), gere a chave e prepare o banco:
+
+```bash
+php artisan key:generate
+php artisan migrate --seed
+```
+
+O arquivo `.env.example` vem pré-configurado para MySQL. Para usar SQLite no ambiente local sem instalar MySQL, defina `DB_CONNECTION=sqlite` no `.env`, comente as outras variáveis `DB_*` e crie o arquivo antes de migrar (`type nul > database/database.sqlite` no Windows ou `touch database/database.sqlite` no Linux/Mac).
+
+*(Opcional)* Se quiser exibir metadados reais da API de jogos (Twitch/IGDB), preencha no `.env` as variáveis `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`, `GAME_API_URL` e `GAME_API_KEY`. Se deixar em branco, o site funcionará normalmente em modo degradado, sem erros.
+
+Inicie a aplicação e o Vite:
+
+```bash
+composer run dev
+```
+
+Abra [http://localhost:8000](http://localhost:8000). O seeder cria uma conta de teste inicial `test@example.com` (senha `password`).
+
+## Rodar as verificações
 
 ```bash
 php artisan test
+npm run build
+php vendor/bin/pint --test
 ```
 
-## 📸 Screenshots
+A suíte conta com 64 testes automatizados em Pest cobrindo autenticação, autorização via Policies, rate limiting, paridade de idiomas (PT-BR/EN-US), resiliência da API de jogos e as telas do dashboard.
 
-(under construction)
+## Como o app é organizado
 
-### Home
-![](docs/images/home.jpg)
+As rotas ficam em `routes/web.php` e encaminham as requisições para controllers em `app/Http/Controllers/`. As validações de entrada ficam encapsuladas em Form Requests (`app/Http/Requests/`) e as regras de autorização de recursos ficam protegidas por Policies (`app/Policies/`). Models e migrations estruturam as entidades no banco (usuários, avaliações, comentários e prós/contras).
 
-![](docs/images/home-menu.jpg)
+A camada de serviços em `app/Services/GameApiService.php` isola a comunicação externa com a API do IGDB/Twitch, gerenciando cache de token OAuth e convertendo falhas de rede em exceções de domínio seguras para evitar erros 500 no front-end.
 
+As views Blade ficam em `resources/views/`, divididas entre telas principais (`reviews/`, `users/`, `auth/`) e componentes reutilizáveis em `resources/views/components/` (cards de avaliação, badges, formulários, layout base e modais). A estilização é construída com Tailwind CSS e componentes DaisyUI, enquanto micro-interações acessíveis (como abas do dashboard e alertas) utilizam Alpine.js.
 
-### Login & Register
+A internacionalização fica em `lang/pt_BR/` e `lang/en/`, com paridade total de chaves e middleware `SetLocale` para controle de sessão/cookie. Notificações e e-mails usam Jobs e Mailables (`app/Jobs/` e `app/Mail/`).
 
-![](docs/images/login.jpg)
+## Demonstração
 
-![](docs/images/register.jpg)
+### Tela Inicial
 
-### Review page
+![Tela inicial do PixelRank](docs/images/home.jpg)
 
-![](docs/images/review-show.jpg)
+### Menu e Navegação
 
+![Menu inicial](docs/images/home-menu.jpg)
 
-### Create review
+### Avaliação e Detalhes
 
-![](docs/images/review-create-1.jpg)
+![Página de avaliação](docs/images/review-show.jpg)
 
-![](docs/images/review-create-2.jpg)
+### Criação de Avaliação
 
+![Criação de avaliação - Etapa 1](docs/images/review-create-1.jpg)
 
-### User dashboard
+![Criação de avaliação - Etapa 2](docs/images/review-create-2.jpg)
 
-![](docs/images/dashboard-profile.jpg)
+### Dashboard do Usuário
 
-![](docs/images/dashboard-reviews.jpg)
+![Perfil no dashboard](docs/images/dashboard-profile.jpg)
 
-![](docs/images/dashboard-comments.jpg)
+![Minhas avaliações no dashboard](docs/images/dashboard-reviews.jpg)
 
+![Meus comentários no dashboard](docs/images/dashboard-comments.jpg)
 
-....
+### Login e Cadastro
 
-## 🏗 Architecture
+![Tela de login](docs/images/login.jpg)
 
-The project follows Laravel's MVC architecture.
+![Tela de cadastro](docs/images/register.jpg)
 
-Business logic is encapsulated within Services, while Policies handle authorization.
-Notifications are responsible for dispatching notifications, and the integration with
-the IGDB API is encapsulated in a dedicated service layer to keep controllers thin.
+## Deploy
 
-## 📂 Project's Structure
+Para rodar em ambiente de produção, configure as variáveis essenciais no `.env` (`APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://seudominio.com`, `SESSION_SECURE_COOKIE=true`), execute os comandos de cache (`php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`, `php artisan storage:link`) e mantenha os workers de fila e agendador ativos (`php artisan queue:work` e `php artisan schedule:work`).
 
-The project's core structure follows Laravel's standard organization,
-with clear separation of concerns through Services, Policies, and Notifications.
-
-```text
-PixelRank/
-│
-├── app/
-│ ├── Http/
-│ │ ├── Controllers/
-│ │ ├── Requests/
-│ │ └── Middleware/
-│ │
-│ ├── Models/
-│ ├── Services/
-│ ├── Policies/
-│ └── Notifications/
-│
-├── database/
-│ ├── migrations/
-│ └── seeders/
-│
-├── resources/
-│ ├── views/
-│ ├── css/
-│ └── js/
-│
-├── routes/
-│ └── web.php
-│
-├── tests/
-│
-├── .env.example
-├── composer.json
-└── package.json
-```
-
-## 🗺 Roadmap
-
-### Version 1.0 (current)
-
-- [x] Reviews
-- [x] Comments
-- [ ] Comment interaction
-- [x] User creation and authentication
-- [x] User dashboard
-- [ ] Recommendation system
-- [ ] Notifications
-- [x] Tests
-
-### Version 2.0 (future)
-
-- [ ] Follower system
-- [ ] Private messaging system
-- [ ] Internationalization (PT-BR / EN)
-- [ ] Docker
-- [ ] Deploy
-
-## 🔐 Security
-
-- Authorization using Laravel Policies
-- Validation via Form Requests
-- Protection against unauthorized actions
-
-## 🚀 Produção
-
-Para rodar em produção, defina as seguintes variáveis de ambiente:
-
-- `APP_ENV=production`
-- `APP_DEBUG=false`
-- `APP_URL=https://seudominio.com`
-- `SESSION_SECURE_COOKIE=true`
-- `SESSION_ENCRYPT=true`
-
-Execução em produção:
-
-```bash
-# Cache de configuração, rotas e views
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-
-# Link do storage público
-php artisan storage:link
-
-# Fila e agendador (execute em processos separados)
-php artisan queue:work
-php artisan schedule:work
-
-# E-mail SMTP real (configure MAIL_* no .env)
-```
-
-## 🌐 Idiomas
-
-O site suporta dois idiomas: **Português (Brasil)** e **Inglês (Estados Unidos)**.
-
-### Como trocar o idioma
-Acesse qualquer página, use o seletor de idioma no cabeçalho (navbar) e escolha `Português (BR)` ou `English (US)`. A escolha é salva na sessão e em um cookie.
-
-### Como adicionar um novo idioma
-1. Copie a pasta `lang/en` para `lang/<codigo>` (ex.: `lang/es`).
-2. Traduza todos os valores das chaves nos arquivos copiados.
-3. Adicione o novo código à lista de locales permitidos em `app/Http/Middleware/SetLocale.php`.
-4. Adicione a opção no seletor de idioma em `resources/views/components/layout.blade.php`.
-5. Rode o teste de paridade de chaves: `php artisan test --filter=LocaleKeysParityTest`.
-
-## 📄 License
-
-This project was developed for study and portfolio purposes.
-
-## 🌐 Demonstration
-
-(soon)
+O app ainda não possui uma URL pública de produção.

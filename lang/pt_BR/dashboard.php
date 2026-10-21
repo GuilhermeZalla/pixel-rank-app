@@ -37,4 +37,12 @@ return [
     'comment_made_in' => 'Comentário na avaliação',
     'profile_updated' => 'Perfil atualizado.',
     'email_changed' => 'E-mail alterado. Verifique o novo endereço para continuar.',
+    'password_helper' => 'Deixe em branco para manter a senha atual.',
+    'avatar_helper' => 'PNG, JPG ou GIF até 1MB.',
+    'first_review_prompt' => 'Compartilhe suas impressões e avalie seus jogos favoritos com a comunidade.',
+    'no_comments_description' => 'Explore avaliações de outros usuários e participe da conversa.',
+    'settings_description' => 'Gerencie suas preferências na aplicação.',
+    'language_preference' => 'Preferência de idioma',
+    'language_preference_description' => 'Escolha o idioma exibido na interface.',
+    'review_removed' => 'Avaliação removida',
 ];

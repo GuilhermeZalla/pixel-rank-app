@@ -617,3 +617,85 @@ TWITCH_CLIENT_SECRET=
 GAME_API_URL=https://api.igdb.com/v4
 GAME_API_KEY=
 ```
+
+
+---
+
+## Redesign da dashboard do usuário
+
+**Status:** Em andamento (Etapa 1: leitura e planejamento concluídos)
+
+### Escopo e arquivos identificados
+- Rotas: `routes/web.php` (`GET /users/{user}/{menu?}/edit`, `PUT /users/{user}`)
+- Controller: `app/Http/Controllers/UserController.php` (`edit()`, `update()`)
+- Form Request: `app/Http/Requests/UserRequest.php`
+- Layout e Footer: `resources/views/components/layout.blade.php`
+- Views da dashboard: `resources/views/users/edit.blade.php`
+- Componentes usados: `nav-link-edit.blade.php`, `article-link.blade.php`, `comment.blade.php`, `empty-result.blade.php`, `pagination.blade.php`, `components/form/*`
+- Idiomas: `lang/en/dashboard.php`, `lang/pt_BR/dashboard.php`
+- Testes relacionados: `ProfileAndRateLimitTest.php`, `SecurityHardeningTest.php`, `ResourceActionsTest.php`, `LocaleKeysParityTest.php`
+
+### Plano de implementação (13 linhas)
+1. Layout e Footer: envolver a dashboard em container com largura máxima, padding responsivo e margem inferior generosa (`mb-12` a `mb-16`), descolando o footer em 360px, 768px e 1280px.
+2. Sidebar e Avatar: modernizar card do usuário (remover `xl:h-155` fixo, avatar circular responsivo sem `13vh`, bio tratada sem quebras incorretas, botões de ação limpos).
+3. Navegação entre abas: transformar `x-nav-link-edit` em abas acessíveis (`role="tab"`, `aria-selected`, `aria-current`, foco visível, touch target >= 44px, suporte a teclado), com grid responsivo em mobile/tablet e vertical no desktop.
+4. Preservação de contratos Alpine: manter estritamente `x-data="{ activeMenu: @js($menu) }"` para total compatibilidade com os testes existentes.
+5. Profile (menu1): modernizar formulário com DaisyUI/Tailwind, input de avatar polido com preview atual, campos de senha com notas de apoio e botão com alvo de toque adequado.
+6. My Reviews (menu2): ajustar cabeçalho com botão de "Nova avaliação" com toque mínimo de 44px e badge DaisyUI sem distorção.
+7. Cards de Reviews (`article-link` dashboard): remover `flex-1/4` quebrado em coluna, layout flex responsivo (coluna em 360px, linha a partir de 640px), metadados com flex-wrap sem transbordar tela.
+8. My Comments (menu3): modernizar lista de comentários com avatar e texto responsivos, `break-words` em vez de `break-all`, link seguro para a review correspondente.
+9. Estados vazios: refinar `x-empty-result` com layout harmonizado.
+10. Aba Settings (menu4): fornecer conteúdo descritivo para que a aba não renderize um container vazio quando acionada.
+11. Internacionalização: garantir que todos os textos/rótulos estejam em `lang/pt_BR/dashboard.php` e `lang/en/dashboard.php` mantendo paridade estrita de chaves.
+12. Verificação automatizada: rodar `php artisan test --compact`, teste de paridade de chaves, Pint e `npm run build`.
+13. Roteiro de conferência: validação manual detalhada em 360px, 768px e 1280px nos dois idiomas.
+
+
+### Execução e Resultados
+- **Layout e Footer:** Container padronizado com `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8` e margem inferior `mb-12 sm:mb-16`. O footer agora tem respiro adequado em todas as resoluções (360px, 768px, 1280px).
+- **Sidebar & Avatar:** Altura rígida `xl:h-155` removida; avatar atualizado com DaisyUI circular proporcional (`size-24 sm:size-28`); bio exibida com `break-words` e botões de ação limpos com foco acessível.
+- **Abas de Navegação:** `nav-link-edit.blade.php` atualizado com elementos interativos acessíveis (`role="tab"`, `:aria-selected`, `:aria-current`, foco visível `focus-visible:ring-accent`, altura mínima de toque de 44px). No mobile/tablet, renderiza em grid de 2 colunas; no desktop (xl:), se integra à barra lateral com indicador visual de borda esquerda.
+- **Etapa 1 (Profile):** Formulário reorganizado com grid responsivo (`grid-cols-1 sm:grid-cols-2`), DaisyUI `file-input` com preview circular da imagem atual, nota explicativa para campos de senha vazios, e botão "Atualizar" responsivo (largura total no mobile, alinhado à direita no desktop) com área de toque confortável.
+- **Etapa 2 (My Reviews):** Botão "Nova avaliação" convertido em botão DaisyUI com toque mínimo de 44px; id `#review` na div renomeado para evitar conflito com listeners do layout; cards de review (`article-link.blade.php`) corrigidos (removido `flex-1/4` espúrio, capa com tamanho estável `w-20 sm:w-28 h-28 sm:h-36`, tags com `flex-wrap` e quebra de palavras segura); estado vazio amigável com botão de criação.
+- **Etapa 3 (My Comments):** Cards de comentário (`comment.blade.php`) aprimorados com avatar proporcional (`shrink-0`), texto com `break-words` e destaque ao título da avaliação; estado vazio com link para explorar avaliações.
+- **Aba Settings (menu4):** Adicionado card com seletor de idioma integrado (`route('locale.update')`), eliminando a tela em branco quando a aba é acessada.
+- **Internacionalização:** 7 novas chaves traduzidas em `lang/pt_BR/dashboard.php` e `lang/en/dashboard.php`, com teste de paridade 100% verde.
+- **Verificações:**
+  - `php artisan test --compact`: 56 testes passaram (278 assertions).
+  - `php vendor/bin/pint --test`: arquivos de idioma formatados com sucesso.
+  - `npm run build`: build Vite concluído em 2.35s sem erros.
+  - Varredura de BOM: todos os arquivos UTF-8 sem BOM.
+
+
+---
+
+## Revisão de Qualidade da Dashboard e Correções
+
+**Status:** Concluído
+
+### Correções Aplicadas
+1. **Avatar Helper:** Alinhado o texto em `lang/pt_BR/dashboard.php` e `lang/en/dashboard.php` para `"PNG, JPG ou GIF até 1MB"`, em total concordância com as regras ativas de `UserRequest.php`.
+2. **Unificação de IDs e ARIA:** Removidos IDs duplicados nas tags `<div>` dos painéis da dashboard em `users/edit.blade.php`. Cada painel agora utiliza exclusivamente `panel-menu1`, `panel-menu2`, `panel-menu3`, `panel-menu4`, conectados aos botões de abas via `aria-controls` e `aria-labelledby`.
+3. **Comentários Órfãos com Degradação Segura:** `comment.blade.php` verifica a existência da relação com review antes de renderizar link; quando nula, exibe card sem link com a mensagem traduzida `dashboard.review_removed`. Confirmado que a migration original possui `cascadeOnDelete()`.
+4. **Resolução de N+1 e Ordenação:** `UserController::edit` agora carrega `withCount('comments')` e `latest()` para as reviews do usuário. O componente `article-link.blade.php` foi atualizado para usar `comments_count` prioritariamente e fallback para `count($review->comments)`.
+5. **Acessibilidade:** Botões Seguir/Mensagem na barra lateral receberam `disabled` e `aria-disabled="true"`. A navegação adota o padrão WAI-ARIA tablist (`role="tab"`, `:aria-selected`, `aria-controls`, `aria-labelledby`, `tabindex="0"` e foco visível).
+6. **Badge sem Tag `<label>` Aninhada:** Adicionado suporte ao `@case('span')` em `badge-link.blade.php` e aplicado em `article-link.blade.php`, evitando tags `<label>` aninhadas indevidamente dentro de tags de link `<a>`.
+7. **Limpeza de Imports:** Removido o import não utilizado `use Illuminate\Contracts\Validation\ValidationRule;` de `UserRequest.php`.
+8. **Pendência Registrada:** Os métodos vazios `store(Request $request)` e `destroy(Request $request, User $user)` em `UserController.php` foram mantidos intocados para decisão futura de rotas.
+
+### Testes Automatizados Enxutos Adicionados
+- Arquivo novo: `tests/Feature/DashboardUserTest.php` com 8 testes:
+  - Redirecionamento de visitante ao tentar acessar abas `menu3` ou `menu4`.
+  - Bloqueio (403 Forbidden) para outro usuário acessando as abas `menu3` ou `menu4`.
+  - Acesso autorizado do proprietário às abas `menu3` e `menu4`.
+  - Renderização de listas com dados quando há reviews e comentários.
+  - Renderização correta dos estados vazios quando não há reviews nem comentários.
+  - Tratamento gracioso de comentário com review nula (sem erro 500, com texto `dashboard.review_removed`).
+  - Rejeição de avatar maior que 1MB.
+  - Rejeição de avatar com extensão ou formato inválido.
+
+### Verificações Finais
+- **Pest:** 64 testes passaram (303 assertions).
+- **Pint:** Código PHP formatado e validado.
+- **Build (Vite):** Concluído com sucesso (2.02s).
+- **BOM:** Todos os arquivos verificados em UTF-8 sem BOM.

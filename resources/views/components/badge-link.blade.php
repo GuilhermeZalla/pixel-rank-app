@@ -29,6 +29,9 @@
     @case('link')
         <a {{ $attributes->merge(['class' => 'p-3 gap-2 ' . $default . ' ' . $style]) }}>{{ $slot }}</a>
     @break
+    @case('span')
+        <span {{ $attributes->merge(['class' => 'p-3 gap-2 ' . $default . ' ' . $style]) }}>{{ $slot }}</span>
+    @break
     @case('label')
         <label {{ $attributes->merge(['class' => 'p-3 gap-2 ' . $default . ' ' . $style]) }}>{{ $slot }}</label>
     @break

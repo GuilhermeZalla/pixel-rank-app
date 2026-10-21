@@ -22,7 +22,7 @@ class UserController extends Controller
     }
 
     public function edit(Request $request, User $user){
-        $reviews = Auth::user()->reviews()->paginate(8);
+        $reviews = Auth::user()->reviews()->withCount('comments')->latest()->paginate(8);
         $comments = Auth::user()->comments()->with(['review', 'user'])->latest()->paginate(10);
         $menu = in_array($request->menu, ['menu1', 'menu2', 'menu3', 'menu4'], true) ? $request->menu : 'menu1';
 

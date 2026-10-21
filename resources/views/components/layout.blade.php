@@ -75,11 +75,14 @@
         {{ $slot }}
     </main>
 
-    <footer class="bg-base-200 border-t border-base-300 py-6">
+    <footer class="bg-base-200 mt-20  border-t border-base-300 py-3" style="box-shadow: 0px -2px 10px #0000009e;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row flex-wrap items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-                <span class="font-bold text-lg">PixelRank</span>
                 <span class="text-sm text-base-content/70">Feito por Guilherme Zalla</span>
+            </div>
+
+             <div class="flex items-center gap-3">
+                <span class="font-bold text-lg">PixelRank</span>
             </div>
 
             <div class="flex items-center gap-3">
