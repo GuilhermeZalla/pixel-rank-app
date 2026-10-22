@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>{{ __('auth_ui.forgot_password_title') }}</x-slot:title>
-    <x-form.form method="POST" action="{{ route('password.email') }}" class="mx-auto my-[10vh] w-[calc(100%-2rem)] max-w-md border border-[#88888833] bg-[#0E0E0E] rounded-[20px] p-6 sm:my-[15vh]">
+    <x-form.form method="POST" action="{{ route('password.email') }}" class="mx-auto my-[10vh] w-[calc(100%-2rem)] max-w-md border border-[#88888833] bg-base-300 rounded-[20px] p-6 sm:my-[15vh]">
         @csrf
         <x-form.field class="text-center mb-6">
             <x-form.description :title="__('auth_ui.reset_password_heading')" :description="__('auth_ui.reset_password_description')"></x-form.description>

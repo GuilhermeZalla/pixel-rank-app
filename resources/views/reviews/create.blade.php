@@ -1,8 +1,8 @@
 <x-layout>
     <x-slot:title>{{ __('reviews.create_title') }}</x-slot:title>
-    <x-form.form method="POST" action="/reviews" class="mx-auto my-[6vh] w-[calc(100%-2rem)] max-w-4xl border border-[#88888833] bg-[#0E0E0E] rounded-[20px] px-4 py-6 sm:px-8 sm:py-8 lg:w-1/2">
+    <x-form.form method="POST" action="/reviews" class="mx-auto my-[6vh] w-[calc(100%-2rem)] max-w-4xl border border-[#88888833] bg-base-300 rounded-[20px] px-4 py-6 sm:px-8 sm:py-8 lg:w-1/2 shadow-xl shadow-black/30">
         @csrf
-        <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-6">
             <x-form.field class="text-center mb-1">
                 <x-form.description :title="__('reviews.create_heading')"
                     :description="__('reviews.create_description')"></x-form.description>
@@ -25,7 +25,7 @@
                         <x-form.button type="radio" option="mixed">{{ __('reviews.recommendations.mixed') }}</x-form.button>
                         <x-form.button type="radio" option="essential">{{ __('reviews.recommendations.essential') }}</x-form.button>
                     </div>
-                    <div class="flex w-full flex-col items-center justify-center rounded-[5px] border border-[#8888884A] bg-[#0E0E0E] md:flex-1/6">
+                    <div class="flex w-full flex-col items-center justify-center rounded-[5px] border border-[#8888884A] bg-base-300 md:flex-1/6 shadow-inner">
                         <x-form.label for="rating" class="h-full">{{ __('reviews.score') }}</x-form.label>
                         <input type="number" name="rating" id="rating" min="0" max="10" step="0.5" placeholder="{{ __('reviews.score_placeholder') }}"
                             class="input bg-transparent border-none outline-none pb-5 text-[1.2rem] font-bold text-white w-full text-center focus:border-none focus:outline-none placeholder:text-white" />
@@ -43,29 +43,29 @@
             <x-form.field class="flex flex-col gap-4 my-4">
                 <x-form.label for="proscons">{{ __('reviews.good_and_bad') }}</x-form.label>
                 <div class="flex flex-col justify-between gap-4 md:flex-row">
-                    <div class="flex flex-col flex-wrap gap-4 bg-[#14181C] rounded-2xl p-4 w-full">
-                         <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]"><x-heroicon-o-hand-thumb-up
-                                class="size-4 text-primary" />{{ __('reviews.positive_points') }}</h3>
+                    <div class="flex flex-col flex-wrap gap-4 bg-base-200 rounded-2xl p-5 w-full shadow-md">
+                         <h3 class="font-bold flex flex-row gap-3 items-center text-[.95rem]"><x-heroicon-o-hand-thumb-up
+                                class="size-5 text-primary" />{{ __('reviews.positive_points') }}</h3>
                 <div class="flex min-w-0 flex-wrap gap-2 sm:flex-nowrap">
-                            <input type="text" id="pro-input" class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E]"
+                            <input type="text" id="pro-input" class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-base-300 shadow-sm"
                                 placeholder="{{ __('reviews.positive_point_placeholder') }}" maxlength="50" name="proscons">
-                            <button type="button" id="add-pro" class="btn btn-primary">{{ __('reviews.add') }}</button>
+                            <button type="button" id="add-pro" class="btn btn-primary shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">{{ __('reviews.add') }}</button>
                         </div>
                         <ul id="pros-list" class="space-y-2"></ul>
-                        <p id="pros-empty" class="text-sm text-gray-400">{{ __('reviews.no_points_yet') }}</p>
+                        <p id="pros-empty" class="text-sm text-base-content/50">{{ __('reviews.no_points_yet') }}</p>
                     </div>
-                    <div class="flex flex-col flex-wrap gap-4 bg-[#14181C] rounded-2xl p-4 w-full">
-                        <h3 class="font-bold flex flex-row gap-3 items-center text-[.90rem]">
-                            <x-heroicon-o-hand-thumb-down class="size-4 text-warning" /> {{ __('reviews.negative_points') }}
+                    <div class="flex flex-col flex-wrap gap-4 bg-base-200 rounded-2xl p-5 w-full shadow-md">
+                        <h3 class="font-bold flex flex-row gap-3 items-center text-[.95rem]">
+                            <x-heroicon-o-hand-thumb-down class="size-5 text-warning" /> {{ __('reviews.negative_points') }}
                         </h3>
                         <div class="flex min-w-0 flex-wrap gap-2 sm:flex-nowrap">
                             <input type="text" id="cons-input"
-                                class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-[#0E0E0E]"
+                                class="input input-bordered flex-1 font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-[5px] bg-base-300 shadow-sm"
                                 placeholder="{{ __('reviews.negative_point_placeholder') }}" maxlength="50" name="proscons">
-                            <button type="button" id="add-cons" class="btn btn-warning text-white">{{ __('reviews.add') }}</button>
+                            <button type="button" id="add-cons" class="btn btn-warning text-white shadow-lg shadow-warning/30 hover:shadow-warning/50 transition-shadow">{{ __('reviews.add') }}</button>
                         </div>
                         <ul id="cons-list" class="space-y-2"></ul>
-                        <p id="cons-empty" class="text-sm text-gray-400">{{ __('reviews.no_points_yet') }}</p>
+                        <p id="cons-empty" class="text-sm text-base-content/50">{{ __('reviews.no_points_yet') }}</p>
                     </div>
                 </div>
             </x-form.field>
@@ -85,8 +85,8 @@
                 @endunless
             </x-form.field>
             <x-form.field class="mt-2 flex-col justify-end gap-3 sm:flex-row">
-                <x-form.link href="/" class="btn w-full sm:w-35">{{ __('reviews.return') }}</x-form.link>
-                <x-form.button class="w-full sm:w-35">{{ __('reviews.create') }}</x-form.button>
+                <x-form.link href="/" class="btn w-full sm:w-35 bg-transparent border border-[#8888884A] hover:bg-base-200">{{ __('reviews.return') }}</x-form.link>
+                <x-form.button class="w-full sm:w-35 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">{{ __('reviews.create') }}</x-form.button>
             </x-form.field>
         </div>
     </x-form.form>
@@ -162,7 +162,7 @@
                     item.id = `game-option-${index}`;
                     item.setAttribute('role', 'option');
                     item.setAttribute('aria-selected', 'false');
-                    item.classList.add('cursor-pointer', 'hover:bg-accent', 'hover:text-[#0E0E0E]', 'rounded-[5px]', 'p-2', 'text-[.85rem]');
+                    item.classList.add('cursor-pointer', 'hover:bg-accent', 'hover:text-base-300', 'rounded-[5px]', 'p-2', 'text-[.85rem]');
 
                     item.addEventListener('click', () => {
                         searchInput.value = game.name;

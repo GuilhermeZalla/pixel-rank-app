@@ -69,7 +69,7 @@
                     @else
 
                         <a href="{{ $url }}"
-                           class="inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-[#88888833] text-gray-300 hover:bg-[#1A1A1A] hover:text-green-400 hover:border-green-500 transition">
+                           class="inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-[#88888833] text-gray-300 hover:bg-base-300 hover:text-green-400 hover:border-green-500 transition">
 
                             {{ $page }}
 

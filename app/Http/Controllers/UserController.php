@@ -15,13 +15,15 @@ class UserController extends Controller
         return view('users.index');
     }
 
-    public function show(User $user){
+    public function show(User $user)
+    {
         $reviews = $user->reviews()->with('user')->latest()->paginate(10);
 
         return view('users.show', ['user' => $user, 'reviews' => $reviews]);
     }
 
-    public function edit(Request $request, User $user){
+    public function edit(Request $request, User $user)
+    {
         $reviews = Auth::user()->reviews()->withCount('comments')->latest()->paginate(8);
         $comments = Auth::user()->comments()->with(['review', 'user'])->latest()->paginate(10);
         $menu = in_array($request->menu, ['menu1', 'menu2', 'menu3', 'menu4'], true) ? $request->menu : 'menu1';
@@ -29,11 +31,10 @@ class UserController extends Controller
         return view('users.edit', ['reviews' => $reviews, 'comments' => $comments, 'menu' => $menu]);
     }
 
-    public function store(Request $request){
+    public function store(Request $request) {}
 
-    }
-
-    public function update(UserRequest $request, User $user){
+    public function update(UserRequest $request, User $user)
+    {
         $validated = $request->validated();
         $oldAvatar = null;
         $emailChanged = isset($validated['email']) && $validated['email'] !== $user->email;
@@ -46,7 +47,7 @@ class UserController extends Controller
             }
         }
 
-        $user->fill(array_intersect_key($validated, array_flip(['name', 'nickname', 'email', 'bio'])));
+        $user->fill(array_intersect_key($validated, array_flip(['name', 'nickname', 'email', 'bio', 'hide_spoilers_default', 'show_views_count', 'private_profile', 'hide_email'])));
 
         if (filled($validated['password'] ?? null)) {
             $user->password = $validated['password'];
@@ -64,12 +65,16 @@ class UserController extends Controller
 
         if ($emailChanged) {
             $user->sendEmailVerificationNotification();
+
             return redirect()->route('verification.notice')->with('success', __('dashboard.email_changed'));
+        }
+
+        if (filled(array_intersect_key($validated, array_flip(['hide_spoilers_default', 'show_views_count', 'private_profile', 'hide_email'])))) {
+            return redirect()->route('users.edit', ['menu' => 'menu4'])->with('success', __('dashboard.settings_updated'));
         }
 
         return redirect('/')->with('success', __('dashboard.profile_updated'));
     }
 
-    public function destroy(Request $request, User $user){}
-
+    public function destroy(Request $request, User $user) {}
 }

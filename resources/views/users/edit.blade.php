@@ -7,7 +7,7 @@
 <x-layout>
     <x-slot:title>{{ __('dashboard.title', ['nickname' => auth()->user()->nickname]) }}</x-slot:title>
     <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 mb-12 sm:mb-16 flex min-w-0 flex-col gap-6 lg:gap-8 xl:flex-row" x-data="{ activeMenu: @js($menu) }">
-        <aside class="flex w-full min-w-0 flex-col gap-6 rounded-2xl border border-[#88888833] bg-[#0E0E0E] p-6 xl:w-80 shrink-0 self-start">
+        <aside class="flex w-full min-w-0 flex-col gap-6 rounded-2xl border border-[#88888833] bg-base-300 p-6 xl:w-80 shrink-0 self-start">
             <div class="flex flex-col items-center text-center gap-3">
                 <div class="avatar">
                     <div class="w-24 sm:w-28 rounded-full ring-2 ring-primary/40 ring-offset-2 ring-offset-[#0E0E0E] overflow-hidden">
@@ -60,7 +60,7 @@
             </nav>
         </aside>
 
-        <section class="flex flex-1 w-full min-w-0 flex-col rounded-2xl border border-[#88888833] bg-[#0E0E0E] p-4 sm:p-6 lg:p-8">
+        <section class="flex flex-1 w-full min-w-0 flex-col rounded-2xl border border-[#88888833] bg-base-300 p-4 sm:p-6 lg:p-8">
             <!-- User Edit Form -->
             <div x-show="activeMenu === 'menu1'" role="tabpanel" id="panel-menu1" aria-labelledby="tab-menu1">
                 <x-form.form method="POST" action="/users/{{ auth()->user()->id }}" class="w-full flex flex-col gap-5" enctype="multipart/form-data">
@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="flex-1 min-w-0">
-                                <input type="file" name="avatar" id="avatar" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" class="file-input file-input-bordered file-input-sm sm:file-input-md w-full rounded-2xl bg-[#0E0E0E] border-[#8888884A] text-sm focus:border-accent focus:outline-none" />
+                                <input type="file" name="avatar" id="avatar" accept=".jpg,.jpeg,.png,.gif,image/jpeg,image/png,image/gif" class="file-input file-input-bordered file-input-sm sm:file-input-md w-full rounded-2xl bg-base-300 border-[#8888884A] text-sm focus:border-accent focus:outline-none" />
                             </div>
                         </div>
                         <p class="text-xs text-base-content/50 mt-1">{{ __('dashboard.avatar_helper') }}</p>
@@ -189,7 +189,92 @@
                     <p class="text-sm text-base-content/70 mt-1">{{ __('dashboard.settings_description') }}</p>
                 </div>
                 <x-divisor class="my-6"></x-divisor>
-                <div class="rounded-xl border border-white/10 bg-[#141414] p-5 sm:p-6 flex flex-col gap-4">
+
+                <x-form.form method="POST" action="/users/{{ auth()->user()->id }}" class="w-full flex flex-col gap-6">
+                    @csrf
+                    @method('PUT')
+
+                    <!-- Security -->
+                    <div class="rounded-xl border border-white/10 bg-base-200 p-5 sm:p-6 flex flex-col gap-4">
+                        <h3 class="font-bold text-lg flex items-center gap-2">
+                            <x-heroicon-o-shield-check class="size-5 text-accent" />
+                            <span>{{ __('dashboard.security') }}</span>
+                        </h3>
+                        <p class="text-sm text-base-content/70 leading-relaxed">{{ __('dashboard.security_description') }}</p>
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <div class="flex-1 min-w-0">
+                                <a href="{{ route('password.request') }}" class="btn btn-outline border-white/20 hover:border-accent hover:text-accent font-bold min-h-[44px] w-full sm:w-auto gap-2">
+                                    <x-heroicon-o-key class="size-4" />
+                                    <span>{{ __('dashboard.reset_password') }}</span>
+                                </a>
+                                <p class="text-xs text-base-content/50 mt-1">{{ __('dashboard.reset_password_description') }}</p>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <a href="{{ route('verification.send') }}" class="btn btn-outline border-white/20 hover:border-accent hover:text-accent font-bold min-h-[44px] w-full sm:w-auto gap-2">
+                                    <x-heroicon-o-envelope class="size-4" />
+                                    <span>{{ __('dashboard.resend_verification') }}</span>
+                                </a>
+                                <p class="text-xs text-base-content/50 mt-1">{{ __('dashboard.resend_verification_description') }}</p>
+                            </div>
+                        </div>
+                        <div class="pt-2 border-t border-white/10">
+                            <p class="text-sm font-medium text-base-content/80">{{ __('dashboard.verification_status') }}</p>
+                            <span class="inline-flex items-center gap-1.5 mt-1 px-2 py-1 rounded text-xs font-semibold 
+                                {{ auth()->user()->hasVerifiedEmail() ? 'bg-green/10 text-green' : 'bg-amber/10 text-amber' }}">
+                                <x-heroicon-o-{{ auth()->user()->hasVerifiedEmail() ? 'check-circle' : 'exclamation-circle' }} class="size-3.5" />
+                                {{ auth()->user()->hasVerifiedEmail() ? __('dashboard.verified') : __('dashboard.not_verified') }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Display Preferences -->
+                    <div class="rounded-xl border border-white/10 bg-base-200 p-5 sm:p-6 flex flex-col gap-4">
+                        <h3 class="font-bold text-lg flex items-center gap-2">
+                            <x-heroicon-o-eye class="size-5 text-accent" />
+                            <span>{{ __('dashboard.display_preferences') }}</span>
+                        </h3>
+                        <p class="text-sm text-base-content/70 leading-relaxed">{{ __('dashboard.display_preferences_description') }}</p>
+                        <x-form.toggle-field
+                            name="hide_spoilers_default"
+                            :title="__('dashboard.hide_spoilers_default')"
+                            :description="__('dashboard.hide_spoilers_default_description')"
+                            :checked="auth()->user()->hide_spoilers_default"
+                        />
+                        <x-form.toggle-field
+                            name="show_views_count"
+                            :title="__('dashboard.show_views_count')"
+                            :description="__('dashboard.show_views_count_description')"
+                            :checked="auth()->user()->show_views_count"
+                        />
+                    </div>
+
+                    <!-- Privacy -->
+                    <div class="rounded-xl border border-white/10 bg-base-200 p-5 sm:p-6 flex flex-col gap-4">
+                        <h3 class="font-bold text-lg flex items-center gap-2">
+                            <x-heroicon-o-lock-closed class="size-5 text-accent" />
+                            <span>{{ __('dashboard.privacy') }}</span>
+                        </h3>
+                        <p class="text-sm text-base-content/70 leading-relaxed">{{ __('dashboard.privacy_description') }}</p>
+                        <x-form.toggle-field
+                            name="private_profile"
+                            :title="__('dashboard.private_profile')"
+                            :description="__('dashboard.private_profile_description')"
+                            :checked="auth()->user()->private_profile"
+                        />
+                        <x-form.toggle-field
+                            name="hide_email"
+                            :title="__('dashboard.hide_email')"
+                            :description="__('dashboard.hide_email_description')"
+                            :checked="auth()->user()->hide_email"
+                        />
+                    </div>
+
+                    <x-form.field class="mt-4 flex flex-col sm:flex-row sm:justify-end">
+                        <x-form.button class="w-full sm:w-auto min-h-[44px] px-8 text-[.90rem]">{{ __('dashboard.save_settings') }}</x-form.button>
+                    </x-form.field>
+                </x-form.form>
+
+                <div class="mt-6 rounded-xl border border-white/10 bg-base-200 p-5 sm:p-6 flex flex-col gap-4">
                     <h3 class="font-bold text-lg flex items-center gap-2">
                         <x-heroicon-o-language class="size-5 text-accent" />
                         <span>{{ __('dashboard.language_preference') }}</span>
@@ -198,7 +283,7 @@
                     <form method="POST" action="{{ route('locale.update') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-3 mt-2">
                         @csrf
                         <label for="dashboard-locale-picker" class="sr-only">{{ __('locale.label') }}</label>
-                        <select class="select select-bordered select-sm min-h-[44px] w-full sm:w-auto font-bold bg-[#0E0E0E]" name="locale" id="dashboard-locale-picker" onchange="this.form.submit()">
+                        <select class="select select-bordered select-sm min-h-[44px] w-full sm:w-auto font-bold bg-base-300" name="locale" id="dashboard-locale-picker" onchange="this.form.submit()">
                             <option value="pt_BR" @selected(app()->getLocale() === 'pt_BR')>Português (BR)</option>
                             <option value="en" @selected(app()->getLocale() === 'en')>English (US)</option>
                         </select>

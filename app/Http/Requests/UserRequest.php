@@ -32,6 +32,10 @@ class UserRequest extends FormRequest
             'password' => ['nullable', 'string', 'confirmed', Password::defaults()],
             'bio' => ['nullable', 'string', 'max:160'],
             'avatar' => ['nullable', 'image', File::types(['jpg', 'jpeg', 'png', 'gif'])->max(1024)],
+            'hide_spoilers_default' => ['sometimes', 'boolean'],
+            'show_views_count' => ['sometimes', 'boolean'],
+            'private_profile' => ['sometimes', 'boolean'],
+            'hide_email' => ['sometimes', 'boolean'],
         ];
     }
 }

@@ -65,13 +65,9 @@ A suíte conta com 64 testes automatizados em Pest cobrindo autenticação, auto
 
 ## Como o app é organizado
 
-As rotas ficam em `routes/web.php` e encaminham as requisições para controllers em `app/Http/Controllers/`. As validações de entrada ficam encapsuladas em Form Requests (`app/Http/Requests/`) e as regras de autorização de recursos ficam protegidas por Policies (`app/Policies/`). Models e migrations estruturam as entidades no banco (usuários, avaliações, comentários e prós/contras).
+As rotas ficam em `routes/` e encaminham as requisições para controllers em `app/Http/Controllers/`. As validações de entrada ficam em Form Requests e as permissões por usuário ficam em Policies. Models e migrations representam os dados no banco. Serviços como `GameApiService` isolam a comunicação externa com APIs e gerenciam falhas de rede de forma segura.
 
-A camada de serviços em `app/Services/GameApiService.php` isola a comunicação externa com a API do IGDB/Twitch, gerenciando cache de token OAuth e convertendo falhas de rede em exceções de domínio seguras para evitar erros 500 no front-end.
-
-As views Blade ficam em `resources/views/`, divididas entre telas principais (`reviews/`, `users/`, `auth/`) e componentes reutilizáveis em `resources/views/components/` (cards de avaliação, badges, formulários, layout base e modais). A estilização é construída com Tailwind CSS e componentes DaisyUI, enquanto micro-interações acessíveis (como abas do dashboard e alertas) utilizam Alpine.js.
-
-A internacionalização fica em `lang/pt_BR/` e `lang/en/`, com paridade total de chaves e middleware `SetLocale` para controle de sessão/cookie. Notificações e e-mails usam Jobs e Mailables (`app/Jobs/` e `app/Mail/`).
+As views Blade ficam em `resources/views/`, divididas entre telas principais (`reviews/`, `users/`, `auth/`) e componentes reutilizáveis em `resources/views/components/`. A estilização usa Tailwind CSS e DaisyUI, enquanto micro-interações como abas do dashboard e alertas utilizam Alpine.js. A internacionalização completa em PT-BR/EN-US fica em `lang/`, com middleware para controle de sessão/cookie. Notificações e e-mails usam Jobs e Mailables.
 
 ## Demonstração
 
@@ -83,7 +79,7 @@ A internacionalização fica em `lang/pt_BR/` e `lang/en/`, com paridade total d
 
 ![Menu inicial](docs/images/home-menu.jpg)
 
-### Avaliação e Detalhes
+### Avaliação
 
 ![Página de avaliação](docs/images/review-show.jpg)
 
@@ -93,7 +89,7 @@ A internacionalização fica em `lang/pt_BR/` e `lang/en/`, com paridade total d
 
 ![Criação de avaliação - Etapa 2](docs/images/review-create-2.jpg)
 
-### Dashboard do Usuário
+### Dashboard
 
 ![Perfil no dashboard](docs/images/dashboard-profile.jpg)
 
@@ -109,6 +105,6 @@ A internacionalização fica em `lang/pt_BR/` e `lang/en/`, com paridade total d
 
 ## Deploy
 
-Para rodar em ambiente de produção, configure as variáveis essenciais no `.env` (`APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://seudominio.com`, `SESSION_SECURE_COOKIE=true`), execute os comandos de cache (`php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`, `php artisan storage:link`) e mantenha os workers de fila e agendador ativos (`php artisan queue:work` e `php artisan schedule:work`).
+Para rodar em ambiente de produção, configure as variáveis essenciais no `.env` (`APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://seudominio.com`, `SESSION_SECURE_COOKIE=true`). Execute os comandos de cache (`php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`, `php artisan storage:link`) e mantenha os workers de fila e agendador ativos (`php artisan queue:work` e `php artisan schedule:work`).
 
 O app ainda não possui uma URL pública de produção.

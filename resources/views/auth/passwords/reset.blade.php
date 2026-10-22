@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>{{ __('auth_ui.reset_form_title') }}</x-slot:title>
-    <x-form.form method="POST" action="{{ route('password.update') }}" class="mx-auto my-[10vh] w-[calc(100%-2rem)] max-w-md border border-[#88888833] bg-[#0E0E0E] rounded-[20px] p-6 sm:my-[15vh]">
+    <x-form.form method="POST" action="{{ route('password.update') }}" class="mx-auto my-[10vh] w-[calc(100%-2rem)] max-w-md border border-[#88888833] bg-base-300 rounded-[20px] p-6 sm:my-[15vh]">
         @csrf
         <input type="hidden" name="token" value="{{ $token }}">
         <x-form.field class="text-center mb-6">

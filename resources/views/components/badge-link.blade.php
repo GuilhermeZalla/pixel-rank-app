@@ -1,8 +1,8 @@
 @props(['active' => false, 'type' => 'badge'])
 
 @php
-    $badgeActive = 'bg-primary text-base-300 py-3';
-    $default = 'badge border-[#8888884A] font-bold text-[.75rem] flex flex-row cursor-pointer';
+    $badgeActive = 'bg-primary text-base-300 py-3 shadow-lg shadow-primary/30';
+    $default = 'badge border-[#8888884A] font-bold text-[.75rem] flex flex-row cursor-pointer transition-all duration-300 hover:border-primary/50 hover:shadow-md';
     $style = 'text-[#FF6764] btn';
 
     $recommendationStyles = [

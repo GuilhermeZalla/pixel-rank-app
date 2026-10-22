@@ -7,8 +7,8 @@
             : asset('images/game-placeholder.svg');
         $commentCount = $review->comments_count ?? count($review->comments);
     @endphp
-    <a href="/reviews/{{ $review->id }}" class="block w-full bg-[#0E0E0E] rounded-[10px] {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
-        <article class="rounded-[10px] border border-[#88888833] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out p-3 sm:p-4">
+    <a href="/reviews/{{ $review->id }}" class="block w-full bg-base-300 rounded-[10px] {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} focus:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+        <article class="rounded-[10px] border border-[#88888833] group hover:border-primary hover:bg-base-200 transition-all duration-300 ease-in-out p-3 sm:p-4">
             <div class="flex flex-row items-start gap-3 sm:gap-5">
                 <x-cover class="w-20 sm:w-28 h-28 sm:h-36 shrink-0 rounded-lg object-cover" src="{{ $coverUrl }}"
                     alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
@@ -56,9 +56,9 @@
         $commentCount = $review->comments_count ?? count($review->comments);
     @endphp
     <a href="/reviews/{{ $review->id }}"
-    class="bg-[#0E0E0E] {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} rounded-[20px]">
+    class="bg-base-300 {{ $review->contains_spoilers ? 'review-link-spoiler' : '' }} rounded-[20px] card-lift">
         <article
-            class="rounded-[20px] p-1 border-3 border-[#88888822] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
+            class="rounded-[20px] p-1 border-3 border-[#88888822] group border-glow hover:bg-base-200 transition-all duration-300 ease-in-out">
             <div class="flex flex-row justify-between h-full p-2">
                     <x-cover class="h-45 rounded-2xl object-contain" src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
                     <div class="flex flex-col justify-start gap-2 flex-5/6 px-5">

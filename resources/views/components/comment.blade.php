@@ -8,7 +8,7 @@ $avatarURL = !empty($comment->user->avatar)
 
 @if($dashboard)
     <li id="comment-{{ $comment->id }}"
-        class="border border-[#88888833] rounded-[10px] bg-[#0E0E0E] group hover:border-primary hover:bg-[#141414] transition-all duration-300 ease-in-out">
+        class="border border-[#88888833] rounded-[10px] bg-base-300 group hover:border-primary hover:bg-base-200 transition-all duration-300 ease-in-out">
         @if($comment->review)
             <a href="/reviews/{{ $comment->review->id }}" class="flex flex-row items-start gap-3 sm:gap-4 p-4 sm:p-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-[10px]">
                 <div class="avatar shrink-0">
@@ -63,20 +63,20 @@ $avatarURL = !empty($comment->user->avatar)
         @endif
     </li>
 @else
-    <li id="comment-{{ $comment->id }}" class="flex flex-row gap-4 border-b border-white/8 pt-8 pb-4">
+    <li id="comment-{{ $comment->id }}" class="flex flex-row gap-4 border-b border-white/8 pt-8 pb-4 hover:bg-base-200/50 transition-colors duration-300 rounded-lg px-4 -mx-4">
             <x-cover src="{{ $avatarURL }}" alt="{{ __('reviews.user_avatar_alt') }}"
-            class="rounded-[50%] h-13"></x-cover>
+            class="rounded-[50%] h-13 shadow-md"></x-cover>
         <div class="w-full">
             <span class="flex flex-row justify-between mb-3">
                 <h3 class="font-bold text-[.90rem] flex flex-row gap-2 items-center">{{ $comment->user->nickname }}<span class="text-[1rem] text-[#ffffff97]">&middot;</span> <span
                         class="text-[.75rem] text-[#ffffff97] font-normal">{{ $comment->getPostedDate() }}</span></h3>
                 <ul>
                     @can('delete', $comment)
-                        <li id="comment-{{ $comment->id }}"> <button class="delete-comment text-red-500 cursor-pointer" data-id="{{ $comment->id }}">{{ __('reviews.comment_delete') }}</button></li>
+                        <li id="comment-{{ $comment->id }}"> <button class="delete-comment text-red-500 cursor-pointer hover:text-red-400 transition-colors" data-id="{{ $comment->id }}">{{ __('reviews.comment_delete') }}</button></li>
                     @endcan
                 </ul>
             </span>
-            <p class="break-all"> {!! nl2br(e($comment->body)) !!}</p>
+            <p class="break-words leading-relaxed text-base-content/90"> {!! nl2br(e($comment->body)) !!}</p>
         </div>
     </li>
 @endif

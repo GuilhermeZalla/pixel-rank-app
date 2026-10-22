@@ -1,6 +1,6 @@
 <x-layout>
     <x-slot:title>{{ __('auth_ui.register_title') }}</x-slot:title>
-    <x-form.form method="POST" action="/register" enctype="multipart/form-data" class="mx-auto my-[6vh] w-[calc(100%-2rem)] max-w-lg border border-[#88888833] bg-[#0E0E0E] rounded-[20px] p-4 sm:p-6">
+    <x-form.form method="POST" action="/register" enctype="multipart/form-data" class="mx-auto my-[6vh] w-[calc(100%-2rem)] max-w-lg border border-[#88888833] bg-base-300 rounded-[20px] p-4 sm:p-6 sm:p-8 shadow-xl shadow-black/30">
         @csrf
         <x-form.field class="text-center mb-6">
             <x-form.description :title="__('auth_ui.create_account')"
@@ -38,7 +38,7 @@
             <x-form.input type="textarea" name="bio" id="bio" :placeholder="__('auth_ui.bio_placeholder')" maxlength="160" />
         </x-form.field>
         <x-form.field class="mt-2">
-            <x-form.button>{{ __('auth_ui.create_account') }}</x-form.button>
+            <x-form.button class="shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">{{ __('auth_ui.create_account') }}</x-form.button>
         </x-form.field>
     </x-form.form>
 </x-layout>

@@ -1,7 +1,7 @@
 @props(['type' => 'input'])
 
 @php
-$default = ' font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-2xl bg-[#0E0E0E] ';
+$default = ' font-bold w-full border border-[#8888884A] focus:border-accent focus:outline-none rounded-2xl bg-base-300 ';
 @endphp
 
 @switch($type)

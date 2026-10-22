@@ -31,6 +31,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'bio',
         'avatar',
+        'hide_spoilers_default',
+        'show_views_count',
+        'private_profile',
+        'hide_email',
     ];
 
     protected $hidden = [
@@ -47,6 +51,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'hide_spoilers_default' => 'boolean',
+            'show_views_count' => 'boolean',
+            'private_profile' => 'boolean',
+            'hide_email' => 'boolean',
         ];
     }
 

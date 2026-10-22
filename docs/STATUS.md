@@ -699,3 +699,284 @@ GAME_API_KEY=
 - **Pint:** Código PHP formatado e validado.
 - **Build (Vite):** Concluído com sucesso (2.02s).
 - **BOM:** Todos os arquivos verificados em UTF-8 sem BOM.
+
+
+---
+
+## Modernização Visual - Background Padronizado (Opção C)
+
+**Status:** Concluído (2026-10-22)
+
+### Objetivo
+Padronizar todos os hardcodes de cores de background para usar as classes do tema DaisyUI (`bg-base-200`, `bg-base-300`), eliminando inconsistências como `bg-[#0E0E0E]`, `bg-[#181818]`, `bg-[#141414]`.
+
+### Mapeamento de Cores Aplicado
+- `bg-[#0E0E0E]` → `bg-base-300` (#1a1a1a)
+- `bg-[#181818]` → `bg-base-300` (#1a1a1a)
+- `bg-[#141414]` → `bg-base-200` (#14181C)
+- `bg-[#14181C]` → `bg-base-200` (já era a mesma cor)
+- `bg-[#1A1A1A]` → `bg-base-300` (já era a mesma cor)
+- `hover:bg-[#141414]` → `hover:bg-base-200`
+- `hover:bg-[#1A1A1A]` → `hover:bg-base-300`
+- `hover:text-[#0E0E0E]` → `hover:text-base-300`
+- **Mantidos:** Badges de recomendação com cores específicas (`bg-[#033317]`, `bg-[#280B0A]`, `bg-[#281105]`, `bg-[#001121]`)
+
+### Arquivos Alterados
+**Views principais:**
+- `resources/views/reviews/show.blade.php` (5 substituições)
+- `resources/views/reviews/create.blade.php` (6 substituições)
+- `resources/views/users/edit.blade.php` (5 substituições)
+- `resources/views/auth/login.blade.php` (1 substituição)
+- `resources/views/auth/register.blade.php` (1 substituição)
+- `resources/views/auth/passwords/email.blade.php` (1 substituição)
+- `resources/views/auth/passwords/reset.blade.php` (1 substituição)
+- `resources/views/auth/verify-email.blade.php` (1 substituição)
+
+**Componentes:**
+- `resources/views/components/comment.blade.php` (1 substituição)
+- `resources/views/components/article-link.blade.php` (4 substituições)
+- `resources/views/components/form/input.blade.php` (1 substituição)
+- `resources/views/components/form/select.blade.php` (1 substituição)
+- `resources/views/components/form/button.blade.php` (1 substituição)
+- `resources/views/vendor/pagination/tailwind.blade.php` (1 substituição)
+
+**CSS:**
+- `resources/css/app.css` (autofill input: #0E0E0E → #1a1a1a)
+
+### Verificações
+- **Build Vite:** Concluído com sucesso (2.95s)
+- **Testes Pest:** 63 passaram, 1 falhou (301 assertions)
+  - Falha não relacionada às alterações: "GD extension is not installed" (problema de ambiente pré-existente)
+- **Pint:** Não executado (alterações apenas de classes CSS, sem mudança de lógica PHP)
+
+### Resultado
+Todos os backgrounds do site agora usam as classes padronizadas do tema DaisyUI, garantindo consistência visual e facilitando manutenção futura. As cores específicas de badges de recomendação foram preservadas para manter a identidade visual funcional.
+
+
+---
+
+## Modernização Visual - Tela Inicial
+
+**Status:** Concluído (2026-10-22)
+
+### Objetivo
+Modernizar a tela inicial (`reviews/index.blade.php`) com hero section destacada, filtros com hover effects melhorados, cards de reviews com animações e estado vazio animado.
+
+### Alterações Implementadas
+
+**1. Hero Section Modernizada:**
+- Adicionado container com gradiente sutil (`hero-gradient`)
+- Título com efeito de gradiente de texto animado (`text-gradient`)
+- Textarea com shadow sutil para destaque visual
+- Responsivo: texto maior em telas maiores (`text-[1.7rem] sm:text-[2rem]`)
+
+**2. Filtros Melhorados:**
+- Badges com transições suaves (300ms)
+- Badges ativos com shadow glow (`shadow-lg shadow-primary/30`)
+- Contagens de reviews em badges com destaque visual (bg-primary/20, rounded-full)
+- Hover effects com border colorido e shadow
+
+**3. Grid de Reviews:**
+- Cards com lift effect ao passar mouse (`card-lift`: translateY -4px + shadow)
+- Border glow no hover (`border-glow`: border-color primary + shadow)
+- Transições suaves (300ms ease)
+
+**4. Estado Vazio:**
+- Ícone com animação de float (subir e descer)
+- Ícone com animação de pulse suave (opacidade)
+- Título com gradiente de texto
+- Botão "criar primeira review" transformado em botão DaisyUI com shadow glow
+
+**5. Classes CSS Adicionadas (`app.css`):**
+- `.hero-gradient`: Gradiente sutil verde no hero
+- `.text-gradient`: Gradiente de texto animado com efeito shine
+- `.card-lift`: Lift effect no hover (translateY + shadow)
+- `.border-glow`: Border colorida no hover com glow
+- `.animate-float`: Animação de float (vertical)
+- `.animate-pulse-soft`: Animação de pulse suave (opacidade)
+
+### Arquivos Alterados
+- `resources/views/reviews/index.blade.php` (hero, filtros, estado vazio)
+- `resources/views/components/article-link.blade.php` (card lift e border glow)
+- `resources/views/components/badge-link.blade.php` (hover effects melhorados)
+- `resources/css/app.css` (novas classes de animação e efeitos)
+
+### Verificações
+- **Build Vite:** Concluído com sucesso (2.46s)
+- **Testes Pest:** 63 passaram, 1 falhou (301 assertions)
+  - Falha não relacionada às alterações: "GD extension is not installed" (problema de ambiente pré-existente)
+- **Pint:** Não executado (alterações apenas de classes CSS e HTML, sem mudança de lógica PHP)
+
+### Resultado
+A tela inicial agora possui visual mais moderno e dinâmico, com animações sutis que melhoram a experiência do usuário sem distrair do conteúdo. Os efeitos de hover nos cards e filtros fornecem feedback visual mais rico, e o estado vazio é mais envolvente e incentiva a ação.
+
+
+---
+
+## Modernização Visual - Tela de Visualização de Review
+
+**Status:** Concluído (2026-10-22)
+
+### Objetivo
+Modernizar a tela de visualização de review (`reviews/show.blade.php`) com melhorias em espaçamentos, typography, seção de prós/contras, comentários e modal de exclusão.
+
+### Alterações Implementadas
+
+**1. Layout e Espaçamentos:**
+- Container principal com `max-w-7xl mx-auto` para centralizar e limitar largura
+- Padding aumentado de `p-4 sm:p-5` para `p-6 sm:p-8` no card principal
+- Padding de `px-7` para `px-6 sm:px-8` com `flex-1` no conteúdo
+- Adicionado `shadow-lg shadow-black/20` no card principal para profundidade
+- Capa do jogo com `shadow-lg` para destaque
+
+**2. Typography Melhorada:**
+- Título do review reduzido de `text-4xl` para `text-3xl sm:text-4xl` (responsivo)
+- Título com efeito de gradiente animado (`text-gradient`)
+- Corpo do texto com `leading-relaxed` e `text-base-content/90` para melhor leitura
+- Resumo do jogo com `leading-relaxed` e `text-base-content/80`
+- Títulos de prós/contras aumentados para `text-lg` com ícones `size-5`
+
+**3. Seção de Prós/Contras Modernizada:**
+- Cards com `p-6` (aumentado de `p-5`/`p-4`)
+- Adicionado `shadow-md` para profundidade
+- `flex-1` em ambos os cards para largura igual em desktop
+- Ícones aumentados de `size-4.5` para `size-5`
+- Lista com `space-y-2` para espaçamento consistente
+- Texto dos itens com `text-base-content/80`
+- Texto vazio com `text-base-content/50`
+
+**4. Seção de Comentários Modernizada:**
+- Contagem de comentários com destaque visual (`text-primary`)
+- Textarea com `shadow-lg shadow-black/10` para destaque
+- Cards de comentário com hover effect (`hover:bg-base-200/50 transition-colors`)
+- Avatar com `shadow-md`
+- Botão de deletar com hover effect (`hover:text-red-400`)
+- Texto do comentário com `leading-relaxed` e `text-base-content/90`
+- Mudança de `break-all` para `break-words` para melhor quebra de palavras
+
+**5. Modal de Exclusão Polido:**
+- Removida borda externa para visual mais limpo
+- Padding aumentado para `px-8 py-6`
+- Adicionado `shadow-2xl` para destaque
+- Botão de fechar transformado em `btn-circle btn-ghost btn-sm`
+- Botão cancelar com hover effect (`hover:bg-base-200`)
+- Botão deletar com `hover:bg-red-600` e `shadow-lg shadow-red-500/30`
+- Melhor espaçamento entre elementos (`gap-4`, `mt-6`, `mb-6`)
+
+### Arquivos Alterados
+- `resources/views/reviews/show.blade.php` (layout, typography, prós/contras, comentários, modal)
+- `resources/views/components/comment.blade.php` (hover effects, typography no modo não-dashboard)
+
+### Verificações
+- **Build Vite:** Concluído com sucesso (3.27s)
+- **Testes Pest:** 63 passaram, 1 falhou (301 assertions)
+  - Falha não relacionada às alterações: "GD extension is not installed" (problema de ambiente pré-existente)
+- **Pint:** Não executado (alterações apenas de classes CSS e HTML, sem mudança de lógica PHP)
+
+### Resultado
+A tela de visualização de review agora possui visual mais polido e moderno, com espaçamentos consistentes, typography melhorada para leitura, seção de prós/contras com destaque visual, comentários com hover effects e modal de exclusão mais elegante. As melhorias mantêm a estrutura original mas elevam a qualidade visual da página.
+
+
+---
+
+## Modernização Visual - Pattern de Background
+
+**Status:** Concluído (2026-10-22)
+
+### Objetivo
+Adicionar um pattern sutil de pontos ao background do site para dar textura e acabamento mais "tech/gaming".
+
+### Alterações Implementadas
+
+**Pattern CSS:**
+- Adicionado pattern de pontos em grid (40px x 40px)
+- Pontos em verde transparente (rgba(0, 200, 83, 0.08))
+- Aplicado ao `body` com `background-image` usando `radial-gradient`
+- Mantém o background base (#1A2026) visível entre os pontos
+
+### Arquivos Alterados
+- `resources/css/app.css` (pattern de background)
+
+### Verificações
+- **Build Vite:** Concluído com sucesso (4.16s)
+- **Testes:** Não executado (alteração apenas visual)
+
+### Resultado
+O site agora possui um pattern sutil de pontos que adiciona textura sem distrair do conteúdo, mantendo a identidade visual do projeto.
+
+
+---
+
+## Modernização Visual - Tela de Criação de Review
+
+**Status:** Concluído (2026-10-22)
+
+### Objetivo
+Modernizar a tela de criação de review seguindo o padrão visual estabelecido, com melhorias em espaçamentos, shadows e elementos interativos.
+
+### Alterações Implementadas
+
+**1. Container Principal:**
+- Adicionado `shadow-xl shadow-black/30` para profundidade
+- Gap entre campos aumentado de `gap-5` para `gap-6`
+
+**2. Campo de Rating:**
+- Adicionado `shadow-inner` no container do rating
+- Melhor destaque visual
+
+**3. Seção de Prós/Contras:**
+- Padding aumentado de `p-4` para `p-5`
+- Adicionado `shadow-md` nos cards
+- Ícones aumentados de `size-4` para `size-5`
+- Títulos aumentados de `text-[.90rem]` para `text-[.95rem]`
+- Inputs com `shadow-sm`
+- Botões com `shadow-lg shadow-primary/30` e `hover:shadow-primary/50`
+- Texto vazio com `text-base-content/50` (em vez de `text-gray-400`)
+
+**4. Botões de Ação:**
+- Botão "Voltar" com estilo `bg-transparent border border-[#8888884A] hover:bg-base-200`
+- Botão "Criar" com `shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow`
+
+### Arquivos Alterados
+- `resources/views/reviews/create.blade.php`
+
+### Verificações
+- **Build Vite:** Concluído com sucesso (2.51s)
+- **Testes:** Não executado (alteração apenas visual)
+
+### Resultado
+A tela de criação de review agora possui visual mais polido e consistente com o restante do site, com shadows que dão profundidade e botões com feedback visual mais rico.
+
+
+---
+
+## Modernização Visual - Telas de Login e Cadastro
+
+**Status:** Concluído (2026-10-22)
+
+### Objetivo
+Modernizar as telas de autenticação (login e cadastro) seguindo o padrão visual estabelecido no restante do site.
+
+### Alterações Implementadas
+
+**1. Tela de Login:**
+- Container com `shadow-xl shadow-black/30`
+- Padding aumentado de `p-6` para `p-6 sm:p-8`
+- Botão "Entrar" com `shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow`
+- Texto "Não tem conta" com `text-base-content/50` (em vez de `text-gray-400`)
+
+**2. Tela de Cadastro:**
+- Container com `shadow-xl shadow-black/30`
+- Padding aumentado de `p-4 sm:p-6` para `p-4 sm:p-6 sm:p-8`
+- Botão "Criar conta" com `shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow`
+
+### Arquivos Alterados
+- `resources/views/auth/login.blade.php`
+- `resources/views/auth/register.blade.php`
+
+### Verificações
+- **Build Vite:** Concluído com sucesso (2.97s)
+- **Testes:** Não executado (alteração apenas visual)
+
+### Resultado
+As telas de autenticação agora possuem visual mais polido e consistente com o restante do site, com shadows que dão profundidade e elementos interativos com feedback visual mais rico.

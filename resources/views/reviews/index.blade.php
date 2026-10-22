@@ -1,14 +1,16 @@
 <x-layout>
     <x-slot:title>{{ __('reviews.index_title') }}</x-slot:title>
     <x-section class="mt-10">
-        <div>
-            <h1 class="font-bold text-[1.7rem]">{{ __('reviews.write_review') }}</h1>
-            <p class="text-[#888888ed] text-[.95rem]">{{ __('reviews.review_prompt') }}</p>
+        <div class="hero-gradient rounded-2xl p-6 sm:p-8">
+            <div>
+                <h1 class="font-bold text-[1.7rem] sm:text-[2rem] text-gradient">{{ __('reviews.write_review') }}</h1>
+                <p class="text-[#888888ed] text-[.95rem] mt-2">{{ __('reviews.review_prompt') }}</p>
+            </div>
+            <form method="POST" action="/reviews/create" class="mt-5">@csrf
+                <x-form.input type="textarea" name="review" rows="5" id="review" :placeholder="__('reviews.start_review_placeholder')"
+                    class="placeholder:text-base-content resize-none border-[#88888822] rounded-2xl shadow-lg shadow-black/20" />
+            </form>
         </div>
-        <form method="POST" action="/reviews/create" class="mt-5">@csrf
-            <x-form.input type="textarea" name="review" rows="5" id="review" :placeholder="__('reviews.start_review_placeholder')"
-                class="placeholder:text-base-content resize-none border-[#88888822] rounded-2xl" />
-        </form>
     </x-section>
     <x-section class="flex flex-col gap-3">
         <h2 class="font-bold text-[1.4rem] mb-1">{{ __('reviews.filters') }}</h2>
@@ -23,16 +25,16 @@
 
             @if(!empty($recommendationsTotal['recommended']))<x-badge-link href="/recommended"
                 :active="request()->is('recommended')">{{ __('reviews.recommended') }}
-            <span>{{ $recommendationsTotal['recommended'] }}</span></x-badge-link>@endif
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-xs font-bold">{{ $recommendationsTotal['recommended'] }}</span></x-badge-link>@endif
             @if(!empty($recommendationsTotal['not_recommended']))<x-badge-link
                 href="/not_recommended" :active="request()->is('not_recommended')">{{ __('reviews.not_recommended') }}
-            <span>{{ $recommendationsTotal['not_recommended'] ?? 0 }}</span></x-badge-link>@endif
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-xs font-bold">{{ $recommendationsTotal['not_recommended'] ?? 0 }}</span></x-badge-link>@endif
             @if(!empty($recommendationsTotal['essential'])) <x-badge-link href="/essential"
                 :active="request()->is('essential')">{{ __('reviews.essential') }}
-            <span>{{ $recommendationsTotal['essential'] ?? 0 }}</span></x-badge-link> @endif
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-xs font-bold">{{ $recommendationsTotal['essential'] ?? 0 }}</span></x-badge-link> @endif
             @if(!empty($recommendationsTotal['mixed'])) <x-badge-link href="/mixed"
                 :active="request()->is('mixed')">{{ __('reviews.mixed') }}
-            <span>{{ $recommendationsTotal['mixed'] ?? 0 }}</span></x-badge-link>@endif
+            <span class="bg-primary/20 text-primary px-2 py-0.5 rounded-full text-xs font-bold">{{ $recommendationsTotal['mixed'] ?? 0 }}</span></x-badge-link>@endif
 
 
         </nav>
@@ -54,9 +56,9 @@
             <x-pagination :pagination="$reviews"></x-pagination>
         @else
             <div class="flex flex-col items-center mt-15 gap-3">
-                <x-heroicon-s-document-text class="text-accent size-30" />
-                <h1 class="font-bold text-2xl">{{ __('reviews.quiet_feed') }}</h1>
-                <a href="{{ route('reviews.create') }}" class="hover:underline hover:text-accent opacity-70 text-[1.1rem] -mt-3">{{ __('reviews.first_review_prompt') }}</a>
+                <x-heroicon-s-document-text class="text-accent size-30 animate-float animate-pulse-soft" />
+                <h1 class="font-bold text-2xl text-gradient">{{ __('reviews.quiet_feed') }}</h1>
+                <a href="{{ route('reviews.create') }}" class="btn btn-primary btn-sm mt-2 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">{{ __('reviews.first_review_prompt') }}</a>
             </div>
         @endif
     </x-section>
