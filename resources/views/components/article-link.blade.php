@@ -31,18 +31,18 @@
                             {{ Str::limit($review->body, 220) }}
                         </p>
                     </div>
-                    <ul class="flex flex-row flex-wrap gap-2 sm:gap-3 items-center text-[.75rem] sm:text-[.80rem] mt-2 pt-2 border-t border-white/5">
+                    <ul class="flex flex-wrap flex-row gap-2 sm:gap-3 items-center text-[.75rem] sm:text-[.80rem] mt-2 pt-2 border-t border-white/5">
                         <li>
                             <x-badge-link type="span"
-                                class="rounded-[8px] px-2 py-0.5 font-bold text-[0.65rem]">{{ __('reviews.recommendations.' . $review->recommendation->value) }}</x-badge-link>
+                                class="rounded-[8px] px-2 py-0.5 font-bold text-[0.65rem] whitespace-nowrap">{{ __('reviews.recommendations.' . $review->recommendation->value) }}</x-badge-link>
                         </li>
                         <li class="font-bold px-2 py-0.5 rounded bg-white/5 text-base-content/90">{{ $review->rating === '10.0' ? 10 : $review->rating }}/10</li>
                         <li class="flex flex-row items-center gap-1 text-base-content/70"><x-heroicon-o-chat-bubble-oval-left
                                 class="size-4" />{{ trans_choice('reviews.comment_count_label', $commentCount, ['count' => $commentCount]) }}</li>
                         @if($review->contains_spoilers)
                             <li>
-                                <span class="flex flex-row gap-1 items-center font-semibold text-orange-500">
-                                    <x-heroicon-s-exclamation-triangle class="size-3.5 shrink-0" />{{ __('reviews.contains_spoilers_short') }}
+                                <span class="flex flex-row gap-1 items-center font-semibold text-[.65rem] text-orange-500 whitespace-nowrap">
+                                    <x-heroicon-s-exclamation-triangle class="size-3 shrink-0" />{{ __('reviews.contains_spoilers_short') }}
                                 </span>
                             </li>
                         @endif
@@ -60,9 +60,9 @@
         <article
             class="rounded-[20px] p-1 border-3 border-[#88888822] group border-glow hover:bg-base-200 transition-all duration-300 ease-in-out">
             <div class="flex flex-row justify-between h-full p-2">
-                    <x-cover class="h-45 rounded-2xl object-contain" src="https://images.igdb.com/igdb/image/upload/t_1080p/{{ $review->game_cover }}.jpg" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
+                    <x-cover class="h-45 rounded-2xl object-contain" src="{{ !empty($review->game_cover) ? 'https://images.igdb.com/igdb/image/upload/t_1080p/' . $review->game_cover . '.jpg' : asset('images/game-placeholder.svg') }}" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
                     <div class="flex flex-col justify-start gap-2 flex-5/6 px-5">
-                        <ul class="flex flex-row justify-between items-center gap-3 text-[.75rem]">
+                        <ul class="flex flex-wrap justify-between items-center gap-2 text-[.75rem]">
                             <li class="flex flex-row justify-center items-center gap-1 opacity-40">
                                 <span class="flex flex-row items-center gap-1">
                                     <x-heroicon-o-user class="size-3" />{{ $review->user->nickname }}
@@ -73,22 +73,22 @@
                                 </span>
                             </li>
                             @if($review->contains_spoilers)
-                            <li><span class="flex flex-row gap-2 font-bold text-[.75rem] items-center"><x-heroicon-s-exclamation-triangle
-                            class="text-orange-600 size-4" />{{ __('reviews.spoilers') }}</span></li>@endif
+                            <li><span class="flex flex-row gap-1 font-bold text-[.70rem] items-center"><x-heroicon-s-exclamation-triangle
+                            class="text-orange-600 size-3.5" />{{ __('reviews.contains_spoilers_short') }}</span></li>@endif
                         </ul>
                         <div class="h-full">
                             <h2 class="font-bold text-[.95rem] flex flex-col gap-1"><span
                                     class="group-hover:text-accent font-normal transition-all duration-300 ease-in-out break-all wrap-break-word text-[.80rem] opacity-70">{{Str::limit($review->game_name, 190)}}</span>{{Str::limit($review->title, 150)}}
                             </h2>
                         </div>
-                        <ul class="flex flex-row justify-start gap-4">
+                        <ul class="flex flex-wrap justify-start gap-3">
                           <li class="text-[.95rem] font-bold">{{ $review->rating === "10.0" ? 10 : $review->rating }}/10</li>
                             <li>
                                 <x-badge-link type="span"
-                                    class="rounded-[10px] px-2 py-0 font-bold text-[.70rem]">{{ __('reviews.recommendations.' . $review->recommendation->value) }}</x-badge-link>
+                                    class="rounded-[10px] px-2 py-0 font-bold text-[.65rem] whitespace-nowrap">{{ __('reviews.recommendations.' . $review->recommendation->value) }}</x-badge-link>
                             </li>
-                            <li class="flex flex-row items-center gap-1 text-[.75rem]"><x-heroicon-o-chat-bubble-oval-left
-                                    class="size-4" />{{ trans_choice('reviews.comment_count_label', $commentCount, ['count' => $commentCount]) }}</li>
+                            <li class="flex flex-row items-center gap-1 text-[.70rem]"><x-heroicon-o-chat-bubble-oval-left
+                                    class="size-3.5" />{{ trans_choice('reviews.comment_count_label', $commentCount, ['count' => $commentCount]) }}</li>
                         </ul>
                     </div>
             </div>

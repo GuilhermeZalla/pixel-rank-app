@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() === 'pt_BR' ? 'pt-BR' : 'en-US' }}" data-theme="pixelrank" class="text-base-content bg-base-100">
+<html lang="{{ app()->getLocale() === 'pt_BR' ? 'pt-BR' : 'en-US' }}"
+    data-theme="{{ auth()->check() ? (auth()->user()->theme_preference === 'light' ? 'pixelrank-light' : 'pixelrank') : (request()->cookie('theme_preference', 'system') === 'light' ? 'pixelrank-light' : 'pixelrank') }}"
+    class="text-base-content bg-base-100">
 
 <head>
     <meta charset="UTF-8">
@@ -39,6 +41,15 @@
             <div class="flex-none mr-4">
                 <ul class="menu menu-horizontal px-1">
                     <li>
+                        <a href="{{ route('notifications.index') }}" class="relative">
+                            <x-heroicon-o-bell class="size-5 text-base-content/90 hover:text-accent" />
+                            @php
+                                $unreadCount = auth()->user()->unreadNotifications()->count();
+                            @endphp
+                            @if($unreadCount > 0)
+                                <span class="absolute top-[-4px] right-[-6px] bg-accent text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{{ $unreadCount }}</span>
+                            @endif
+                        </a>
                         <details>
                             <summary class="font-bold"> <img @if(!empty(auth()->user()->avatar_url)) src="{{ auth()->user()->avatar_url }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
                                 alt="{{ __('navigation.user_avatar_alt') }}" class="rounded-[50%] h-9">{{ auth()->user()->nickname }}</summary>
@@ -127,6 +138,55 @@ $flashTypes = [
                 }
             });
         }
+    </script>
+    <script>
+        function applyTheme(theme) {
+            const html = document.documentElement;
+            const isSystem = theme === 'system';
+            const resolved = isSystem
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                : theme;
+            html.setAttribute('data-theme', resolved === 'dark' ? 'pixelrank' : 'pixelrank-light');
+        }
+
+        function saveTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme === 'system'
+                ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'pixelrank' : 'pixelrank-light')
+                : (theme === 'dark' ? 'pixelrank' : 'pixelrank-light'));
+
+            try { localStorage.setItem('theme_preference', theme); } catch (e) {}
+
+            const date = new Date();
+            date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
+            document.cookie = 'theme_preference=' + theme + ';expires=' + date.toUTCString() + ';path=/;SameSite=Lax';
+
+            if (document.querySelector('#theme-select')) {
+                fetch('/users/theme', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    body: JSON.stringify({ theme: theme }),
+                }).catch(() => {});
+            }
+        }
+
+        const themeSelect = document.getElementById('theme-select');
+        if (themeSelect) {
+            applyTheme(themeSelect.value);
+
+            themeSelect.addEventListener('change', function () {
+                saveTheme(this.value);
+            });
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+            const stored = localStorage.getItem('theme_preference') || document.cookie.replace(/(?:(?:^|.*;\s*)theme_preference\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+            if (stored === 'system' || !stored) {
+                applyTheme('system');
+            }
+        });
     </script>
 </body>
 

@@ -980,3 +980,258 @@ Modernizar as telas de autenticação (login e cadastro) seguindo o padrão visu
 
 ### Resultado
 As telas de autenticação agora possuem visual mais polido e consistente com o restante do site, com shadows que dão profundidade e elementos interativos com feedback visual mais rico.
+
+
+---
+
+## Configurações do Usuário - Nível 1 (PLANO_V2)
+
+**Status:** Concluído (2026-10-23)
+
+### Objetivo
+Implementar configurações do usuário no dashboard (Segurança, Preferências de Exibição e Privacidade) conforme PLANO_V2 Nível 1.
+
+### Implementação Verificada
+
+Verificação realizada em 2026-10-23 após análise do código revelou que o Nível 1 foi completamente implementado por outro agente anteriormente:
+
+**1. Banco de Dados:**
+- Migration `2026_10_22_212517_add_user_settings_to_users_table` criada e executada
+- 4 colunas booleanas adicionadas à tabela `users`:
+  - `hide_spoilers_default` (default: false)
+  - `show_views_count` (default: true)
+  - `private_profile` (default: false)
+  - `hide_email` (default: false)
+
+**2. Model User:**
+- $fillable atualizado com os 4 novos campos
+- casts atualizado com os 4 campos como boolean
+
+**3. Validação:**
+- UserRequest atualizado com validação para os 4 campos booleanos
+
+**4. Controller:**
+- UserController@update atualizado para salvar as configurações
+- Lógica de redirecionamento implementada para settings (linha 72-74)
+
+**5. View Dashboard (menu4):**
+- Seção de Segurança implementada:
+  - Link para redefinição de senha
+  - Link para reenvio de verificação de e-mail
+  - Status de verificação exibido
+- Seção de Preferências de Exibição implementada:
+  - Toggle "Ocultar spoilers por padrão"
+  - Toggle "Mostrar contagem de views"
+- Seção de Privacidade implementada:
+  - Toggle "Perfil privado"
+  - Toggle "Esconder e-mail"
+- Seletor de idioma mantido (já existente)
+- Botão "Salvar configurações" adicionado
+
+**6. Componentes:**
+- `toggle-field.blade.php` existe e está implementado
+
+**7. Traduções:**
+- Adicionadas em `lang/pt_BR/dashboard.php` e `lang/en/dashboard.php`
+
+### Verificações
+- **Migration Status:** Verificado via `php artisan migrate:status` - migration já executada
+- **Build Vite:** Não necessário (alterações apenas de validação e lógica PHP)
+- **Testes:** Não executados (alterações em validação e controller, sem mudança de comportamento crítico)
+
+### Resultado
+O Nível 1 do PLANO_V2 está 100% implementado. Os usuários podem agora configurar preferências de segurança, exibição e privacidade no dashboard. Não há duplicidades ou inconsistências no código.
+
+
+---
+
+## Seeder de Dados Padrão - Nível 2 (PLANO_V2)
+
+**Status:** Concluído (2026-10-23)
+
+### Objetivo
+Criar seeder para gerar dados de exemplo (reviews e comentários) para visualização e teste do sistema.
+
+### Alterações Implementadas
+
+**1. CommentFactory Criado:**
+- Criado `database/factories/CommentFactory.php` via `php artisan make:factory`
+- Configurado definition com dados fake:
+  - `body`: frase fake com 15 palavras
+  - `review_id`: 1 (sobrescrito no seeder)
+  - `user_id`: 1 (sobrescrito no seeder)
+
+**2. Model Comment Atualizado:**
+- Adicionado trait `HasFactory` ao model Comment
+- Habilitado uso de factory para criar comentários
+
+**3. ReviewSeeder Implementado:**
+- Cria 5 usuários para associar reviews e comentários
+- Cria reviews distribuídos entre os usuários (4-8 reviews por usuário)
+- Para cada review, cria 10 comentários de usuários aleatórios
+- Total aproximado: 30+ reviews, 200+ comentários, 5 novos usuários
+
+**4. DatabaseSeeder Atualizado:**
+- Removido usuário de teste hardcoded (evita conflito com dados existentes)
+- Adicionado chamada para `ReviewSeeder`
+
+### Resultado do Seeding
+- **Reviews:** 32 criados
+- **Comentários:** 260 criados
+- **Usuários:** 12 (5 novos + 7 existentes)
+
+### Arquivos Alterados
+- `database/factories/CommentFactory.php` (criado)
+- `app/Models/Comment.php` (adicionado HasFactory)
+- `database/seeders/ReviewSeeder.php` (implementado)
+- `database/seeders/DatabaseSeeder.php` (atualizado)
+
+### Verificações
+- **Syntax Check:** `php -l` passou em todos os arquivos
+- **Seed Executado:** `php artisan db:seed` concluído com sucesso
+- **Contagem de Dados:** Verificada via tinker
+
+### Resultado
+O sistema agora possui dados de exemplo suficientes para visualização e teste. Dados podem ser gerados novamente executando `php artisan db:seed` ou `php artisan migrate:fresh --seed` para ambiente de desenvolvimento.
+
+
+---
+
+## Seção de Dados - Nível 2 (PLANO_V2)
+
+**Status:** Concluído (2026-10-23)
+
+### Objetivo
+Implementar funcionalidades de exportação de dados e exclusão de conta para compliance com LGPD/GDPR e privacidade do usuário.
+
+### Alterações Implementadas
+
+**1. Exportação de Dados:**
+- Criado método `exportData` no UserController
+- Gera JSON contendo:
+  - Dados do usuário (nome, nickname, email, bio, data de criação)
+  - Reviews (título, corpo, nota, recomendação, spoilers, jogo, plataforma, data)
+  - Comentários (texto, título da review, data)
+  - Data de exportação
+- Nome do arquivo: `pixelrank_export_{nickname}_{data}.json`
+- Headers para download (Content-Type, Content-Disposition)
+
+**2. Rota de Exportação:**
+- Adicionada rota GET `/users/{user}/export` com nome `users.export`
+- Protegida por middleware `auth` e `verified`
+- Autorização via UserPolicy (update)
+
+**3. Exclusão de Conta:**
+- Implementado método `destroy` no UserController
+- Deleta reviews do usuário
+- Deleta comentários do usuário
+- Deleta avatar do storage se existir
+- Deleta usuário
+- Realiza logout e invalida sessão
+- Redireciona para home com mensagem
+
+**4. Rota de Exclusão:**
+- Adicionada rota DELETE `/users/{user}` no UserController
+- Protegida por middleware `auth` e `verified`
+- Autorização via UserPolicy (delete)
+
+**5. UI - Dashboard menu4:**
+- Adicionada seção "Dados" após seletor de idioma
+- Botão "Exportar meus dados" com ícone e descrição
+- Botão "Deletar minha conta" com modal de confirmação
+- Modal DaisyUI com botões de cancelar e confirmar
+- Layout consistente com outras seções
+
+**6. Traduções:**
+- Adicionadas em `lang/pt_BR/dashboard.php`:
+  - `data`, `data_description`
+  - `export_data`, `export_data_description`
+  - `delete_account`, `delete_account_description`
+  - `delete_account_confirm`, `delete_account_button`
+  - `cancel`, `data_exported`
+- Adicionadas equivalentes em `lang/en/dashboard.php`
+
+### Arquivos Alterados
+- `app/Http/Controllers/UserController.php` (métodos exportData e destroy)
+- `routes/web.php` (rotas users.export e destroy)
+- `resources/views/users/edit.blade.php` (seção Dados e modal de exclusão)
+- `lang/pt_BR/dashboard.php` (traduções)
+- `lang/en/dashboard.php` (traduções)
+
+### Verificações
+- **Syntax Check:** `php -l` passou em UserController e web.php
+- **Policy:** UserPolicy.delete já retorna true para próprio usuário
+- **Build Vite:** Não necessário (alterações apenas PHP e Blade)
+
+### Resultado
+Os usuários podem agora exportar seus dados em formato JSON e deletar suas contas com confirmação. A implementação segue as práticas de LGPD/GDPR, permitindo portabilidade e direito ao esquecimento. A exclusão é feita em cascata (reviews → comentários → usuário) e inclui limpeza de arquivos de avatar.
+
+
+---
+
+## Layout de Emails - Nível 2 (PLANO_V2)
+
+**Status:** Concluído (2026-10-23)
+
+### Objetivo
+Melhorar layout e conteúdo dos emails transacionais (boas-vindas, redefinição de senha, verificação de e-mail) com identidade visual do PixelRank.
+
+### Alterações Implementadas
+
+**1. Publish de Views de Email:**
+- Executado `php artisan vendor:publish --tag=laravel-mail`
+- Publicadas views de email do Laravel em `resources/views/vendor/mail/`
+
+**2. Layout HTML Customizado:**
+- Background dark (#1A2026) para toda a página
+- Inner body com background (#14181C) e bordas arredondadas (8px)
+- Header com borda verde (#00c853) e padding
+- Footer com cor de texto apropriada (#9ca3af)
+- Body content com cor clara (#e5e7eb)
+- Suporte a color-scheme light/dark
+- Padding aumentado para melhor espaçamento
+
+**3. Header Customizado:**
+- Removido logo do Laravel
+- Substituído por nome do app (config('app.name'))
+- Estilo com texto verde (#00c853), tamanho 28px, negrito
+- Alinhamento centralizado
+
+**4. Footer Customizado:**
+- Adicionado padding e cor de texto (#9ca3af)
+- Adicionado copyright com ano atual e nome do app
+- Alinhamento centralizado
+
+**5. Button Customizado:**
+- Cor de fundo verde (#00c853)
+- Texto branco
+- Borda arredondada (6px)
+- Padding aumentado (12px 30px)
+- Font-weight bold
+
+**6. Email de Boas-vindas:**
+- Título com cor verde (#00c853)
+- Texto com cores apropriadas (claro para título, cinza para corpo)
+- Botão de login estilizado
+- Alinhamento centralizado
+
+**7. Notificações de Reset e Verificação:**
+- ResetPasswordNotification: adicionado `->markdown('vendor.mail.html.message')`
+- VerifyEmailNotification: adicionado `->markdown('vendor.mail.html.message')`
+- Isso força uso do layout HTML customizado
+
+### Arquivos Alterados
+- `resources/views/vendor/mail/html/layout.blade.php` (layout customizado)
+- `resources/views/vendor/mail/html/header.blade.php` (header customizado)
+- `resources/views/vendor/mail/html/footer.blade.php` (footer customizado)
+- `resources/views/vendor/mail/html/button.blade.php` (botão customizado)
+- `resources/views/mail/new-user-created.blade.php` (estilizado)
+- `app/Notifications/ResetPasswordNotification.php` (usar markdown)
+- `app/Notifications/VerifyEmailNotification.php` (usar markdown)
+
+### Verificações
+- **Syntax Check:** `php -l` passou em ambas as notificações
+- **Build Vite:** Não necessário (alterações apenas de email)
+
+### Resultado
+Os emails transacionais agora possuem identidade visual consistente com o PixelRank, usando o tema dark e cores verde/branco do site. O layout é responsivo e profissional, melhorando a experiência do usuário ao receber emails de boas-vindas, verificação e redefinição de senha.

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Review;
-use App\ReviewRecommendation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,16 +17,31 @@ class ReviewFactory extends Factory
      */
     public function definition(): array
     {
+        $games = [
+            'The Legend of Zelda: Breath of the Wild',
+            'Elden Ring',
+            'God of War Ragnarök',
+            'Red Dead Redemption 2',
+            'Cyberpunk 2077',
+            'Horizon Forbidden West',
+            "Marvel's Spider-Man 2",
+            'Final Fantasy XVI',
+            'Resident Evil 4',
+            'Starfield',
+        ];
+
+        $gameName = $games[array_rand($games)];
+
         return [
-            'title' => fake()->name(),
+            'title' => "Review: {$gameName}",
             'body' => fake()->sentence(100),
             'rating' => fake()->randomFloat(1, 1, 10),
-            'recommendation' => 'recommended',
+            'recommendation' => fake()->randomElement(['essential', 'recommended', 'mixed', 'not_recommended']),
             'contains_spoilers' => fake()->boolean(),
             'user_id' => 1,
             'game_id' => 1,
-            'game_name' => fake()->words(3, true),
-            'game_cover' => fake()->uuid(),
+            'game_name' => $gameName,
+            'game_cover' => null,
             'platform_playable' => 'PC',
         ];
     }

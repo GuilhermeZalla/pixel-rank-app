@@ -36,6 +36,8 @@ class UserRequest extends FormRequest
             'show_views_count' => ['sometimes', 'boolean'],
             'private_profile' => ['sometimes', 'boolean'],
             'hide_email' => ['sometimes', 'boolean'],
+            'newsletter' => ['sometimes', 'boolean'],
+            'theme_preference' => ['sometimes', 'string', 'in:light,dark,system'],
         ];
     }
 }

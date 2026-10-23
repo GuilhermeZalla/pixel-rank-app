@@ -60,7 +60,7 @@ return [
     'review_cover_alt' => 'Review cover',
     'user_avatar_alt' => 'User avatar',
     'review_by' => 'Review by',
-    'views_count' => '{0} No views|{1} :count view|[2,*] :count views',
+    'views_count' => '{0} 0|{1} :count view|[2,*] :count views',
     'platforms' => 'Platforms',
     'platforms_single' => 'Platform',
     'not_available' => 'Not available',

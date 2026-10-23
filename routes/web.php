@@ -14,6 +14,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\NotificationController;
 
 // Search Routes
 
@@ -60,6 +61,15 @@ Route::post('/email/verification-notification', function (\Illuminate\Http\Reque
     return back()->with('status', 'verification-link-sent');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
+// Notifications Route
+
+Route::controller(NotificationController::class)->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/notifications', 'index')->name('notifications.index');
+    Route::patch('/notifications/{id}/read', 'markAsRead')->name('notifications.read');
+    Route::patch('/notifications/read-all', 'markAllAsRead')->name('notifications.read-all');
+    Route::patch('/users/theme', 'updateTheme')->name('users.theme');
+});
+
 // Users Route
 
 Route::controller(UserController::class)->middleware(['auth', 'verified'])->group(function () {
@@ -67,6 +77,8 @@ Route::controller(UserController::class)->middleware(['auth', 'verified'])->grou
     Route::get('/users/{user}', 'show')->can('view', 'user');
     Route::get('/users/{user}/{menu?}/edit', 'edit')->name('users.edit')->can('update', 'user');
     Route::put('/users/{user}', 'update')->can('update', 'user');
+    Route::get('/users/{user}/export', 'exportData')->name('users.export')->can('update', 'user');
+    Route::delete('/users/{user}', 'destroy')->can('delete', 'user');
 });
 
 // Reviews Route

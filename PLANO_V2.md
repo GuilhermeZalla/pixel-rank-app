@@ -7,43 +7,57 @@ Este plano documenta as implementações de Nível 2 e Nível 3 para a tela de c
 - [x] Seção de Segurança: link redefinição de senha, reenvio de verificação de e-mail, status de verificação
 - [x] Seção de Preferências de Exibição: toggle "Ocultar spoilers por padrão", toggle "Mostrar contagem de views"
 - [x] Seção de Privacidade: toggle "Perfil privado", toggle "Esconder e-mail"
-- [x] Migration: 4 colunas booleanas na tabela `users`
+- [x] Migration: 4 colunas booleanas na tabela `users` (executada em 2026-10-22)
 - [x] Validação via `UserRequest`
 - [x] Salvar configurações via `UserController@update`
+- [x] View menu4 atualizada com todas as seções
+- [x] Componente `toggle-field` implementado
+- [x] Traduções PT-BR/EN adicionadas
+- [x] Verificado via `php artisan migrate:status` em 2026-10-23
 
 ---
 
 ## Nível 2 - Média complexidade (v1.1) 📋
 
 ### Seção de Notificações (in-app)
-- [ ] Migration: tabela `notifications` (Laravel Notifications)
-- [ ] Modelo: usar trait `Notifiable` no `User` (já presente)
-- [ ] Notificações de comentários nas minhas reviews
-- [ ] Notificações de respostas aos meus comentários
-- [ ] Toggle: "Receber email com novidades" (newsletter)
-- [ ] Componente de UI: painel/lista de notificações (sininho) no header
-- [ ] Controller: marcar notificação como lida, listar notificações não lidas
+- [x] Migration: tabela `notifications` (Laravel Notifications) - 2026-10-23
+- [x] Modelo: usar trait `Notifiable` no `User` (já presente)
+- [x] Notificações de comentários nas minhas reviews (`CommentOnReviewNotification`)
+- [x] Notificações de respostas aos meus comentários (`ReplyToCommentNotification` - campo `reply_to_id` adicionado à tabela comments em 2026-10-23)
+- [x] Toggle: "Receber email com novidades" (newsletter) - coluna `newsletter` na tabela users
+- [x] Componente de UI: painel/lista de notificações (sininho) no header
+- [x] Controller: marcar notificação como lida, listar notificações não lidas (`NotificationController`)
+- [x] View: `resources/views/notifications/index.blade.php`
+- [x] Rotas: `notifications.index`, `notifications.read`, `notifications.read-all`
 
 ### Seção de Dados
-- [ ] Botão: "Exportar meus dados" (JSON/CSV com reviews, comentários, perfil)
-- [ ] Botão: "Deletar minha conta" (com confirmação e aviso de irreversibilidade)
+- [x] Botão: "Exportar meus dados" (JSON com reviews, comentários, perfil)
+- [x] Botão: "Deletar minha conta" (com confirmação e aviso de irreversibilidade)
+- [x] Rota de exportação com nome de arquivo formatado
+- [x] Exclusão em cascata (reviews → comentários → usuário)
+- [x] Modal de confirmação DaisyUI
+- [x] Traduções PT-BR/EN adicionadas
 
 ### Seeder de Dados Padrão
-- [ ] Seeder para gerar pelo menos 30 reviews fakes
-- [ ] Seeder para gerar pelo menos 10 comentários fakes em cada review
-- [ ] Disponibilizar dados padrão ao iniciar o sistema para visualização
+- [x] Seeder para gerar pelo menos 30 reviews fakes (32 criados)
+- [x] Seeder para gerar pelo menos 10 comentários fakes em cada review (260 criados)
+- [x] Disponibilizar dados padrão ao iniciar o sistema para visualização
+- [x] CommentFactory criado
+- [x] Model Comment com HasFactory
+- [x] DatabaseSeeder atualizado
 
 ### Layout de Emails
-- [ ] Melhorar layout e conteúdo dos emails transacionais (boas-vindas, redefinição de senha, verificação de e-mail e demais notificações)
-- [ ] Substituir o layout padrão do Laravel por um template customizado com identidade visual do Pixel Rank
+- [x] Melhorar layout e conteúdo dos emails transacionais (boas-vindas, redefinição de senha, verificação de e-mail e demais notificações)
+- [x] Substituir o layout padrão do Laravel por um template customizado com identidade visual do Pixel Rank
 
 ---
 
 ## Nível 3 - Complexo (v2.0) 📋
 
 ### Tema
-- [ ] Seletor de tema (claro/escuro/sistema)
-- [ ] Persistência de preferência de tema (cookie/sessão/banco)
+- [x] Seletor de tema (claro/escuro/sistema) - implementado em 2026-10-23
+- [x] Persistência de preferência de tema (localStorage + cookie + banco) - implementado em 2026-10-23
+- [x] Seletor disponível apenas na dashboard do usuário (menu4/edit - Configurações), removido do dropdown do cabeçalho
 
 ### Contas Conectadas
 - [ ] Integração com Steam
@@ -54,6 +68,7 @@ Este plano documenta as implementações de Nível 2 e Nível 3 para a tela de c
 
 ## Notas de Implementação
 
-- Notificações internas (Nível 2) requerem a tabela `notifications` do Laravel e um componente de UI para exibição (ex: dropdown no header com contador de não lidas).
-- Exportação de dados (Nível 2) pode usar `League\Csv` ou coleções do Laravel para gerar JSON/CSV.
-- Deleção de conta (Nível 2) deve ser feita com soft delete ou exclusão em cascata de reviews e comentários do usuário.
+- Notificações internas (Nível 2) usam a tabela `notifications` do Laravel e componente de UI no header com contador de não lidas.
+- Exportação de dados (Nível 2) usa coleções do Laravel para gerar JSON.
+- Deleção de conta (Nível 2) feita com exclusão em cascata de reviews e comentários do usuário.
+- `ReplyToCommentNotification` agora está ativa com o campo `reply_to_id` na tabela `comments`.

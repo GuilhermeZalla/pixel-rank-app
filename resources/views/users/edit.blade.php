@@ -269,6 +269,20 @@
                         />
                     </div>
 
+                    <!-- Theme -->
+                    <div class="rounded-xl border border-white/10 bg-base-200 p-5 sm:p-6 flex flex-col gap-4">
+                        <h3 class="font-bold text-lg flex items-center gap-2">
+                            <x-heroicon-o-sun class="size-5 text-accent" />
+                            <span>{{ __('dashboard.theme') }}</span>
+                        </h3>
+                        <p class="text-sm text-base-content/70 leading-relaxed">{{ __('dashboard.theme_description') }}</p>
+                        <select id="theme-select" class="select select-bordered select-sm min-h-[44px] w-full sm:w-auto bg-base-300 border-base-content/20">
+                            <option value="system" @selected(auth()->user()->theme_preference === 'system')>{{ __('dashboard.theme_system') }}</option>
+                            <option value="light" @selected(auth()->user()->theme_preference === 'light')>{{ __('dashboard.theme_light') }}</option>
+                            <option value="dark" @selected(auth()->user()->theme_preference === 'dark')>{{ __('dashboard.theme_dark') }}</option>
+                        </select>
+                    </div>
+
                     <x-form.field class="mt-4 flex flex-col sm:flex-row sm:justify-end">
                         <x-form.button class="w-full sm:w-auto min-h-[44px] px-8 text-[.90rem]">{{ __('dashboard.save_settings') }}</x-form.button>
                     </x-form.field>
@@ -289,7 +303,53 @@
                         </select>
                     </form>
                 </div>
+
+                <!-- Data -->
+                <div class="mt-6 rounded-xl border border-white/10 bg-base-200 p-5 sm:p-6 flex flex-col gap-4">
+                    <h3 class="font-bold text-lg flex items-center gap-2">
+                        <x-heroicon-o-server-stack class="size-5 text-accent" />
+                        <span>{{ __('dashboard.data') }}</span>
+                    </h3>
+                    <p class="text-sm text-base-content/70 leading-relaxed">{{ __('dashboard.data_description') }}</p>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <div class="flex-1 min-w-0">
+                            <a href="{{ route('users.export', auth()->user()) }}" class="btn btn-outline border-white/20 hover:border-accent hover:text-accent font-bold min-h-[44px] w-full sm:w-auto gap-2">
+                                <x-heroicon-o-arrow-down-tray class="size-4" />
+                                <span>{{ __('dashboard.export_data') }}</span>
+                            </a>
+                            <p class="text-xs text-base-content/50 mt-1">{{ __('dashboard.export_data_description') }}</p>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-white/10">
+                        <button onclick="deleteModal.showModal()" class="btn btn-error hover:bg-red-600 font-bold min-h-[44px] w-full sm:w-auto gap-2">
+                            <x-heroicon-o-trash class="size-4" />
+                            <span>{{ __('dashboard.delete_account') }}</span>
+                        </button>
+                        <p class="text-xs text-base-content/50 mt-1">{{ __('dashboard.delete_account_description') }}</p>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
+
+    <!-- Delete Account Modal -->
+    <dialog id="deleteModal" class="modal">
+        <div class="modal-box bg-base-200 border border-white/10">
+            <h3 class="font-bold text-lg mb-2">{{ __('dashboard.delete_account') }}</h3>
+            <p class="text-sm text-base-content/70 mb-6">{{ __('dashboard.delete_account_confirm') }}</p>
+            <div class="flex gap-3 justify-end">
+                <form method="dialog">
+                    <button class="btn btn-outline border-white/20 hover:bg-base-300">{{ __('dashboard.cancel') }}</button>
+                </form>
+                <form method="POST" action="{{ route('users.destroy', auth()->user()) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-error hover:bg-red-600">{{ __('dashboard.delete_account_button') }}</button>
+                </form>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </x-layout>

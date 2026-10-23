@@ -38,6 +38,34 @@
 
 }
 
+@plugin "daisyui/theme" {
+    name: "pixelrank-light";
+
+    --color-base-100: #f8fafc;
+    --color-base-200: #f1f5f9;
+    --color-base-300: #e2e8f0;
+    --color-base-content: #0f172a;
+
+    --color-primary: #00c853;
+    --color-primary-content: #000000;
+
+    --color-secondary: #00a844;
+    --color-secondary-content: #ffffff;
+
+    --color-accent: #00ff66;
+    --color-accent-content: #000000;
+
+    --color-success: #00c853;
+    --color-success-content: #000000;
+
+    --color-warning: #ff0000;
+    --color-warning-content: #000000;
+
+    --color-info: #00c853;
+    --color-info-content: #000000;
+
+}
+
 input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 1000px #1a1a1a inset;
     -webkit-text-fill-color: #fff;

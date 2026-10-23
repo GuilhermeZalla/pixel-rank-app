@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    use HasFactory;
+
     protected $table = 'comments';
     protected $appends = ['posted_date'];
     protected $fillable = ['body', 'review_id'];

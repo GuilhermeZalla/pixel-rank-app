@@ -60,7 +60,7 @@ return [
     'review_cover_alt' => 'Capa da avaliação',
     'user_avatar_alt' => 'Foto de perfil',
     'review_by' => 'Avaliação de',
-    'views_count' => '{0} Nenhuma visualização|{1} :count visualização|[2,*] :count visualizações',
+    'views_count' => '{0} 0|{1} :count visualização|[2,*] :count visualizações',
     'platforms' => 'Plataformas',
     'platforms_single' => 'Plataforma',
     'not_available' => 'Não disponível',
@@ -96,7 +96,7 @@ return [
     'comment_made_in' => 'Comentário na avaliação',
     'comment_count_label' => '{0} :count comentários|{1} :count comentário|[2,*] :count comentários',
     'spoilers' => 'Spoilers',
-    'contains_spoilers_short' => 'Contém spoilers',
+    'contains_spoilers_short' => 'Spoilers',
     'review_for' => 'Avaliação de',
     'recommendations' => [
         'essential' => 'Essencial',

@@ -16,7 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new VerifyEmailNotification());
+        $this->notify(new VerifyEmailNotification);
     }
 
     public function sendPasswordResetNotification($token): void
@@ -35,6 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'show_views_count',
         'private_profile',
         'hide_email',
+        'newsletter',
+        'theme_preference',
     ];
 
     protected $hidden = [
@@ -55,15 +57,19 @@ class User extends Authenticatable implements MustVerifyEmail
             'show_views_count' => 'boolean',
             'private_profile' => 'boolean',
             'hide_email' => 'boolean',
+            'newsletter' => 'boolean',
+            'theme_preference' => 'string',
         ];
     }
 
-    public function reviews(){
-        return $this->hasMany(\App\Models\Review::class);
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
-    public function comments(){
-        return $this->hasMany(\App\Models\Comment::class);
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     /**
