@@ -19,7 +19,7 @@ it('allows only the review owner to edit and update a review', function () {
     $payload = [
         'game_id' => $review->game_id,
         'game_name' => $review->game_name,
-        'game_cover' => $review->game_cover,
+        'game_cover' => $review->game_cover ?? 'cover-test',
         'title' => 'Updated title',
         'recommendation' => 'recommended',
         'contains_spoilers' => '0',

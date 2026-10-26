@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Review;
 use App\Notifications\CommentOnReviewNotification;
+use App\Notifications\ReplyToCommentNotification;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -34,14 +37,28 @@ class CommentController extends Controller
         $validated = $request->validate([
             'comment' => ['required', 'string', 'min:5', 'max:2000'],
             'review' => ['required', 'integer', 'exists:reviews,id'],
-            'reply_to' => ['nullable', 'integer', 'exists:comments,id'],
+            'reply_to' => [
+                'nullable',
+                'integer',
+                Rule::exists('comments', 'id')->where('review_id', $request->input('review')),
+            ],
         ]);
 
         $comment = Auth::user()->comments()->create([
             'body' => $validated['comment'],
             'review_id' => $validated['review'],
-            'reply_to_id' => $validated['reply_to'] ?? null,
         ]);
+
+        if ($validated['reply_to'] ?? null) {
+            $repliedComment = Comment::where('review_id', $validated['review'])
+                ->findOrFail($validated['reply_to']);
+            $comment->replyTo()->associate($repliedComment);
+            $comment->save();
+
+            if ($repliedComment->user_id !== Auth::id()) {
+                $repliedComment->user->notify(new ReplyToCommentNotification($comment));
+            }
+        }
 
         $review = Review::find($validated['review']);
 
@@ -49,16 +66,11 @@ class CommentController extends Controller
             $review->user->notify(new CommentOnReviewNotification($review, $comment));
         }
 
-        if ($validated['reply_to'] ?? null) {
-            $repliedComment = Comment::find($validated['reply_to']);
-            if ($repliedComment && $repliedComment->user_id !== Auth::id()) {
-                $repliedComment->user->notify(new ReplyToCommentNotification($comment));
-            }
-        }
+        $comment->load(['user:id,nickname,avatar', 'replyTo:id,user_id,created_at', 'replyTo.user:id,nickname,avatar'])
+            ->loadCount('likes')
+            ->setAttribute('liked_by_current_user', false);
 
-        return response()->json([
-            'comment' => $comment->load('user'),
-        ]);
+        return response()->json(['comment' => $comment]);
     }
 
     /**
@@ -88,7 +100,35 @@ class CommentController extends Controller
 
         $comment->update(['body' => $validated['comment']]);
 
-        return response()->json(['comment' => $comment->load('user')]);
+        return response()->json(['comment' => $comment->load('user:id,nickname,avatar')]);
+    }
+
+    public function like(Comment $comment)
+    {
+        DB::table('comment_likes')->insertOrIgnore([
+            'comment_id' => $comment->id,
+            'user_id' => Auth::id(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'likes_count' => $comment->likes()->count(),
+            'liked_by_current_user' => true,
+        ]);
+    }
+
+    public function unlike(Comment $comment)
+    {
+        DB::table('comment_likes')
+            ->where('comment_id', $comment->id)
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        return response()->json([
+            'likes_count' => $comment->likes()->count(),
+            'liked_by_current_user' => false,
+        ]);
     }
 
     /**

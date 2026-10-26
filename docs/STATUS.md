@@ -1271,3 +1271,13 @@ Os emails transacionais agora possuem identidade visual consistente com o PixelR
 - A faixa horizontal foi substituída por um destaque grande com capa e até quatro cards menores ao lado; em telas estreitas, os cards reorganizam-se abaixo.
 - Os cards agora priorizam imagem, jogo, título e nota, sem autor, contadores ou selo de recomendação. O aviso de spoiler continua visível.
 - Build Vite concluído novamente; a suíte específica passou com 4 testes e 18 assertions após o ajuste.
+
+## Respostas e curtidas em comentários (2026-10-26)
+
+- **Status:** implementado, com publicação de respostas associadas a `reply_to_id` e controles de curtir/descurtir disponíveis para usuários autenticados com e-mail verificado.
+- Respostas reutilizam o endpoint de publicação existente, preservam a validação de mesma avaliação, mostram a quem respondem e geram a notificação in-app existente.
+- Curtidas usam a nova tabela `comment_likes`, protegida por chave única composta e exclusão em cascata para comentários e usuários. PUT e DELETE são idempotentes.
+- A lista inicial e o carregamento progressivo incluem contexto da resposta, total de curtidas e estado da curtida do usuário atual, sem expor e-mail.
+- Interface responsiva e traduzida em PT-BR/EN-US. A confirmação de exclusão avisa que respostas ao comentário também serão removidas.
+- Migration `2026_10_26_120000_create_comment_likes_table.php` criada; não executada manualmente nesta tarefa.
+- **Verificação:** `php artisan test tests/Feature/CommentExperienceTest.php` passou com 15 testes e 96 assertions; `php artisan test` passou com 83 testes e 417 assertions; `npm.cmd run build` passou. O build exibiu apenas o aviso de pacote opcional `fontaine` ausente.

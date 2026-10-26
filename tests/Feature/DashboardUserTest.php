@@ -92,7 +92,7 @@ it('renders a comment with a null review without throwing an error', function ()
 
 it('rejects an avatar upload larger than 1MB', function () {
     $owner = User::factory()->create(['email_verified_at' => now()]);
-    $largeAvatar = UploadedFile::fake()->image('avatar.jpg')->size(1500);
+    $largeAvatar = UploadedFile::fake()->create('avatar.jpg', 1500, 'image/jpeg');
 
     $this->actingAs($owner)
         ->put('/users/'.$owner->id, [

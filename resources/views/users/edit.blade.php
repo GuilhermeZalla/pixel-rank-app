@@ -341,7 +341,7 @@
                 <form method="dialog">
                     <button class="btn btn-outline border-white/20 hover:bg-base-300">{{ __('dashboard.cancel') }}</button>
                 </form>
-                <form method="POST" action="{{ route('users.destroy', auth()->user()) }}">
+                <form method="POST" action="{{ url('/users/'.auth()->user()->getRouteKey()) }}">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-error hover:bg-red-600">{{ __('dashboard.delete_account_button') }}</button>

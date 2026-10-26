@@ -6,6 +6,7 @@ use App\Support\LocaleFormatter;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Comment extends Model
 {
@@ -23,6 +24,16 @@ class Comment extends Model
     public function review()
     {
         return $this->belongsTo(\App\Models\Review::class);
+    }
+
+    public function replyTo()
+    {
+        return $this->belongsTo(self::class, 'reply_to_id');
+    }
+
+    public function likes(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'comment_likes')->withTimestamps();
     }
 
     public function getPostedDate()

@@ -29,6 +29,11 @@ class UserFactory extends Factory
             'nickname' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'hide_spoilers_default' => false,
+            'show_views_count' => true,
+            'private_profile' => false,
+            'hide_email' => false,
+            'theme_preference' => 'system',
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];

@@ -92,6 +92,7 @@ Route::controller(ReviewController::class)->group(function () {
         Route::delete('/reviews/{review}', 'destroy')->can('delete', 'review');
         Route::get('/reviews/{review}/edit', 'edit')->can('update', 'review');
     });
+    Route::get('/reviews/{review}/comments', 'comments')->name('reviews.comments');
     Route::get('/reviews/{review}', 'show');
     Route::get('/{filter?}', 'index')->where('filter', 'essential|recommended|not_recommended|mixed|highest-rated|lowest-rated|popular|oldest|hot-reviews')->name('reviews');
 });
@@ -102,6 +103,8 @@ Route::controller(CommentController::class)->middleware(['auth', 'verified'])->g
     Route::get('/comments', 'index');
     Route::post('/comments', 'store');
     Route::patch('/comments/{comment}', 'update')->can('update', 'comment');
+    Route::put('/comments/{comment}/like', 'like');
+    Route::delete('/comments/{comment}/like', 'unlike');
     Route::delete('/comments/{comment}', 'destroy')->can('delete', 'comment');
 });
 

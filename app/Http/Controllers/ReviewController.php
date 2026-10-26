@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class ReviewController extends Controller
 {
@@ -75,7 +76,7 @@ class ReviewController extends Controller
      */
     public function show(Request $request, GameApiService $gameapi)
     {
-        $review = Review::with(['user', 'comments', 'comments.user'])->find($request->review);
+        $review = Review::with(['user', 'pros_cons'])->find($request->review);
 
         if (! $review) {
             abort(404);
@@ -92,15 +93,57 @@ class ReviewController extends Controller
         }
 
         $pros_cons = $review->pros_cons->groupBy('type');
+        $commentCount = $review->comments()->count();
+        $comments = $review->comments()
+            ->with(['user:id,nickname,avatar', 'replyTo:id,user_id,created_at', 'replyTo.user:id,nickname,avatar'])
+            ->withCount('likes')
+            ->withExists(['likes as liked_by_current_user' => fn ($query) => $query->where('users.id', Auth::id() ?? 0)])
+            ->orderByDesc('created_at')->orderByDesc('id')->limit(20)->get();
 
         $review->increment('views');
 
         return view('reviews.show', [
             'review' => $review,
+            'comments' => $comments,
+            'commentCount' => $commentCount,
+            'commentsHasMore' => $commentCount > $comments->count(),
             'pros_cons' => $pros_cons,
             'game' => $info,
             'gameApiAvailable' => $gameapi->isConfigured() && ! empty($games),
             'gameCover' => $gameCover,
+        ]);
+    }
+
+    public function comments(Request $request, Review $review)
+    {
+        $validated = $request->validate([
+            'sort' => ['sometimes', 'string', Rule::in(['newest', 'oldest'])],
+            'offset' => ['sometimes', 'integer', 'min:0'],
+        ]);
+
+        $sort = $validated['sort'] ?? 'newest';
+        $offset = (int) ($validated['offset'] ?? 0);
+        $query = $review->comments()
+            ->with(['user:id,nickname,avatar', 'replyTo:id,user_id,created_at', 'replyTo.user:id,nickname,avatar'])
+            ->withCount('likes')
+            ->withExists(['likes as liked_by_current_user' => fn ($likes) => $likes->where('users.id', Auth::id() ?? 0)]);
+        $total = (clone $query)->count();
+
+        if ($sort === 'oldest') {
+            $query->orderBy('created_at')->orderBy('id');
+        } else {
+            $query->orderByDesc('created_at')->orderByDesc('id');
+        }
+
+        $items = $query->offset($offset)->limit(15)->get();
+        $nextOffset = $offset + $items->count();
+
+        return response()->json([
+            'comments' => $items,
+            'total' => $total,
+            'next_offset' => $nextOffset,
+            'has_more' => $nextOffset < $total,
+            'sort' => $sort,
         ]);
     }
 

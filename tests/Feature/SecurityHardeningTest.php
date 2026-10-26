@@ -47,10 +47,11 @@ it('does not allow a mass-assigned review or comment to choose its owner', funct
 
 it('renders comment data through text nodes instead of an HTML string', function () {
     $view = file_get_contents(resource_path('views/reviews/show.blade.php'));
+    $script = file_get_contents(resource_path('js/comment-section.js'));
 
     expect($view)->not->toContain('insertAdjacentHTML')
-        ->and($view)->toContain('body.textContent = data.comment.body;')
-        ->and($view)->toContain('author.append(document.createTextNode(data.comment.user.nickname));');
+        ->and($script)->toContain('element.textContent = text;')
+        ->and($script)->not->toContain('.innerHTML');
 });
 
 it('serializes the dashboard menu value as JavaScript data', function () {

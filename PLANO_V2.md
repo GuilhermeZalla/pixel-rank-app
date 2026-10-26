@@ -86,3 +86,15 @@ Este plano documenta as implementações de Nível 2 e Nível 3 para a tela de c
 - Filtros, ordenação e paginação do feed permanecem independentes dos destaques. O convite de publicação aparece depois do feed e o estado vazio preserva o convite original.
 - A apresentação prioriza as capas e exibe poucas informações nos cards (jogo, título e nota), preservando o aviso de spoiler. A interface recebeu traduções PT-BR/EN-US e foco de teclado.
 - Validação: 4 testes específicos aprovados (18 assertions) e build Vite concluído após o ajuste visual, em 2026-10-26.
+
+## Respostas e curtidas em comentários (2026-10-26)
+
+**Status:** Implementado.
+
+- Usuários autenticados e com e-mail verificado podem responder a comentários e curtir/remover curtidas.
+- Respostas usam `reply_to_id`, exibem a autoria do comentário respondido e mantêm a validação que impede referências a outra avaliação. A notificação in-app existente para respostas continua ativa.
+- Curtidas são persistidas em `comment_likes`, com unicidade por usuário e comentário; curtir e descurtir são operações idempotentes.
+- A interface funciona no carregamento inicial e progressivo, preserva ordenação e paginação, tem labels PT-BR/EN-US e controles responsivos acessíveis.
+- A exclusão de um comentário também exclui suas respostas e curtidas por chaves estrangeiras em cascata; a confirmação informa esse efeito.
+- Migration criada para a tabela de curtidas; não foi executada manualmente nesta tarefa.
+- Validação: `CommentExperienceTest` passou com 15 testes e 96 assertions; a suíte completa passou com 83 testes e 417 assertions; build Vite concluído.
