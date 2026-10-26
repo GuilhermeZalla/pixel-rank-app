@@ -17,6 +17,12 @@ return [
     'essential' => 'Essencial',
     'mixed' => 'Misto',
     'reviews' => 'Avaliações',
+    'community_highlights' => 'Em conversa',
+    'community_highlights_description' => 'Avaliações que estão movimentando a comunidade.',
+    'featured_metric' => [
+        'recent_comments' => 'Em destaque por comentários nos últimos 15 dias',
+        'views' => 'Em destaque por visualizações',
+    ],
     'hide_spoiler_reviews' => 'Ocultar avaliações com spoilers',
     'quiet_feed' => 'Parece que está tudo tranquilo por aqui...',
     'first_review_prompt' => 'Seja a primeira pessoa a compartilhar sua opinião sobre um jogo',

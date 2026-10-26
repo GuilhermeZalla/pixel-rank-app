@@ -1235,3 +1235,39 @@ Melhorar layout e conteúdo dos emails transacionais (boas-vindas, redefinição
 
 ### Resultado
 Os emails transacionais agora possuem identidade visual consistente com o PixelRank, usando o tema dark e cores verde/branco do site. O layout é responsivo e profissional, melhorando a experiência do usuário ao receber emails de boas-vindas, verificação e redefinição de senha.
+
+
+---
+
+## Modernização da Home — destaques da comunidade (2026-10-26)
+
+**Status:** Implementado.
+
+### Alterações
+- A Home agora apresenta até cinco avaliações em uma composição editorial: um destaque grande e até quatro cards menores ao lado, antes dos filtros e do feed. Em telas estreitas, os cards menores reorganizam-se abaixo do destaque.
+- O critério principal são comentários publicados nos últimos 15 dias; a consulta ordena pela quantidade e usa data de criação e ID como desempate determinístico.
+- Quando nenhuma avaliação tem comentários recentes, os destaques usam visualizações e identificam esse critério na interface. Sem avaliações cadastradas, a seção não é renderizada.
+- Os cards usam a capa como foco visual e mostram apenas o jogo, o título e a nota; o destaque também preserva o aviso de spoiler. A métrica geral aparece no cabeçalho da seção. A consulta traz somente avaliações e contagens, sem carregar usuários ou comentários completos.
+- A seleção de destaques é independente do filtro e da paginação do feed.
+- O bloco para escrever avaliação foi movido para depois do feed quando há avaliações. No estado vazio, permanece o convite existente para criar a primeira avaliação, sem duplicar chamadas.
+- Foram adicionadas traduções PT-BR e EN-US, com foco visível e navegação por teclado.
+
+### Arquivos alterados
+- `app/Actions/FetchReviews.php`
+- `resources/views/reviews/index.blade.php`
+- `resources/views/components/featured-review.blade.php` (novo)
+- `lang/pt_BR/reviews.php`
+- `lang/en/reviews.php`
+- `tests/Feature/HomeHighlightsTest.php` (novo)
+- `docs/STATUS.md`
+- `PLANO_V2.md`
+
+### Validação
+- `php artisan test --filter=HomeHighlightsTest`: **4 testes aprovados, 18 assertions** após o ajuste visual.
+- `npm.cmd run build`: **concluído**. Vite informou que o pacote opcional `fontaine` não está instalado para otimização de fallback de fontes; o build terminou normalmente e nenhuma dependência foi instalada.
+- O PHP CLI continua exibindo o aviso preexistente de que `pdo_firebird` não está disponível.
+
+### Ajuste visual da seção (2026-10-26)
+- A faixa horizontal foi substituída por um destaque grande com capa e até quatro cards menores ao lado; em telas estreitas, os cards reorganizam-se abaixo.
+- Os cards agora priorizam imagem, jogo, título e nota, sem autor, contadores ou selo de recomendação. O aviso de spoiler continua visível.
+- Build Vite concluído novamente; a suíte específica passou com 4 testes e 18 assertions após o ajuste.

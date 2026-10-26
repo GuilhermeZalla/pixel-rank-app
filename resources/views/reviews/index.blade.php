@@ -1,17 +1,26 @@
 <x-layout>
     <x-slot:title>{{ __('reviews.index_title') }}</x-slot:title>
-    <x-section class="mt-10">
-        <div class="hero-gradient rounded-2xl p-6 sm:p-8">
+    @if($featuredReviews->isNotEmpty())
+        <x-section class="mt-10 gap-4" aria-labelledby="community-highlights-heading">
             <div>
-                <h1 class="font-bold text-[1.7rem] sm:text-[2rem] text-gradient">{{ __('reviews.write_review') }}</h1>
-                <p class="text-[#888888ed] text-[.95rem] mt-2">{{ __('reviews.review_prompt') }}</p>
+                <h1 id="community-highlights-heading" class="font-bold text-[1.5rem] sm:text-[1.7rem] text-gradient">{{ __('reviews.community_highlights') }}</h1>
+                <p class="mt-1 text-sm text-base-content/65">{{ __('reviews.community_highlights_description') }}</p>
+                <p class="mt-1 text-xs font-semibold text-primary">{{ __('reviews.featured_metric.' . $featuredReviewMetric) }}</p>
             </div>
-            <form method="POST" action="/reviews/create" class="mt-5">@csrf
-                <x-form.input type="textarea" name="review" rows="5" id="review" :placeholder="__('reviews.start_review_placeholder')"
-                    class="placeholder:text-base-content resize-none border-[#88888822] rounded-2xl shadow-lg shadow-black/20" />
-            </form>
-        </div>
-    </x-section>
+            <div class="grid grid-cols-1 gap-3 lg:grid-cols-5">
+                <div class="lg:col-span-3">
+                    <x-featured-review :review="$featuredReviews->first()" :featured="true" />
+                </div>
+                @if($featuredReviews->count() > 1)
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-1">
+                        @foreach($featuredReviews->skip(1) as $featuredReview)
+                            <x-featured-review :review="$featuredReview" />
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </x-section>
+    @endif
     <x-section class="flex flex-col gap-3">
         <h2 class="font-bold text-[1.4rem] mb-1">{{ __('reviews.filters') }}</h2>
         <nav class="flex flex-row flex-wrap justify-start gap-3">
@@ -58,10 +67,26 @@
             <div class="flex flex-col items-center mt-15 gap-3">
                 <x-heroicon-s-document-text class="text-accent size-30 animate-float animate-pulse-soft" />
                 <h1 class="font-bold text-2xl text-gradient">{{ __('reviews.quiet_feed') }}</h1>
-                <a href="{{ route('reviews.create') }}" class="btn btn-primary btn-sm mt-2 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">{{ __('reviews.first_review_prompt') }}</a>
+                @if($featuredReviews->isEmpty())
+                    <a href="{{ route('reviews.create') }}" class="btn btn-primary btn-sm mt-2 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-shadow">{{ __('reviews.first_review_prompt') }}</a>
+                @endif
             </div>
         @endif
     </x-section>
+    @if($featuredReviews->isNotEmpty())
+        <x-section class="mb-10">
+            <div class="hero-gradient rounded-2xl p-6 sm:p-8">
+                <div>
+                    <h2 class="font-bold text-[1.7rem] sm:text-[2rem] text-gradient">{{ __('reviews.write_review') }}</h2>
+                    <p class="text-base-content/65 text-[.95rem] mt-2">{{ __('reviews.review_prompt') }}</p>
+                </div>
+                <form method="POST" action="/reviews/create" class="mt-5">@csrf
+                    <x-form.input type="textarea" name="review" rows="5" id="review" :placeholder="__('reviews.start_review_placeholder')"
+                        class="placeholder:text-base-content resize-none border-[#88888822] rounded-2xl shadow-lg shadow-black/20" />
+                </form>
+            </div>
+        </x-section>
+    @endif
     <script>
         const toggleCheckbox = document.getElementById('toggle-link');
         if (toggleCheckbox) {

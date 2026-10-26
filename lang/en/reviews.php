@@ -17,6 +17,12 @@ return [
     'essential' => 'Essential',
     'mixed' => 'Mixed',
     'reviews' => 'Reviews',
+    'community_highlights' => 'In the conversation',
+    'community_highlights_description' => 'Reviews sparking conversation across the community.',
+    'featured_metric' => [
+        'recent_comments' => 'Featured by comments in the last 15 days',
+        'views' => 'Featured by views',
+    ],
     'hide_spoiler_reviews' => 'Hide Spoiler Reviews',
     'quiet_feed' => "Looks like it's a little quiet around here...",
     'first_review_prompt' => 'Be the first to share your take on a game',

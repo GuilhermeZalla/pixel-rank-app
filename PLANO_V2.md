@@ -72,3 +72,17 @@ Este plano documenta as implementações de Nível 2 e Nível 3 para a tela de c
 - Exportação de dados (Nível 2) usa coleções do Laravel para gerar JSON.
 - Deleção de conta (Nível 2) feita com exclusão em cascata de reviews e comentários do usuário.
 - `ReplyToCommentNotification` agora está ativa com o campo `reply_to_id` na tabela `comments`.
+
+
+---
+
+## Atualização complementar — Home PixelRank (2026-10-26)
+
+**Status:** Proposta A implementada.
+
+- A Home ganhou a seção “Em conversa”, com uma avaliação visualmente maior e até quatro cards menores ao lado, ordenados por comentários publicados nos últimos 15 dias. Em telas estreitas, os cards se reorganizam abaixo da principal.
+- Se não houver atividade recente, a faixa usa as avaliações mais vistas e informa a métrica. Se não houver avaliações, a faixa fica oculta.
+- A seção reutiliza avaliações, comentários, visualizações e componentes existentes; não requer migration, endpoint, dependência ou sistema de votos.
+- Filtros, ordenação e paginação do feed permanecem independentes dos destaques. O convite de publicação aparece depois do feed e o estado vazio preserva o convite original.
+- A apresentação prioriza as capas e exibe poucas informações nos cards (jogo, título e nota), preservando o aviso de spoiler. A interface recebeu traduções PT-BR/EN-US e foco de teclado.
+- Validação: 4 testes específicos aprovados (18 assertions) e build Vite concluído após o ajuste visual, em 2026-10-26.
