@@ -33,7 +33,7 @@ const env = {
 };
 let server;
 let browser;
-const report = { viewports: { desktop: '1440x1000', mobile: '390x844' }, screenshots: [], gifs: [], checks: [], errors: [] };
+const report = { viewports: { desktop: '1440x1000', mobile: '390x844' }, screenshots: [], gifs: [], checks: [], layoutChecks: [], headerChecks: [], errors: [] };
 let cleanupPromise;
 function cleanup() {
     return cleanupPromise ??= (async () => {
@@ -60,10 +60,17 @@ async function stable(page) {
 async function goto(page, path) {
     const response = await page.goto(origin + path);
     if (response.status() !== 200) throw new Error(`${path}: HTTP ${response.status()}`);
-    await stable(page);
-    await page.evaluate(() => scrollTo(0, 0));
-    if (await page.evaluate(() => getComputedStyle(document.body).display !== 'flex')) {
-        throw new Error(`Application styles did not load: ${path}`);
+    for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+            await stable(page);
+            await page.evaluate(() => scrollTo(0, 0));
+            if (await page.evaluate(() => getComputedStyle(document.body).display !== 'flex')) {
+                throw new Error(`Application styles did not load: ${path}`);
+            }
+            return;
+        } catch (error) {
+            if (!error.message.includes('Execution context was destroyed') || attempt === 2) throw error;
+        }
     }
 }
 async function shot(page, name, fullPage = false) {
@@ -76,6 +83,38 @@ async function shot(page, name, fullPage = false) {
 async function commentsTop(page) {
     await page.locator('#comments-panel').evaluate(element => element.scrollIntoView({ block: 'start' }));
     await page.waitForTimeout(250);
+}
+async function checkHeader(page) {
+    const measure = () => {
+        const header = document.querySelector('.navbar');
+        const summary = header.querySelector('summary');
+        const name = summary.querySelector('span');
+        const items = [header.querySelector('a[href$="/notifications"]'), summary.querySelector('img'), name];
+        const boxes = items.map(item => item.getBoundingClientRect());
+        return {
+            width: innerWidth,
+            sameRow: boxes.every(box => Math.abs((box.top + box.bottom) / 2 - (boxes[0].top + boxes[0].bottom) / 2) < 2),
+            withinViewport: boxes.every(box => box.left >= 0 && box.right <= innerWidth),
+            overflow: document.documentElement.scrollWidth > innerWidth,
+        };
+    };
+    const normal = await page.evaluate(measure);
+    const name = page.locator('.navbar summary span');
+    const original = await name.textContent();
+    await name.evaluate(element => { element.textContent = 'usuario_com_nome_de_trinta_e_cinco_35'; });
+    const longName = await page.evaluate(measure);
+    await name.evaluate((element, original) => { element.textContent = original; }, original);
+    const summary = page.locator('.navbar summary');
+    await summary.focus();
+    await summary.press('Enter');
+    const dropdown = await page.locator('.navbar details > ul').boundingBox();
+    const dropdownWorks = await page.locator('.navbar details').evaluate(element => element.open)
+        && dropdown && dropdown.x >= 0 && dropdown.x + dropdown.width <= normal.width;
+    await summary.press('Enter');
+    if (![normal, longName].every(check => check.sameRow && check.withinViewport && !check.overflow) || !dropdownWorks) {
+        throw new Error(`Authenticated header failed: ${JSON.stringify({ normal, longName, dropdownWorks })}`);
+    }
+    report.headerChecks.push({ path: new URL(page.url()).pathname, ...normal, longName, dropdownWorks: Boolean(dropdownWorks) });
 }
 async function login(page, data) {
     await goto(page, '/login');
@@ -95,7 +134,9 @@ async function record(page, name, mobile, actions) {
         while (recording) {
             const started = performance.now();
             try {
-                await page.screenshot({ path: join(frames, `${String(index++).padStart(5, '0')}.png`) });
+                await page.screenshot({ path: join(frames, `${String(index).padStart(5, '0')}.png`) });
+                index++;
+                captureError = undefined;
             } catch (error) { if (recording) captureError = error; }
             await new Promise(resolve => setTimeout(resolve, Math.max(0, 250 - (performance.now() - started))));
         }
@@ -134,6 +175,7 @@ try {
     const page = await context.newPage();
     page.on('pageerror', error => { report.errors.push(error.message); });
     await goto(page, '/');
+    const feedCover = await page.locator(`a[href="/reviews/${data.reviewId}"] img`).first().getAttribute('src');
     await shot(page, 'home-desktop');
     if (report.checks[0].brokenImages.length) throw new Error('Images failed to load; check network access before recording.');
     await record(page, 'comunidade-desktop', false, async () => {
@@ -206,6 +248,37 @@ try {
     await goto(mobile, `/reviews/${data.reviewId}`);
     await commentsTop(mobile);
     await shot(mobile, 'comentarios-mobile');
+    for (const width of [360, 390, 768, 1440]) {
+        await mobile.setViewportSize({ width, height: 1000 });
+        await goto(mobile, `/reviews/${data.reviewId}`);
+        const layout = await mobile.evaluate(() => {
+            const select = document.querySelector('#comments-sort');
+            const label = select.closest('label');
+            const text = label.querySelector('span');
+            const range = document.createRange();
+            range.selectNodeContents(text);
+            const a = text.getBoundingClientRect();
+            const b = select.getBoundingClientRect();
+            const cover = document.querySelector('img[alt="Capa do jogo"]');
+            return {
+                width: innerWidth,
+                label: text.textContent,
+                lines: range.getClientRects().length,
+                sameRow: Math.abs((a.top + a.bottom) / 2 - (b.top + b.bottom) / 2) < 2,
+                overflow: document.documentElement.scrollWidth > innerWidth,
+                cover: cover?.getAttribute('src'),
+                coverLoaded: Boolean(cover?.complete && cover.naturalWidth > 0),
+            };
+        });
+        if (layout.lines !== 1 || !layout.sameRow || layout.overflow || layout.label !== 'Ordenar comentários' || layout.cover !== feedCover || !layout.coverLoaded) {
+            throw new Error(`Review layout failed: ${JSON.stringify(layout)}`);
+        }
+        report.layoutChecks.push(layout);
+        await checkHeader(mobile);
+        await goto(mobile, `/users/${data.userId}/menu1/edit`);
+        await checkHeader(mobile);
+    }
+    if (report.checks.some(check => check.brokenImages.length)) throw new Error('A screenshot contains unloaded images.');
     if (report.errors.length) throw new Error(`Browser errors: ${report.errors.join('; ')}`);
     await writeFile(join(output, 'capture-report.json'), JSON.stringify(report, null, 2) + '\n');
     console.log(JSON.stringify({ screenshots: report.screenshots.length, gifs: report.gifs, imageIssues: report.checks.filter(check => check.brokenImages.length) }));

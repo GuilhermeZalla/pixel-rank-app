@@ -119,9 +119,21 @@ php artisan migrate --seed
 composer run dev
 ```
 
-O seeder cria **cinco usuários fictícios**, de quatro a oito avaliações por usuário e de dois a vinte comentários por avaliação. As quantidades variam a cada execução. Os usuários gerados têm e-mail verificado e a senha de factory `password`, destinada apenas a dados locais de demonstração. **Não existe uma conta fixa `test@example.com`.** Para testar o cadastro normal, crie sua própria conta e confirme o e-mail.
+Em ambiente local, o seeder cria a conta de demonstração **`test@example.com`**, com senha **`password`** e e-mail já verificado. Essa conta permite testar o painel, publicar avaliações e participar dos comentários. Ela não é criada em produção, e executar o seeder novamente não altera uma conta existente com esse e-mail.
 
-O seeder acrescenta registros a cada execução; use-o em um banco novo para a primeira demonstração.
+O seeder também cria **cinco usuários fictícios**, de quatro a oito avaliações por usuário e de dois a vinte comentários por avaliação. As quantidades variam a cada execução; esses usuários também têm e-mail verificado e a senha de factory `password`, exclusiva para demonstração local. Para testar o cadastro normal, crie sua própria conta e confirme o e-mail.
+
+### Conta de demonstração em uma instalação existente
+
+Para acrescentar somente a conta de teste ao banco local já configurado, sem gerar outras avaliações ou comentários:
+
+```powershell
+php artisan db:seed --class=UserSeeder --no-interaction
+```
+
+Entre com `test@example.com` e `password`. O comando cria a conta apenas se ela não existir; não redefine senhas nem altera perfis existentes. Se você já cadastrou esse e-mail com outra senha, use a senha escolhida ou **Esqueci minha senha**.
+
+O seeder geral (`DatabaseSeeder`) acrescenta avaliações e comentários a cada execução; use-o em um banco novo para a primeira demonstração. O comando isolado `UserSeeder` acima não gera esse conteúdo e pode ser repetido sem duplicar a conta.
 
 ### Alternativa com SQLite
 
@@ -199,7 +211,6 @@ São rotas web da aplicação Blade, com sessão e proteção CSRF nas alteraç�
 - Perfis de outros usuários exigem login e e-mail verificado; a listagem geral de usuários está bloqueada por Policy.
 - Os dados do seeder são fictícios e variáveis. Os GIFs usam um conjunto próprio de demonstração em banco isolado.
 - O projeto não possui uma URL pública de produção documentada.
-- Nas capturas, a capa da página individual de avaliação apresenta uma falha de renderização da URL; as capas da Home carregam normalmente. O problema está registrado em [docs/STATUS.md](docs/STATUS.md), e as mídias preservam o comportamento atual.
 
 ## API de jogos: Twitch/IGDB
 

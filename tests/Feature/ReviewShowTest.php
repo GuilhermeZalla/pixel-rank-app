@@ -155,3 +155,57 @@ it('returns 404 for a review that does not exist', function () {
 
     $this->get('/reviews/999999')->assertNotFound();
 });
+
+it('uses the saved game cover on both the feed and a review published through the form', function () {
+    fakeGameApi();
+    $user = User::factory()->create();
+
+    $this->actingAs($user)->post('/reviews', [
+        'game_id' => 119133,
+        'game_name' => 'Elden Ring',
+        'game_cover' => 'co4jni',
+        'title' => 'A world worth exploring',
+        'body' => str_repeat('Exploring this game is rewarding. ', 8),
+        'recommendation' => 'essential',
+        'rating' => 9.5,
+        'platform_playable' => 'PC',
+    ])->assertSessionHasNoErrors()->assertRedirect();
+
+    $review = $user->reviews()->sole();
+    $cover = 'src="https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg"';
+
+    $this->get('/')->assertOk()->assertSee($cover, false);
+    $this->get('/reviews/'.$review->id)->assertOk()->assertSee($cover, false);
+});
+
+it('shows the saved game cover even when the game metadata api is unavailable', function () {
+    $this->mock(GameApiService::class, function ($mock) {
+        $mock->shouldReceive('getGame')->andReturn([]);
+        $mock->shouldReceive('isConfigured')->andReturn(false);
+    });
+    $review = Review::factory()->for(User::factory())->create(['game_cover' => 'co4jni']);
+
+    $this->get('/reviews/'.$review->id)->assertOk()
+        ->assertSee('src="https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg"', false);
+});
+
+it('shows the local placeholder when a review has no saved game cover', function () {
+    fakeGameApi();
+    $review = Review::factory()->for(User::factory())->create(['game_cover' => null]);
+
+    $this->get('/reviews/'.$review->id)->assertOk()
+        ->assertSee('src="'.asset('images/game-placeholder.svg').'"', false);
+});
+
+it('renders the Portuguese comment controls with valid accents', function () {
+    fakeGameApi();
+    $review = Review::factory()->for(User::factory())->create();
+
+    $this->withSession(['locale' => 'pt_BR'])->get('/reviews/'.$review->id)
+        ->assertOk()
+        ->assertSee('Ordenar comentários')
+        ->assertSee('Capa do jogo')
+        ->assertSee('data-edit-save="Salvar alterações"', false)
+        ->assertDontSee('Ã')
+        ->assertDontSee('â€');
+});

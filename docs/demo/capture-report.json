@@ -22,23 +22,23 @@
   "gifs": [
     {
       "name": "comunidade-desktop",
-      "frames": 42,
-      "seconds": 10.5
+      "frames": 41,
+      "seconds": 10.25
     },
     {
       "name": "interacoes-desktop",
-      "frames": 38,
-      "seconds": 9.5
+      "frames": 39,
+      "seconds": 9.75
     },
     {
       "name": "painel-desktop",
-      "frames": 40,
-      "seconds": 10
+      "frames": 41,
+      "seconds": 10.25
     },
     {
       "name": "comunidade-mobile",
-      "frames": 44,
-      "seconds": 11
+      "frames": 43,
+      "seconds": 10.75
     }
   ],
   "checks": [
@@ -48,9 +48,7 @@
     },
     {
       "screen": "avaliacao-desktop",
-      "brokenImages": [
-        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
-      ]
+      "brokenImages": []
     },
     {
       "screen": "login-desktop",
@@ -62,9 +60,7 @@
     },
     {
       "screen": "comentarios-desktop",
-      "brokenImages": [
-        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
-      ]
+      "brokenImages": []
     },
     {
       "screen": "dashboard-perfil-desktop",
@@ -96,15 +92,163 @@
     },
     {
       "screen": "avaliacao-mobile",
-      "brokenImages": [
-        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
-      ]
+      "brokenImages": []
     },
     {
       "screen": "comentarios-mobile",
-      "brokenImages": [
-        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
-      ]
+      "brokenImages": []
+    }
+  ],
+  "layoutChecks": [
+    {
+      "width": 360,
+      "label": "Ordenar comentários",
+      "lines": 1,
+      "sameRow": true,
+      "overflow": false,
+      "cover": "https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg",
+      "coverLoaded": true
+    },
+    {
+      "width": 390,
+      "label": "Ordenar comentários",
+      "lines": 1,
+      "sameRow": true,
+      "overflow": false,
+      "cover": "https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg",
+      "coverLoaded": true
+    },
+    {
+      "width": 768,
+      "label": "Ordenar comentários",
+      "lines": 1,
+      "sameRow": true,
+      "overflow": false,
+      "cover": "https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg",
+      "coverLoaded": true
+    },
+    {
+      "width": 1440,
+      "label": "Ordenar comentários",
+      "lines": 1,
+      "sameRow": true,
+      "overflow": false,
+      "cover": "https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg",
+      "coverLoaded": true
+    }
+  ],
+  "headerChecks": [
+    {
+      "path": "/reviews/1",
+      "width": 360,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 360,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/users/1/menu1/edit",
+      "width": 360,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 360,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/reviews/1",
+      "width": 390,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 390,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/users/1/menu1/edit",
+      "width": 390,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 390,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/reviews/1",
+      "width": 768,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 768,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/users/1/menu1/edit",
+      "width": 768,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 768,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/reviews/1",
+      "width": 1440,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 1440,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
+    },
+    {
+      "path": "/users/1/menu1/edit",
+      "width": 1440,
+      "sameRow": true,
+      "withinViewport": true,
+      "overflow": false,
+      "longName": {
+        "width": 1440,
+        "sameRow": true,
+        "withinViewport": true,
+        "overflow": false
+      },
+      "dropdownWorks": true
     }
   ],
   "errors": []

@@ -34,4 +34,6 @@ As capturas estáticas usam viewport de 1440 × 1000 no desktop e 390 × 844 no 
 
 As capas continuam vindo do serviço de imagens do IGDB; os avatares padrão vêm de UI Avatars. A conexão com esses serviços deve estar disponível para que as imagens carreguem. Os personagens, contas, textos e discussões são fictícios; as marcas e capas de jogos pertencem aos respectivos titulares.
 
-O relatório registra uma falha preexistente na URL da capa da página individual de avaliação: as diretivas Blade dentro do atributo `src` do componente chegam literalmente ao HTML. A Home e os avatares carregaram corretamente na gravação final. As capturas mantêm esse comportamento real; a ocorrência está detalhada em `docs/STATUS.md`.
+O relatório também verifica a review em larguras de 360, 390, 768 e 1440 px: texto de ordenação em uma linha, seletor ao lado, ausência de rolagem horizontal e capa carregada com a mesma URL do card na Home. A gravação falha se alguma captura contiver imagens não carregadas.
+
+Nessas mesmas larguras, o cabeçalho autenticado é conferido na review e no painel de perfil: sino, avatar e nome alinhados, nomes longos sem transbordamento e menu abrindo pelo teclado dentro da tela.

@@ -22,7 +22,7 @@
         <x-section class="flex flex-col">
             <div class="flex flex-col gap-5 rounded-2xl bg-base-300 p-6 sm:flex-row sm:p-8 shadow-lg shadow-black/20">
                  <x-cover class="h-full w-full max-w-60 object-contain rounded-[20px] sm:w-60 shadow-lg"
-                src="@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/{{ $gameCover }}.jpg@else{{ asset('images/game-placeholder.svg') }}@endif" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
+                :src="$gameCover ? 'https://images.igdb.com/igdb/image/upload/t_1080p/' . $gameCover . '.jpg' : asset('images/game-placeholder.svg')" alt="{{ __('reviews.review_cover_alt') }}"></x-cover>
                 <div class="flex flex-col justify-between px-6 sm:px-8 flex-1">
                     <h2 class="flex flex-row items-center text-[.85rem] gap-2"><img @if(!empty($review->user->avatar_url)) src="{{ $review->user->avatar_url }}" @else src="https://ui-avatars.com/api/?name={{ urlencode($review->user->nickname) }}"@endif alt="{{ __('reviews.user_avatar_alt') }}" class="rounded-[50%] h-8 border-2 border-secondary"> <div><span class="opacity-70">{{ __('reviews.review_by') }} </span><strong class="font-bold">{{ $review->user->nickname }}</strong></div><span class="text-[1rem] opacity-70">&middot;</span> <span class="flex flex-row items-center gap-1.5 opacity-70 text-[.80rem]">
                                     <x-heroicon-o-eye
@@ -133,9 +133,9 @@
             data-sort-error="{{ __('reviews.comments_load_error') }}">
             <div class="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <h2 id="comments-heading" class="font-bold text-[1.3rem]">{{ __('reviews.comments_heading') }} (<span id="comments-count" class="text-primary">{{ $commentCount }}</span>)</h2>
-                <label class="flex items-center gap-2 text-sm text-base-content/75">
-                    <span>{{ __('reviews.comments_sort_label') }}</span>
-                    <select id="comments-sort" class="select select-sm min-h-11 bg-base-300">
+                <label class="flex w-full min-w-0 items-center gap-2 text-sm text-base-content/75 sm:w-auto">
+                    <span class="shrink-0 whitespace-nowrap">{{ __('reviews.comments_sort_label') }}</span>
+                    <select id="comments-sort" class="select select-sm min-h-11 min-w-0 flex-1 bg-base-300 sm:w-40 sm:flex-none">
                         <option value="newest">{{ __('reviews.comments_sort_newest') }}</option>
                         <option value="oldest">{{ __('reviews.comments_sort_oldest') }}</option>
                     </select>

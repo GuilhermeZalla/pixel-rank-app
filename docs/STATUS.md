@@ -1295,3 +1295,34 @@ Os emails transacionais agora possuem identidade visual consistente com o PixelR
 - A restrição de rede do ambiente de captura foi contornada executando a gravação com acesso às imagens externas; as capas da Home e os avatares carregaram na versão final.
 - **Ocorrência preexistente identificada:** a capa de `reviews/show.blade.php` usa diretivas `@if/@else/@endif` dentro do atributo `src` de `<x-cover>`. O HTML renderizado mantém essas diretivas literalmente, formando uma URL inválida; por isso a capa individual aparece quebrada nas capturas desktop/mobile. A Home usa uma expressão calculada e carrega corretamente. O problema está registrado em `docs/demo/capture-report.json`; o código da aplicação não foi alterado nesta tarefa.
 - Metadados do IGDB aparecem como indisponíveis por opção do ambiente de demonstração sem credenciais, conforme descrito no README. Nenhuma resposta externa foi simulada para mostrar publicação de avaliação.
+
+## Correções da review e acesso de demonstração (2026-10-30)
+
+- **Status:** concluído.
+- Corrigida a URL da capa em `reviews/show.blade.php`: o atributo Blade agora recebe uma expressão avaliada com o `game_cover` salvo na review, a mesma origem usada pelos cards da Home. A leitura da capa não depende da disponibilidade da API de metadados. Sem capa salva, é usado o placeholder local. O texto alternativo passou a ser “Capa do jogo” / “Game cover”. A ocorrência registrada na seção anterior está resolvida.
+- Corrigidos os textos com acentuação corrompida em `lang/pt_BR/reviews.php`, incluindo ordenação, edição, carregamento e mensagens de erro dos comentários.
+- Ajustada a largura do seletor e impedida a quebra do rótulo “Ordenar comentários”. Verificação real em Chromium nas larguras **360, 390, 768 e 1440 px** confirmou rótulo em uma linha, seletor ao lado e ausência de rolagem horizontal.
+- Identificado que `test@example.com` não existia no MySQL local `pixel_rank_app`. Implementado `UserSeeder` para criar somente essa conta em ambiente local/testing, com senha `password` e e-mail verificado. O seeder não altera contas existentes e não cria a conta em produção; passou a integrar o seeder geral para instalações novas.
+- Executado somente `php artisan db:seed --class=UserSeeder --no-interaction` no banco local, sem migrations nem execução do seeder de conteúdo. Conferência posterior confirmou conta existente, senha correspondente e e-mail verificado. Nenhuma conta anterior foi modificada.
+- Adicionados testes para capa de review publicada pelo formulário, correspondência com o feed, funcionamento sem metadados externos, placeholder e textos PT-BR. Testes do seeder cobrem login com as credenciais documentadas, repetição sem duplicação, preservação de contas existentes e bloqueio em produção.
+- **Validação:** suíte completa com **90 testes aprovados e 444 assertions**; build Vite concluído; Pint nos arquivos novos/de seeder aprovado; sintaxe Node e `git diff --check` conferidos. O aviso opcional sobre `fontaine` permanece sem impedir o build.
+- Regravados os **quatro GIFs e 14 screenshots**, com relatório atualizado em `docs/demo/capture-report.json`: nenhuma imagem quebrada ou erro JavaScript. O relatório também comprova a capa idêntica à da Home e a ordenação em uma linha nas quatro larguras verificadas.
+- README atualizado com as credenciais reais e o comando isolado para criar a conta em instalações existentes; removida a limitação da capa já corrigida. Instruções de reprodução das capturas também atualizadas.
+
+## Alinhamento do cabeçalho autenticado (2026-10-30)
+
+- **Status:** concluído.
+- O sino e o menu do usuário estavam no mesmo item de menu e apareciam empilhados. Foram separados em itens irmãos, com alinhamento horizontal explícito.
+- Avatar com tamanho fixo e nome sem quebra de linha; nomes longos usam reticências e mantêm o texto completo no atributo `title`. O grupo aproveita o espaço disponível no celular e o dropdown é alinhado à direita para permanecer dentro da tela.
+- A alteração funcional ficou em `resources/views/components/layout.blade.php`, compartilhado pelas telas autenticadas. Links e ações existentes foram preservados.
+- **Validação:** build Vite aprovado; verificações reais em Chromium em **360, 390, 768 e 1440 px**, na review e no painel de perfil. O relatório confirma alinhamento de sino/avatar/nome com nomes normais e longos, ausência de rolagem horizontal e abertura do menu pelo teclado sem sair da tela.
+- Atualizados os GIFs, screenshots e `docs/demo/capture-report.json`; a gravação terminou sem imagens quebradas ou erros JavaScript. O script de captura passou a registrar as verificações do cabeçalho e evita lacunas de quadros quando uma navegação interrompe temporariamente uma captura.
+- Sintaxe Node e `git diff --check` conferidos. Não foram alterados banco, rotas ou autenticação nesta correção.
+
+## Configuração local das plataformas Twitch/IGDB (2026-10-30)
+
+- **Status:** corrigido no ambiente local.
+- O formulário de criação mostrava o aviso de indisponibilidade e nenhuma plataforma porque `TWITCH_AUTH` e `GAME_API_URL` estavam vazias no `.env`, embora Client ID e Client Secret já estivessem preenchidos. Nessas condições, `GameApiService::isConfigured()` retorna `false` e `getPlatforms()` retorna uma lista vazia.
+- Preenchidas somente as duas URLs com `https://id.twitch.tv/` e `https://api.igdb.com/v4`, conforme o `.env.example`. As credenciais existentes foram preservadas e não foram exibidas nos diagnósticos.
+- **Validação real:** consulta autenticada concluída com **220 plataformas retornadas**. O arquivo temporário de diagnóstico foi removido. Não houve alteração no código da aplicação.
+- Servidores já iniciados podem precisar ser reiniciados para carregar o ambiente atualizado; depois, o formulário deve ser reaberto.

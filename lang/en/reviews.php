@@ -66,7 +66,7 @@ return [
     'spoiler_warning' => 'Warning: This review contains spoilers',
     'edit' => 'Edit',
     'delete' => 'Delete',
-    'review_cover_alt' => 'Review cover',
+    'review_cover_alt' => 'Game cover',
     'user_avatar_alt' => 'User avatar',
     'review_by' => 'Review by',
     'views_count' => '{0} 0|{1} :count view|[2,*] :count views',

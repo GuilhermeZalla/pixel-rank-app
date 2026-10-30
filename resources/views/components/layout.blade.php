@@ -38,10 +38,10 @@
             </form>
         @endif
         @auth
-            <div class="flex-none mr-4">
-                <ul class="menu menu-horizontal px-1">
-                    <li>
-                        <a href="{{ route('notifications.index') }}" class="relative">
+            <div class="min-w-0 flex-1 sm:flex-none">
+                <ul class="menu menu-horizontal w-full flex-nowrap items-center justify-end gap-1 p-0">
+                    <li class="shrink-0">
+                        <a href="{{ route('notifications.index') }}" class="relative flex min-h-11 min-w-11 items-center justify-center">
                             <x-heroicon-o-bell class="size-5 text-base-content/90 hover:text-accent" />
                             @php
                                 $unreadCount = auth()->user()->unreadNotifications()->count();
@@ -50,10 +50,12 @@
                                 <span class="absolute top-[-4px] right-[-6px] bg-accent text-black text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">{{ $unreadCount }}</span>
                             @endif
                         </a>
-                        <details>
-                            <summary class="font-bold"> <img @if(!empty(auth()->user()->avatar_url)) src="{{ auth()->user()->avatar_url }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
-                                alt="{{ __('navigation.user_avatar_alt') }}" class="rounded-[50%] h-9">{{ auth()->user()->nickname }}</summary>
-                            <ul class="rounded-lg border border-[#88888833] bg-base-200 p-2 mt-1 left-12 w-40 z-50">
+                    </li>
+                    <li class="min-w-0">
+                        <details class="relative min-w-0">
+                            <summary class="flex min-w-0 items-center gap-2 whitespace-nowrap px-2 font-bold"> <img @if(!empty(auth()->user()->avatar_url)) src="{{ auth()->user()->avatar_url }}" @else src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->nickname) }}"@endif
+                                alt="{{ __('navigation.user_avatar_alt') }}" class="size-9 shrink-0 rounded-full object-cover"><span class="max-w-20 truncate sm:max-w-48" title="{{ auth()->user()->nickname }}">{{ auth()->user()->nickname }}</span></summary>
+                            <ul class="rounded-lg border border-[#88888833] bg-base-200 p-2 mt-1 right-0 w-48 z-50">
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu1/edit">{{ __('navigation.profile') }}</x-submenu-link>
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu2/edit">{{ __('navigation.my_reviews') }}</x-submenu-link>
                                 <x-submenu-link href="/users/{{ auth()->user()->id }}/menu3/edit">{{ __('navigation.my_comments') }}</x-submenu-link>
