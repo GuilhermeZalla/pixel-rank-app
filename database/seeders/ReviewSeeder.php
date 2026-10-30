@@ -26,7 +26,7 @@ class ReviewSeeder extends Seeder
                 ->create()
                 ->each(function ($review) use ($users) {
                     // Criar 10 comentários em cada review
-                    Comment::factory(10)
+                    Comment::factory(fake()->numberBetween(2, 20))
                         ->for($review)
                         ->for($users->random())
                         ->create();
