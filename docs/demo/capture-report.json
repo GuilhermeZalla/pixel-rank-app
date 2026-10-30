@@ -1,0 +1,111 @@
+{
+  "viewports": {
+    "desktop": "1440x1000",
+    "mobile": "390x844"
+  },
+  "screenshots": [
+    "home-desktop",
+    "avaliacao-desktop",
+    "login-desktop",
+    "cadastro-desktop",
+    "comentarios-desktop",
+    "dashboard-perfil-desktop",
+    "dashboard-avaliacoes-desktop",
+    "dashboard-comentarios-desktop",
+    "dashboard-configuracoes-desktop",
+    "notificacoes-desktop",
+    "criar-avaliacao-desktop",
+    "home-mobile",
+    "avaliacao-mobile",
+    "comentarios-mobile"
+  ],
+  "gifs": [
+    {
+      "name": "comunidade-desktop",
+      "frames": 42,
+      "seconds": 10.5
+    },
+    {
+      "name": "interacoes-desktop",
+      "frames": 38,
+      "seconds": 9.5
+    },
+    {
+      "name": "painel-desktop",
+      "frames": 40,
+      "seconds": 10
+    },
+    {
+      "name": "comunidade-mobile",
+      "frames": 44,
+      "seconds": 11
+    }
+  ],
+  "checks": [
+    {
+      "screen": "home-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "avaliacao-desktop",
+      "brokenImages": [
+        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
+      ]
+    },
+    {
+      "screen": "login-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "cadastro-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "comentarios-desktop",
+      "brokenImages": [
+        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
+      ]
+    },
+    {
+      "screen": "dashboard-perfil-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "dashboard-avaliacoes-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "dashboard-comentarios-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "dashboard-configuracoes-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "notificacoes-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "criar-avaliacao-desktop",
+      "brokenImages": []
+    },
+    {
+      "screen": "home-mobile",
+      "brokenImages": []
+    },
+    {
+      "screen": "avaliacao-mobile",
+      "brokenImages": [
+        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
+      ]
+    },
+    {
+      "screen": "comentarios-mobile",
+      "brokenImages": [
+        "http://127.0.0.1:8137/reviews/@if(!empty($gameCover))https://images.igdb.com/igdb/image/upload/t_1080p/co4jni.jpg@elsehttp://127.0.0.1:8137/images/game-placeholder.svg@endif"
+      ]
+    }
+  ],
+  "errors": []
+}

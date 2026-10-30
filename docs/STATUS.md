@@ -1281,3 +1281,17 @@ Os emails transacionais agora possuem identidade visual consistente com o PixelR
 - Interface responsiva e traduzida em PT-BR/EN-US. A confirmação de exclusão avisa que respostas ao comentário também serão removidas.
 - Migration `2026_10_26_120000_create_comment_likes_table.php` criada; não executada manualmente nesta tarefa.
 - **Verificação:** `php artisan test tests/Feature/CommentExperienceTest.php` passou com 15 testes e 96 assertions; `php artisan test` passou com 83 testes e 417 assertions; `npm.cmd run build` passou. O build exibiu apenas o aviso de pacote opcional `fontaine` ausente.
+
+## README, screenshots e demonstrações reais (2026-10-30)
+
+- **Status:** concluído no escopo de documentação.
+- README reorganizado conforme a referência fornecida: demonstrações, screenshots, stack, instalação, autenticação, rotas web, idiomas e temas, demonstração, limites, IGDB, e-mails, verificações e decisões técnicas.
+- Corrigidas informações antigas: não há conta fixa `test@example.com`; o seeder gera quantidades variáveis; comentários e sino não usam WebSocket; newsletter é apenas uma preferência; somente o job de boas-vindas exige worker; publicar novas avaliações depende da seleção de jogo no IGDB.
+- Criados quatro GIFs reais em `docs/demo/` e 14 screenshots PNG em `docs/screenshots/`, com desktop em 1440 × 1000 e celular em 390 × 844. O GIF mobile aparece com largura de 300 px no README.
+- Fluxos gravados: Home, filtros, avaliação, publicação de comentário, curtida, resposta, abas do painel e navegação mobile. Login, cadastro, notificações e formulário de criação também foram capturados.
+- `docs/demo/record.mjs`, `seed.php` e `README.md` documentam a reprodução. O script cria SQLite temporário, contas fictícias verificadas com senha aleatória e chave própria, desativa os envios reais e não modifica o `.env` nem o banco habitual. Encerra seus processos e remove o banco temporário ao concluir.
+- **Validação:** build Vite concluído; suíte Pest com **83 testes aprovados e 417 assertions**; sintaxe Node/PHP conferida; formatação do fixture verificada com Pint. Navegação e interações exercitadas em Chromium, sem erros JavaScript nem rolagem horizontal nas capturas.
+- No PHP 8.5.12 disponível nesta sessão, OpenSSL, cURL e Fileinfo foram habilitados somente nos processos usados na validação/gravação. Não houve alteração da configuração global. O aviso do pacote opcional `fontaine` não impediu o build.
+- A restrição de rede do ambiente de captura foi contornada executando a gravação com acesso às imagens externas; as capas da Home e os avatares carregaram na versão final.
+- **Ocorrência preexistente identificada:** a capa de `reviews/show.blade.php` usa diretivas `@if/@else/@endif` dentro do atributo `src` de `<x-cover>`. O HTML renderizado mantém essas diretivas literalmente, formando uma URL inválida; por isso a capa individual aparece quebrada nas capturas desktop/mobile. A Home usa uma expressão calculada e carrega corretamente. O problema está registrado em `docs/demo/capture-report.json`; o código da aplicação não foi alterado nesta tarefa.
+- Metadados do IGDB aparecem como indisponíveis por opção do ambiente de demonstração sem credenciais, conforme descrito no README. Nenhuma resposta externa foi simulada para mostrar publicação de avaliação.

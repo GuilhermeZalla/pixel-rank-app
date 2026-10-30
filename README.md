@@ -1,209 +1,292 @@
 # PixelRank
 
-![Tela inicial do PixelRank](docs/images/home.jpg)
+Projeto de estudo e portfólio inspirado na proposta do Letterboxd, voltado a avaliações de jogos. Sem vínculo, associação ou endosso dos jogos e marcas citados. Código sob [licença MIT](LICENSE).
 
-O PixelRank é uma plataforma de avaliações de jogos inspirada na experiência do Letterboxd. Os usuários podem avaliar títulos com notas de 0 a 10, escrever resenhas detalhadas com indicação de prós e contras, comentar em publicações da comunidade, filtrar o feed e gerenciar seu perfil e histórico em um dashboard dedicado. É um projeto de portfólio desenvolvido com Laravel, Blade, Tailwind CSS, DaisyUI e Alpine.js.
+O PixelRank reúne resenhas da comunidade com notas de 0 a 10, recomendações, prós e contras e aviso de spoilers. A aplicação inclui feed com filtros e destaques, busca de jogos pelo IGDB, comentários com respostas e curtidas, notificações e um painel para gerenciar perfil, avaliações, comentários e configurações. A interface usa Laravel com Blade, em português brasileiro e inglês.
 
-## Features da aplicação
+## Demonstrações
 
-- Criar conta, autenticar-se, verificar e-mail e redefinir senha com segurança e proteção contra força bruta (rate limiting).
-- Publicar, editar e excluir avaliações de jogos com nota, recomendação (Recomendado, Não recomendado, Misto ou Essencial), lista de prós e contras e aviso opcional de spoiler.
-- Buscar jogos em tempo real com integração à API do IGDB/Twitch (capas, plataformas, sinopse e data de lançamento), contando com degradação graciosa quando a API externa não estiver configurada.
-- Explorar o feed da comunidade com filtros rápidos (populares, mais bem avaliados, menores notas, mais antigos, quentes e por recomendação) e alternância para ocultar spoilers.
-- Comentar nas avaliações e acompanhar as discussões em tempo real.
-- Painel pessoal do usuário (Dashboard) organizado em abas: edição de perfil (dados, foto de avatar e bio), listagem das próprias avaliações e histórico de comentários.
-- Internacionalização completa em Português (Brasil) e Inglês (EUA), com alternância de idioma salva na sessão e em cookie.
-- Notificações in-app (sininho no header) para comentários nas suas avaliações e respostas aos seus comentários, com painel dedicado e opção de newsletter.
-- Exportação de dados em JSON (perfil, avaliações e comentários) e exclusão de conta com confirmação.
-- Tema claro/escuro/sistema com persistência da preferência.
+Gravações reais da aplicação com dados fictícios em um banco SQLite temporário isolado. As contas usadas nas capturas já estavam verificadas. A integração Twitch/IGDB estava desativada: o formulário de criação é apresentado, mas a publicação de uma nova avaliação depende da seleção de um jogo pela API.
 
-## Tecnologias
+### Comunidade
 
-- PHP 8.4.27 e Laravel 13
-- Blade, Tailwind CSS 4 e DaisyUI 5
-- Alpine.js 3 e Vite 8
-- Pest 4 para os testes automatizados
-- MySQL por padrão; SQLite em memória para os testes automatizados ou para desenvolvimento local simplificado
-- Integração resiliente com a API Twitch / IGDB com cache de credenciais OAuth
+![Home, destaques da comunidade, filtros do feed e página de avaliação](docs/demo/comunidade-desktop.gif)
 
-## Rodar na sua máquina
+### Comentários e interações
 
-Você precisa de PHP 8.4 com as extensões do Laravel, Composer, Node.js/npm e Git. Com SQLite, não é necessário instalar um servidor de banco de dados externo.
+![Publicação de comentários, respostas e curtidas na página de avaliação](docs/demo/interacoes-desktop.gif)
 
-```bash
+### Meu painel
+
+![Perfil, avaliações, comentários e configurações no painel da conta](docs/demo/painel-desktop.gif)
+
+### Comunidade no celular
+
+<img src="docs/demo/comunidade-mobile.gif" alt="Navegação pelo feed e pela página de avaliação no celular" width="300">
+
+## Screenshots
+
+Capturas reais em português, com dados fictícios no mesmo ambiente isolado das demonstrações. Desktop em 1440 × 1000 e celular em 390 × 844.
+
+As capas dos jogos são carregadas do IGDB e pertencem aos respectivos titulares. Os passos para repetir as capturas estão em [docs/demo/README.md](docs/demo/README.md).
+
+| Tela | Desktop | Celular |
+| --- | --- | --- |
+| Home | [Ver captura](docs/screenshots/home-desktop.png) | [Ver captura](docs/screenshots/home-mobile.png) |
+| Avaliação | [Ver captura](docs/screenshots/avaliacao-desktop.png) | [Ver captura](docs/screenshots/avaliacao-mobile.png) |
+| Comentários | [Ver captura](docs/screenshots/comentarios-desktop.png) | [Ver captura](docs/screenshots/comentarios-mobile.png) |
+| Login | [Ver captura](docs/screenshots/login-desktop.png) | — |
+| Cadastro | [Ver captura](docs/screenshots/cadastro-desktop.png) | — |
+| Meu painel: perfil | [Ver captura](docs/screenshots/dashboard-perfil-desktop.png) | — |
+| Meu painel: avaliações | [Ver captura](docs/screenshots/dashboard-avaliacoes-desktop.png) | — |
+| Meu painel: comentários | [Ver captura](docs/screenshots/dashboard-comentarios-desktop.png) | — |
+| Meu painel: configurações | [Ver captura](docs/screenshots/dashboard-configuracoes-desktop.png) | — |
+| Notificações | [Ver captura](docs/screenshots/notificacoes-desktop.png) | — |
+| Criar avaliação | [Ver captura](docs/screenshots/criar-avaliacao-desktop.png) | — |
+
+## Estrutura e stack
+
+Versões registradas em `composer.lock` e `package-lock.json`:
+
+- **Backend:** Laravel 13.38.0, Eloquent, sessões por cookie, Form Requests e Policies.
+- **Interface:** Blade, Tailwind CSS 4.3.2, DaisyUI 5.6.18, Alpine.js 3.15.12 e Vite 8.1.4.
+- **Banco:** MySQL por padrão; SQLite como alternativa local e em memória nos testes.
+- **Testes:** Pest 4.7.5 e PHPUnit 12.5.30.
+- `app/`: controllers, validações, regras de acesso, models, ações, serviço IGDB, notificações e job de boas-vindas.
+- `resources/views/`, `resources/css/` e `resources/js/`: telas, componentes e recursos da interface.
+- `routes/web.php`: rotas da aplicação; `lang/pt_BR/` e `lang/en/`: traduções.
+- `database/`: migrations, factories e seeders; `tests/`: testes automatizados.
+- [docs/STATUS.md](docs/STATUS.md): acompanhamento do projeto.
+
+## Executar localmente
+
+Requisitos: **PHP 8.4.1 ou superior**, Composer 2, Node.js/npm e Git. O Vite 8.1.4 aceita Node `^20.19.0 || >=22.12.0`. Habilite as extensões exigidas pelo Composer e o driver PDO do banco escolhido; os testes precisam de PDO SQLite.
+
+Embora `composer.json` declare PHP `^8.3`, as versões Symfony registradas no lock exigem PHP `>=8.4.1`. Use esse requisito para instalar as dependências sem alterar o lock.
+
+### Projeto já configurado
+
+Com `.env`, chave, dependências e banco preparados, execute na raiz:
+
+```powershell
+composer run dev
+```
+
+O comando inicia o servidor Laravel, o processo de fila e o Vite. Mantenha o terminal aberto e acesse [http://localhost:8000](http://localhost:8000). Para encerrar, pressione `Ctrl+C`.
+
+Também é possível iniciar os serviços separadamente, um comando em cada terminal:
+
+```powershell
+php artisan serve --host=localhost --port=8000
+```
+
+```powershell
+npm.cmd run dev
+```
+
+```powershell
+php artisan queue:work
+```
+
+O navegador acessa a porta do Laravel; o Vite fornece os recursos durante o desenvolvimento. Preserve um `.env` já configurado e sua `APP_KEY`.
+
+### Primeira instalação
+
+No PowerShell:
+
+```powershell
 git clone https://github.com/GuilhermeZalla/pixel-rank-app.git
 cd pixel-rank-app
 composer install
-npm install
-```
-
-Copie `.env.example` para `.env` (no PowerShell, use `Copy-Item .env.example .env`), gere a chave e prepare o banco:
-
-```bash
+npm.cmd ci
+Copy-Item .env.example .env
 php artisan key:generate
-php artisan migrate --seed
+php artisan storage:link
 ```
 
-O arquivo `.env.example` vem pré-configurado para MySQL. Para usar SQLite no ambiente local sem instalar MySQL, defina `DB_CONNECTION=sqlite` no `.env`, comente as outras variáveis `DB_*` e crie o arquivo antes de migrar (`type nul > database/database.sqlite` no Windows ou `touch database/database.sqlite` no Linux/Mac).
+A cópia do ambiente e a geração de chave são passos de uma instalação nova. `storage:link` permite servir os avatares gravados no disco público.
 
-Se preferir MySQL, crie o banco antes de migrar:
+O `.env.example` usa MySQL. Crie um banco vazio antes das migrations:
 
 ```sql
 CREATE DATABASE pixel_rank_app CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-O comando `php artisan migrate --seed` executa as migrations e popula o banco com dados padrão: aproximadamente 30 avaliações de exemplo e 10 comentários em cada uma, gerados via seeder, para você visualizar o funcionamento da aplicação imediatamente.
+Ajuste `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` e `DB_PASSWORD` no `.env`. Para identificar o projeto, você também pode definir `APP_NAME=PixelRank` e `APP_URL=http://localhost:8000`. Depois:
 
-*(Opcional)* Se quiser exibir metadados reais da API de jogos (Twitch/IGDB), preencha no `.env` as variáveis `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET`, `GAME_API_URL` e `GAME_API_KEY`. Se deixar em branco, o site funcionará normalmente em modo degradado, sem erros.
-
-Inicie a aplicação e o Vite:
-
-```bash
+```powershell
+php artisan migrate --seed
 composer run dev
 ```
 
-Abra [http://localhost:8000](http://localhost:8000). O seeder cria uma conta de teste inicial `test@example.com` (senha `password`).
+O seeder cria **cinco usuários fictícios**, de quatro a oito avaliações por usuário e de dois a vinte comentários por avaliação. As quantidades variam a cada execução. Os usuários gerados têm e-mail verificado e a senha de factory `password`, destinada apenas a dados locais de demonstração. **Não existe uma conta fixa `test@example.com`.** Para testar o cadastro normal, crie sua própria conta e confirme o e-mail.
 
-## Notificações in-app
+O seeder acrescenta registros a cada execução; use-o em um banco novo para a primeira demonstração.
 
-Quando outro usuário comenta na sua avaliação ou responde ao seu comentário, uma notificação é criada. Você pode acessá-las pelo ícone de sino no cabeçalho (com contador de não lidas) ou pela rota `/notifications`. Cada notificação pode ser marcada como lida individualmente ou todas de uma vez.
+### Alternativa com SQLite
 
-## Tema (claro/escuro/sistema)
+Para uma instalação local sem servidor MySQL, crie o arquivo na raiz do projeto:
 
-Você pode escolher entre três opções de tema no menu do usuário no cabeçalho:
-- **Sistema**: segue a preferência do seu navegador/sistema operacional.
-- **Claro**: interface com fundo claro (tema `pixelrank-light`).
-- **Escuro**: interface com fundo escuro (tema `pixelrank`, o padrão).
-
-A escolha é salva no seu cookie, localStorage e, se estiver autenticado, no banco de dados.
-
-## Exportação e exclusão de dados
-
-No dashboard, na aba Configurações (menu4), na seção Dados, você pode:
-- Exportar todos os seus dados (perfil, avaliações e comentários) em formato JSON.
-- Deletar sua conta permanentemente, com confirmação e exclusão em cascata de todos os seus dados.
-
-## API de jogos (Twitch/IGDB)
-
-O projeto foi projetado para **degradar graciosamente** quando a API externa não está configurada:
-
-- Sem credenciais Twitch/IGDB → as páginas de avaliação carregam normalmente, mostrando "Não disponível" onde o metadado do jogo iria.
-- Busca de jogos retorna lista vazia (HTTP 200), sem erro 500.
-
-Se quiser dados reais de jogos, preencha no `.env`:
-
+```powershell
+if (-not (Test-Path database/database.sqlite)) {
+    New-Item -ItemType File -Path database/database.sqlite | Out-Null
+}
 ```
+
+Ajuste o `.env` com o caminho absoluto do arquivo, usando barras normais:
+
+```dotenv
+DB_CONNECTION=sqlite
+DB_DATABASE=C:/caminho/para/pixel-rank-app/database/database.sqlite
+```
+
+Depois execute `php artisan config:clear`, `php artisan migrate --seed` e `composer run dev`. As tabelas de sessão, cache e fila são criadas pelas migrations do projeto.
+
+## Autenticação e interface
+
+Visitantes podem explorar o feed, pesquisar avaliações e ler resenhas e comentários. Cadastro e login usam sessão do Laravel. Publicar ou gerenciar avaliações, comentar, curtir comentários, acessar o painel e consultar notificações exige autenticação e e-mail verificado. A edição e a exclusão de avaliações, comentários e dados da conta são restritas ao proprietário.
+
+As avaliações recebem nota de **0 a 10, em passos de 0,5**, recomendação (Essencial, Recomendado, Misto ou Não recomendado), plataforma, texto, prós e contras e marcação de spoiler. O feed permite ordenar por notas, visualizações, data e comentários recentes, além de filtrar por recomendação. Os destaques consideram os comentários dos últimos 15 dias; sem atividade recente, usam as avaliações mais visualizadas.
+
+Os comentários permitem responder, curtir, editar e excluir as próprias mensagens, ordenar por mais novos ou mais antigos e carregar outros itens. O envio usa requisições assíncronas. O painel reúne as abas de perfil, avaliações, comentários e configurações, com upload de avatar, exportação JSON e exclusão de conta.
+
+## Rotas principais
+
+São rotas web da aplicação Blade, com sessão e proteção CSRF nas alterações. Algumas ações retornam JSON para a própria interface.
+
+| Rota | Finalidade |
+| --- | --- |
+| `GET /` e `GET /{filter}` | Feed e filtros de recomendação ou ordenação |
+| `GET /search/{filter?}/{search?}` | Busca de avaliações por título |
+| `GET /games/search?query=...` | Busca de jogos no IGDB |
+| `GET /reviews/{review}` | Avaliação e comentários |
+| `GET /reviews/create` e `POST /reviews` | Formulário e publicação de avaliação |
+| `GET /reviews/{review}/edit`, `PUT/DELETE /reviews/{review}` | Gerenciamento da própria avaliação |
+| `GET /reviews/{review}/comments` | Comentários em JSON, com ordenação e paginação |
+| `POST /comments`, `PATCH/DELETE /comments/{comment}` | Publicação, edição e exclusão de comentário |
+| `PUT/DELETE /comments/{comment}/like` | Curtir ou remover a própria curtida |
+| `GET /users/{user}/{menu?}/edit` | Painel do proprietário; abas `menu1` a `menu4` |
+| `GET /users/{user}/export` e `DELETE /users/{user}` | Exportar dados e excluir a própria conta |
+| `GET /notifications` | Notificações não lidas da conta |
+| `PATCH /notifications/{id}/read` e `PATCH /notifications/read-all` | Marcar uma ou todas como lidas |
+| `GET/POST /login`, `GET/POST /register` e `DELETE /logout` | Autenticação |
+| `GET/POST /forgot-password`, `GET /reset-password/{token}` e `POST /reset-password` | Recuperação de senha |
+| `GET /email/verify` e `POST /email/verification-notification` | Aviso de verificação e reenvio do link |
+| `GET /email/verify/{id}/{hash}` | Verificação por link assinado |
+| `POST /locale` e `PATCH /users/theme` | Preferências de idioma e tema |
+
+## Idiomas, temas e dados
+
+- **Português brasileiro e inglês:** a aplicação considera a escolha salva na sessão ou no cookie, o idioma do navegador e o padrão de `APP_LOCALE`. Datas, números e mensagens acompanham o idioma ativo.
+- **Claro, escuro e sistema:** a preferência de tema é preservada no navegador e na conta autenticada.
+- **Spoilers:** há aviso nas avaliações e controle para ocultá-las na listagem.
+- **Exportação:** o painel baixa um JSON com os dados básicos do perfil, avaliações e comentários.
+- **Exclusão:** a confirmação no painel remove a conta, suas avaliações, comentários e avatar.
+
+## Fluxo de demonstração
+
+1. Explore os destaques e aplique filtros no feed; abra uma avaliação e leia os comentários.
+2. Crie uma conta, confirme o e-mail pelo link recebido e entre no painel.
+3. Com Twitch/IGDB configurado, selecione um jogo e publique uma avaliação com nota, recomendação e texto.
+4. Comente em uma avaliação, responda a outra mensagem e curta comentários.
+5. Consulte os avisos no sino e em Notificações; gerencie suas publicações e preferências em Meu painel.
+
+## Limites do projeto
+
+- A seleção de jogos para publicar novas avaliações depende da API Twitch/IGDB. Sem credenciais ou com falha externa, o site continua exibindo o conteúdo já salvo e o formulário, mas a busca de jogos fica vazia e os metadados indisponíveis.
+- Não há atualização por WebSocket das discussões ou do sino. As notificações são internas e aparecem ao carregar a interface.
+- A opção de newsletter é uma preferência armazenada; não há envio periódico implementado.
+- Perfis de outros usuários exigem login e e-mail verificado; a listagem geral de usuários está bloqueada por Policy.
+- Os dados do seeder são fictícios e variáveis. Os GIFs usam um conjunto próprio de demonstração em banco isolado.
+- O projeto não possui uma URL pública de produção documentada.
+- Nas capturas, a capa da página individual de avaliação apresenta uma falha de renderização da URL; as capas da Home carregam normalmente. O problema está registrado em [docs/STATUS.md](docs/STATUS.md), e as mídias preservam o comportamento atual.
+
+## API de jogos: Twitch/IGDB
+
+A integração obtém um token OAuth pelo fluxo `client_credentials` da Twitch e consulta a API do IGDB. Configure no `.env`:
+
+```dotenv
 TWITCH_AUTH=https://id.twitch.tv/
 TWITCH_CLIENT_ID=seu_client_id
 TWITCH_CLIENT_SECRET=seu_client_secret
 GAME_API_URL=https://api.igdb.com/v4
-GAME_API_KEY=sua_api_key
 ```
 
-Se deixar em branco, o site funcionará normalmente em modo degradado, sem erros.
+O serviço usa essas credenciais; `GAME_API_KEY`, ainda presente no arquivo de exemplo, não é utilizada na autenticação atual. Depois de alterar o ambiente, execute `php artisan config:clear` e reinicie os processos.
 
-## Comandos úteis
+`GameApiService` centraliza o acesso externo, define timeout e novas tentativas, guarda o token em cache e retorna listas vazias em caso de indisponibilidade. A interface preserva a leitura das avaliações e informa a ausência dos dados. As capas de jogos selecionados pela integração usam o serviço de imagens do IGDB.
 
-| Comando | Para quê |
-|---------|----------|
-| `php artisan serve` | Inicia o servidor local |
-| `php artisan migrate` | Cria as tabelas do banco |
-| `php artisan migrate --seed` | Cria as tabelas e popula com dados de exemplo |
-| `php artisan test` | Roda todos os testes |
-| `php artisan queue:work` | Processa jobs enfileirados (ex: email de boas-vindas) |
-| `php vendor/bin/pint --test` | Verifica formatação do código |
+## E-mails, verificação e notificações
 
-## Troubleshooting
+O `.env.example` usa **`MAIL_MAILER=log`**. Nesse modo, os e-mails são gravados em `storage/logs/laravel.log`; não chegam a uma caixa de entrada. Para entrega real, configure o transportador SMTP no ambiente.
 
-### E-mail de verificação não chega
+| Evento | Como é processado |
+| --- | --- |
+| Boas-vindas após o cadastro | Job `NewUserNotification`, enfileirado na conexão configurada |
+| Verificação de e-mail, reenvio e troca de endereço | Notificação de e-mail enviada na própria requisição |
+| Recuperação de senha | Notificação de e-mail enviada na própria requisição |
+| Comentário em uma avaliação ou resposta a um comentário | Notificação gravada diretamente no banco, sem worker |
 
-O `.env` vem com `MAIL_MAILER=log`. Com essa configuração, o Laravel **não envia email de verdade** — ele apenas grava o conteúdo do email no arquivo de log (`storage/logs/laravel.log`). Por isso você não recebe nada na caixa de entrada.
+### Fila de boas-vindas
 
-Para receber emails de verdade, configure um SMTP real no `.env`, por exemplo:
+Com `QUEUE_CONNECTION=database`, mantenha o worker ativo:
 
-```
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=seu_usuario
-MAIL_PASSWORD=sua_senha
-MAIL_FROM_ADDRESS="noreply@seudominio.com"
-MAIL_FROM_NAME="PixelRank"
-```
-
-Ou use um serviço como Mailtrap (desenvolvimento), SendGrid, AWS SES, etc.
-
-A rota de reenvio de verificação já existe (`POST /email/verification-notification`) e funciona — o que falta é apenas configurar um transportador de email real.
-
-### Jobs/Queue
-
-O projeto tem um sistema de jobs/queue limitado:
-
-| Job | Quando é disparado | O que faz |
-|-----|-------------------|-----------|
-| `NewUserNotification` | Após cadastro de usuário | Envia email de boas-vindas e grava log |
-| `VerifyEmailNotification` | Cadastro / troca de email | Envia email de verificação de conta |
-
-O `NewUserNotification` implementa `ShouldQueue`, ou seja, é enfileirado. A conexão de queue configurada é `database` (tabela `jobs`). Para os jobs serem executados, você precisa rodar o worker:
-
-```bash
+```powershell
 php artisan queue:work
 ```
 
-Se não rodar o worker, os jobs ficam pendentes na tabela `jobs` e nunca são processados.
+`composer run dev` já inicia um processo de fila com `queue:listen`. Se iniciar os serviços separadamente, o worker precisa de seu próprio terminal. Sem ele, o e-mail de boas-vindas permanece pendente; a verificação de e-mail e os avisos internos continuam seguindo os fluxos indicados na tabela.
 
-## Rodar as verificações
+Para consultar falhas, use `php artisan queue:failed`. Após corrigir a causa, `php artisan queue:retry <uuid>` reprocessa um job específico. Reinicie o worker após mudanças de código ou configuração.
 
-```bash
-php artisan test
-npm run build
+### SMTP no ambiente local
+
+Exemplo para um capturador SMTP local já iniciado, como Mailpit:
+
+```dotenv
+MAIL_MAILER=smtp
+MAIL_SCHEME=null
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_FROM_ADDRESS=pixelrank@example.test
+MAIL_FROM_NAME="PixelRank"
+```
+
+Para outro provedor, ajuste host, porta, esquema e credenciais conforme o serviço. Execute `php artisan config:clear` e reinicie os processos depois da alteração.
+
+### Links e limites
+
+- Login e cadastro: cinco tentativas por minuto em cada endpoint; busca de jogos: 30 por minuto.
+- Verificação: link assinado e usuário autenticado; confirmação e reenvio têm limite de seis requisições por minuto em cada endpoint. A troca de e-mail invalida a verificação anterior.
+- Recuperação: solicitação e conclusão têm limite de cinco requisições por minuto em cada endpoint. O token expira em 60 minutos, com intervalo mínimo de 60 segundos para gerar outro. A solicitação apresenta a mesma mensagem para e-mails conhecidos e desconhecidos.
+- Comentários: de cinco a 2.000 caracteres; respostas só podem apontar para comentários da mesma avaliação. Uma conta registra no máximo uma curtida por comentário.
+- Avaliações: título de oito a 120 caracteres e texto com pelo menos 150; até dez prós e dez contras na validação do servidor.
+- Avatares: JPG, JPEG, PNG ou GIF de até 1 MB.
+- Notificações: a página lista somente as não lidas, em grupos de 20, com marcação individual ou conjunta.
+
+## Verificação
+
+Na raiz do projeto:
+
+```powershell
+php artisan test --compact
+npm.cmd run build
 php vendor/bin/pint --test
 ```
 
-A suíte conta com 64 testes automatizados em Pest cobrindo autenticação, autorização via Policies, rate limiting, paridade de idiomas (PT-BR/EN-US), resiliência da API de jogos e as telas do dashboard.
+Os testes usam SQLite em memória, sessão e cache de teste, fila síncrona e transportador de e-mail em memória, conforme `phpunit.xml`. Cobrem autenticação e verificação de conta, permissões de proprietário, limites de requisições, dashboard, traduções, resiliência do IGDB, destaques e interações nos comentários.
 
-## Como o app é organizado
+A pasta `tests/Browser` contém atualmente um teste HTTP de cadastro e verificação executado pelo Laravel; não é uma suíte de automação visual em navegador. As capturas desta documentação complementam a demonstração da interface.
 
-As rotas ficam em `routes/` e encaminham as requisições para controllers em `app/Http/Controllers/`. As validações de entrada ficam em Form Requests e as permissões por usuário ficam em Policies. Models e migrations representam os dados no banco. Serviços como `GameApiService` isolam a comunicação externa com APIs e gerenciam falhas de rede de forma segura.
+## Decisões técnicas
 
-As views Blade ficam em `resources/views/`, divididas entre telas principais (`reviews/`, `users/`, `auth/`) e componentes reutilizáveis em `resources/views/components/`. A estilização usa Tailwind CSS e DaisyUI, enquanto micro-interações como abas do dashboard e alertas utilizam Alpine.js. A internacionalização completa em PT-BR/EN-US fica em `lang/`, com middleware para controle de sessão/cookie. Notificações e e-mails usam Jobs e Mailables.
-
-## Demonstração
-
-### Tela Inicial
-
-![Tela inicial do PixelRank](docs/images/home.jpg)
-
-### Menu e Navegação
-
-![Menu inicial](docs/images/home-menu.jpg)
-
-### Avaliação
-
-![Página de avaliação](docs/images/review-show.jpg)
-
-### Criação de Avaliação
-
-![Criação de avaliação - Etapa 1](docs/images/review-create-1.jpg)
-
-![Criação de avaliação - Etapa 2](docs/images/review-create-2.jpg)
-
-### Dashboard
-
-![Perfil no dashboard](docs/images/dashboard-profile.jpg)
-
-![Minhas avaliações no dashboard](docs/images/dashboard-reviews.jpg)
-
-![Meus comentários no dashboard](docs/images/dashboard-comments.jpg)
-
-### Login e Cadastro
-
-![Tela de login](docs/images/login.jpg)
-
-![Tela de cadastro](docs/images/register.jpg)
-
-## Deploy
-
-Para rodar em ambiente de produção, configure as variáveis essenciais no `.env` (`APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://seudominio.com`, `SESSION_SECURE_COOKIE=true`). Execute os comandos de cache (`php artisan config:cache`, `php artisan route:cache`, `php artisan view:cache`, `php artisan storage:link`) e mantenha os workers de fila e agendador ativos (`php artisan queue:work` e `php artisan schedule:work`).
-
-O app ainda não possui uma URL pública de produção.
+- **Laravel e Blade:** páginas renderizadas no servidor, com componentes reutilizáveis e Alpine.js nas interações da interface.
+- **Sessões e Policies:** autenticação por cookie, proteção CSRF e autorização das alterações pelo proprietário do recurso.
+- **Form Requests e validação:** regras de entrada centralizadas nos formulários principais e validação dos comentários no controller.
+- **Integração isolada:** `GameApiService` concentra OAuth, cache e tratamento de falhas do serviço de jogos.
+- **Criação transacional:** uma avaliação e seus prós e contras são gravados na mesma transação.
+- **Comentários:** respostas vinculadas à mesma avaliação, curtidas únicas por usuário e paginação para carregar mais mensagens.
+- **Traduções:** arquivos separados para `pt_BR` e `en`, com middleware de seleção de idioma e testes de paridade das chaves.
+- **Fila pontual:** o job de boas-vindas usa fila; os demais envios e avisos internos seguem os canais descritos acima.
